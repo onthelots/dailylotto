@@ -1,5 +1,6 @@
 import 'package:dailylotto/src/core/notification_service.dart';
 import 'package:dailylotto/src/core/routes.dart';
+import 'package:dailylotto/src/core/shared_preference.dart';
 import 'package:dailylotto/src/core/theme.dart';
 import 'package:dailylotto/src/presentation/main/bloc/theme_bloc/theme_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/theme_bloc/theme_event.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 
 
@@ -18,17 +20,26 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // 앱 구동여부 확인
+  final bool isFirstRun = await SharedPreferencesHelper.getFirstRunState();
+  final String initialRoute = isFirstRun ? Routes.splash : Routes.main;
+
   // env (gemini api key)
   await dotenv.load(fileName: ".env"); // env (api key)
 
   // run
   Future.delayed(Duration(seconds: 2), () {
-    runApp(MyApp());
+    runApp(MyApp(
+      initialRoute: initialRoute,
+    ));
   });
 }
 
 class MyApp extends StatelessWidget {
+  final String initialRoute;
   final _router = AppRouter();
+
+  MyApp({Key? key, required this.initialRoute}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -48,7 +59,7 @@ class MyApp extends StatelessWidget {
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: themeMode,
-            initialRoute: Routes.main,
+            initialRoute: initialRoute,
             onGenerateRoute: _router.onGenerateRoute,
           );
         },
