@@ -18,6 +18,8 @@ dependencies:
 
   #ui
   unicons: ^3.0.0
+  lottie: ^3.2.0
+  smooth_page_indicator: ^1.2.0+3
 
   #ai
   flutter_gemini: ^3.0.0
@@ -51,3 +53,5 @@ flutter:
 
   assets:
      - .env
+     - assets/
+     - assets/animations/

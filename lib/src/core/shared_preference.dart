@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:unicons/icons/line/book_alt.dart';
 
 class SharedPreferencesHelper {
   static const _themeKey = 'themeMode';
@@ -20,5 +21,18 @@ class SharedPreferencesHelper {
       // 값이 없으면 기본값인 ThemeMode.system 반환
       return ThemeMode.system;
     }
+  }
+
+  // 앱 구동여부 확인
+  static Future<bool> getFirstRunState() async {
+    final prefs = await SharedPreferences.getInstance();
+    final bool? isFirstRun = prefs.getBool('isFirstRun');
+    return isFirstRun == null ? true : isFirstRun;
+  }
+
+  // 앱 첫 구동여부 false로 설정할 것
+  static Future<void> setFirstRunStateToFalse() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isFirstRun', false);
   }
 }
