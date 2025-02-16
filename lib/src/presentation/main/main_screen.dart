@@ -34,12 +34,13 @@ class MainScreen extends StatelessWidget {
             bottomNavigationBar: Platform.isIOS
                 ? CupertinoTabBar(
               currentIndex: currentIndex,
-              activeColor: AppColors.lightActiveButton,
-              inactiveColor: AppColors.lightInactiveButton,
               items: CustomBottomNavigationBar.bottomNavigationBarItem,
               onTap: (index) {
                 context.read<BottomNavBloc>().add(TabSelected(index)); // 이벤트 전달
               },
+              activeColor: Theme.of(context).bottomNavigationBarTheme.selectedItemColor,
+              inactiveColor: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor ?? Colors.white10,
+              backgroundColor: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
             )
                 : BottomNavigationBar(
               currentIndex: currentIndex,
@@ -47,6 +48,9 @@ class MainScreen extends StatelessWidget {
               onTap: (index) {
                 context.read<BottomNavBloc>().add(TabSelected(index)); // 이벤트 전달
               },
+              selectedItemColor: Theme.of(context).bottomNavigationBarTheme.selectedItemColor,
+              unselectedItemColor: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
+              backgroundColor: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
             ),
           );
         },

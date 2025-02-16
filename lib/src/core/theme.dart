@@ -24,10 +24,10 @@ class AppTheme {
       labelSmall: TextStyle(color: Colors.black54, fontSize: 13, fontWeight: FontWeight.w600), // 위치, 장소
     ),
 
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColors.lightBackground, // 탭바 배경색
       selectedItemColor: AppColors.lightActiveButton, // 선택된 아이콘 색
-      unselectedItemColor: AppColors.lightInactiveButton, // 선택되지 않은 아이콘 색
+      unselectedItemColor: Colors.grey, // 선택되지 않은 아이콘 색
       showUnselectedLabels: true, // 비선택된 아이템에 텍스트도 보이게
 
       selectedLabelStyle: TextStyle(
@@ -35,7 +35,7 @@ class AppTheme {
       ),
 
       unselectedLabelStyle: TextStyle(
-        color: AppColors.lightInactiveButton, // 비선택된 텍스트 색상
+        color: Colors.grey, // 비선택된 텍스트 색상
       ),
     ),
   );
@@ -61,16 +61,16 @@ class AppTheme {
       labelSmall: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w600), // 위치, 장소
     ),
 
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColors.darkBackground, // 탭바 배경색
-      selectedItemColor: AppColors.darkActiveButton, // 선택된 아이콘 색
-      unselectedItemColor: AppColors.darkInactiveButton, // 선택되지 않은 아이콘 색
+      selectedItemColor: Colors.white, // 선택된 아이콘 색
+      unselectedItemColor: Colors.white30, // 선택되지 않은 아이콘 색
       showUnselectedLabels: true, // 비선택된 아이템에 텍스트도 보이게
       selectedLabelStyle: TextStyle(
-        color: AppColors.darkActiveButton, // 선택된 텍스트 색상
+        color: Colors.white, // 선택된 텍스트 색상
       ),
       unselectedLabelStyle: TextStyle(
-        color: AppColors.darkInactiveButton, // 비선택된 텍스트 색상
+        color: Colors.white30 // 비선택된 텍스트 색상
       ),
     ),
   );

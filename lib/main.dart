@@ -1,4 +1,3 @@
-import 'package:dailylotto/src/core/notification_service.dart';
 import 'package:dailylotto/src/core/routes.dart';
 import 'package:dailylotto/src/core/shared_preference.dart';
 import 'package:dailylotto/src/core/theme.dart';
@@ -9,10 +8,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +19,10 @@ Future<void> main() async {
 
   // 앱 구동여부 확인
   final bool isFirstRun = await SharedPreferencesHelper.getFirstRunState();
-  final String initialRoute = isFirstRun ? Routes.splash : Routes.main;
+  final String initialRoute = isFirstRun ? Routes.introduce : Routes.main;
+
+  print("첫 구동인가요? ${isFirstRun}");
+  print("라우팅이 어디로 되나욧? ? ${isFirstRun}");
 
   // env (gemini api key)
   await dotenv.load(fileName: ".env"); // env (api key)

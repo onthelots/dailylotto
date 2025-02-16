@@ -6,31 +6,28 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../core/constants.dart';
 import '../../core/routes.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+class IntroduceScreen extends StatefulWidget {
+  const IntroduceScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<IntroduceScreen> createState() => _IntroduceScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _IntroduceScreenState extends State<IntroduceScreen> {
   final PageController _pageController = PageController();
 
-  @override
-  void initState() {
-    super.initState();
-  }
-  
-  void _nextPage(BuildContext context) {
-    if (_pageController.page != null) {
-      if (_pageController.page! < 2) {
-        _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-      } else {
-        Navigator.pushReplacementNamed(context, Routes.main);
-      }
+  void _nextPage() {
+    if (_pageController.page! < 2) {
+      _pageController.nextPage(
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      SharedPreferencesHelper.setFirstRunStateToFalse(); // 첫 구동 false로 설정
+      Navigator.pushNamedAndRemoveUntil(context, Routes.main, (route) => false); // 다음 화면으로 이동
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,8 +46,6 @@ class _SplashScreenState extends State<SplashScreen> {
                     fit: BoxFit.fill,
                     frameRate: FrameRate.max,
                   ),
-                  onNext: () => _nextPage(context),
-                  pageController: _pageController,
                 ),
                 PageContent(
                   title: "추첨일이 다가오기 전에!\n최대한 많이 행운의 숫자를 생성하세요",
@@ -61,8 +56,6 @@ class _SplashScreenState extends State<SplashScreen> {
                     fit: BoxFit.fill,
                     frameRate: FrameRate.max,
                   ),
-                  onNext: () => _nextPage(context),
-                  pageController: _pageController,
                 ),
                 PageContent(
                   title: "매일 진행되는 번호추천을 잊지 않도록\n반드시 알람설정을 허용해주세요",
@@ -73,22 +66,40 @@ class _SplashScreenState extends State<SplashScreen> {
                     fit: BoxFit.fill,
                     frameRate: FrameRate.max,
                   ),
-                  onNext: ()  {
-                    _nextPage(context);
-                    SharedPreferencesHelper.setFirstRunStateToFalse(); // 첫 구동 false로 설정할 것
-                  },
-                  pageController: _pageController,
                 ),
               ],
             ),
           ),
+          // 인디케이터 위치 조정
+          SmoothPageIndicator(
+            controller: _pageController,
+            count: 3,
+            effect: const WormEffect(
+              dotHeight: 10,
+              dotWidth: 10,
+              activeDotColor: AppColors.lightPrimary,
+            ),
+          ),
         ],
       ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 20.0),
+        child: ElevatedButton(
+          onPressed: _nextPage,
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            backgroundColor: Theme.of(context).primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ),
+          child: const Text(
+            "다음",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
     );
-  }
-
-  void _permissionWithNotification() async {
-    await [Permission.notification].request();
   }
 }
 
@@ -96,21 +107,15 @@ class PageContent extends StatelessWidget {
   final String title;
   final String subtitle;
   final Widget image;
-  final VoidCallback? onNext;
-  final PageController pageController;
-
   PageContent({
     super.key,
     required this.title,
     required this.subtitle,
     required this.image,
-    this.onNext,
-    required this.pageController,
   });
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
@@ -129,9 +134,7 @@ class PageContent extends StatelessWidget {
                     style: Theme.of(context).textTheme.labelLarge,
                     maxLines: 2,
                   ),
-
                   const SizedBox(height: 10),
-
                   Text(
                     subtitle,
                     style: Theme.of(context).textTheme.bodyMedium,
@@ -139,9 +142,7 @@ class PageContent extends StatelessWidget {
                   ),
                 ],
               ),
-
               const SizedBox(height: 30),
-
               Center(
                 child: SizedBox(
                   child: image,
@@ -149,41 +150,7 @@ class PageContent extends StatelessWidget {
                   height: 280,
                 ),
               ),
-
-              const SizedBox(height: 30),
-
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SmoothPageIndicator(
-                    controller: pageController,
-                    count: 3,
-                    effect: const WormEffect(
-                      dotHeight: 10,
-                      dotWidth: 10,
-                      activeDotColor: AppColors.lightPrimary,
-                    ),
-                  ),
-                ),
-              ),
             ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 20.0),
-        child: ElevatedButton(
-          onPressed: onNext,
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            backgroundColor: Theme.of(context).primaryColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-          ),
-          child: const Text(
-            "다음",
-            style: TextStyle(color: Colors.white),
           ),
         ),
       ),

@@ -11,9 +11,7 @@ class Routes {
   static const String main = '/main'; // 메인
 
   // splash
-  static const String splash_1 = '/sp1'; // 스플래시1
-  static const String splash_2 = '/sp2'; // 스플래시2
-  static const String splash_3 = '/sp3'; // 스플래시3
+  static const String introduce = '/introduce'; // 스플래시1
 
   // tab
   static const String home = '/home'; // 홈 (탭바)
@@ -47,9 +45,9 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => MyPageScreen(),
         );
-      case Routes.splash:
+      case Routes.introduce:
         return MaterialPageRoute(
-          builder: (_) => SplashScreen(),
+          builder: (_) => IntroduceScreen(),
         );
       default:
         return null;
