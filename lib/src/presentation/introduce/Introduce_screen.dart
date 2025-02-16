@@ -88,7 +88,9 @@ class _IntroduceScreenState extends State<IntroduceScreen> {
           onPressed: _nextPage,
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
-            backgroundColor: Theme.of(context).primaryColor,
+            backgroundColor: Theme
+                .of(context)
+                .primaryColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),

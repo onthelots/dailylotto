@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:dailylotto/src/core/routes.dart';
 import 'package:dailylotto/src/core/shared_preference.dart';
 import 'package:dailylotto/src/core/theme.dart';
@@ -5,11 +7,16 @@ import 'package:dailylotto/src/presentation/main/bloc/theme_bloc/theme_bloc.dart
 import 'package:dailylotto/src/presentation/main/bloc/theme_bloc/theme_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/theme_bloc/theme_state.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'firebase_options.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print('Handling a background message ${message.messageId}');
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,12 +24,11 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  fcmSetting();
+
   // 앱 구동여부 확인
   final bool isFirstRun = await SharedPreferencesHelper.getFirstRunState();
   final String initialRoute = isFirstRun ? Routes.introduce : Routes.main;
-
-  print("첫 구동인가요? ${isFirstRun}");
-  print("라우팅이 어디로 되나욧? ? ${isFirstRun}");
 
   // env (gemini api key)
   await dotenv.load(fileName: ".env"); // env (api key)
@@ -32,6 +38,96 @@ Future<void> main() async {
     runApp(MyApp(
       initialRoute: initialRoute,
     ));
+  });
+}
+
+Future<void> fcmSetting() async {
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  await messaging.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    print("✅ 알림 권한 허용됨");
+
+    // "테스트 알림 구독"
+    await messaging.subscribeToTopic('test_topic');
+
+    // "행운의숫자" 주제 구독: 매일 알림 용
+    await messaging.subscribeToTopic('daily_topic');
+
+    // "로또추천" 주제 구독: 주간 알림 용
+    await messaging.subscribeToTopic('saturday_topic');
+  } else {
+    print("❌ 알림 권한 거부됨");
+  }
+
+  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+      'high_importance_channel', // id
+      'High Importance Notifications',
+      description: 'This channel is used for important notifications.',
+      importance: Importance.high,
+      playSound: true);
+
+  var initialzationSettingsIOS = const DarwinInitializationSettings(
+    requestSoundPermission: true,
+    requestBadgePermission: true,
+    requestAlertPermission: true,
+  );
+
+  var initializationSettingsAndroid =
+      const AndroidInitializationSettings('@mipmap/launcher_icon');
+
+  var initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid, iOS: initialzationSettingsIOS);
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin>()
+      ?.getActiveNotifications();
+
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+  );
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+
+    if (message.notification != null && android != null) {
+      flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification?.title,
+        notification?.body,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            icon: '@mipmap/launcher_icon',
+          ),
+        ),
+      );
+    }
   });
 }
 
@@ -68,74 +164,3 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// class MyHomePage extends StatefulWidget {
-//   const MyHomePage({super.key, required this.title});
-//
-//   final String title;
-//
-//   @override
-//   State<MyHomePage> createState() => _MyHomePageState();
-// }
-//
-// class _MyHomePageState extends State<MyHomePage> {
-//   late final QuestionBloc _questionBloc;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     final questionRepository = CstQuestionRepository(QuestionDataSource());
-//     final getThreeRandomQuestionsUseCase =
-//     GetThreeRandomQuestionsUseCase(questionRepository);
-//     _questionBloc = QuestionBloc(getThreeRandomQuestionsUseCase);
-//     _questionBloc.add(LoadQuestionsEvent());
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         // ... (기존 코드)
-//       ),
-//       body: BlocBuilder<QuestionBloc, QuestionState>(
-//         bloc: _questionBloc,
-//         builder: (context, state) {
-//           if (state is QuestionLoadingState) {
-//             return const Center(child: CircularProgressIndicator());
-//           } else if (state is QuestionLoadedState) {
-//             return ListView.builder(
-//               itemCount: state.questions.length,
-//               itemBuilder: (context, index) {
-//                 final question = state.questions[index];
-//                 return Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     Text(question.question,
-//                         style: const TextStyle(
-//                             fontSize: 18, fontWeight: FontWeight.bold)),
-//                     const SizedBox(height: 8),
-//                     Column(
-//                       children: question.options
-//                           .map<Widget>((option) => Text(option))
-//                           .toList(),
-//                     ),
-//                     const SizedBox(height: 16),
-//                   ],
-//                 );
-//               },
-//             );
-//           } else if (state is QuestionErrorState) {
-//             return Center(child: Text('Error: ${state.message}'));
-//           } else {
-//             return const Center(child: Text('Unknown State'));
-//           }
-//         },
-//       ),
-//     );
-//   }
-//
-//   @override
-//   void dispose() {
-//     _questionBloc.close();
-//     super.dispose();
-//   }
-// }
