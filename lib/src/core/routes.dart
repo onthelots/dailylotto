@@ -1,6 +1,7 @@
 import 'package:dailylotto/src/presentation/history/history_screen.dart';
 import 'package:dailylotto/src/presentation/main/main_screen.dart';
 import 'package:dailylotto/src/presentation/mypage/mypage_screen.dart';
+import 'package:dailylotto/src/presentation/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../presentation/home/home_screen.dart';
@@ -45,6 +46,10 @@ class AppRouter {
       case Routes.mypage:
         return MaterialPageRoute(
           builder: (_) => MyPageScreen(),
+        );
+      case Routes.splash:
+        return MaterialPageRoute(
+          builder: (_) => SplashScreen(),
         );
       default:
         return null;

@@ -20,34 +20,37 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BottomNavBloc, TabState>(
-      builder: (context, state) {
-        final currentIndex = (state as TabState).index; // 기본값 0
-        return Scaffold(
-          // IndexedStack을 사용하여 탭 전환
-          body: IndexedStack(
-            index: currentIndex,
-            children: _tabs,
-          ),
-          bottomNavigationBar: Platform.isIOS
-              ? CupertinoTabBar(
-            currentIndex: currentIndex,
-            activeColor: AppColors.lightActiveButton,
-            inactiveColor: AppColors.lightInactiveButton,
-            items: CustomBottomNavigationBar.bottomNavigationBarItem,
-            onTap: (index) {
-              context.read<BottomNavBloc>().add(TabSelected(index)); // 이벤트 전달
-            },
-          )
-              : BottomNavigationBar(
-            currentIndex: currentIndex,
-            items: CustomBottomNavigationBar.bottomNavigationBarItem,
-            onTap: (index) {
-              context.read<BottomNavBloc>().add(TabSelected(index)); // 이벤트 전달
-            },
-          ),
-        );
-      },
+    return BlocProvider(
+      create: (context) => BottomNavBloc(),
+      child: BlocBuilder<BottomNavBloc, TabState>(
+        builder: (context, state) {
+          final currentIndex = (state as TabState).index; // 기본값 0
+          return Scaffold(
+            // IndexedStack을 사용하여 탭 전환
+            body: IndexedStack(
+              index: currentIndex,
+              children: _tabs,
+            ),
+            bottomNavigationBar: Platform.isIOS
+                ? CupertinoTabBar(
+              currentIndex: currentIndex,
+              activeColor: AppColors.lightActiveButton,
+              inactiveColor: AppColors.lightInactiveButton,
+              items: CustomBottomNavigationBar.bottomNavigationBarItem,
+              onTap: (index) {
+                context.read<BottomNavBloc>().add(TabSelected(index)); // 이벤트 전달
+              },
+            )
+                : BottomNavigationBar(
+              currentIndex: currentIndex,
+              items: CustomBottomNavigationBar.bottomNavigationBarItem,
+              onTap: (index) {
+                context.read<BottomNavBloc>().add(TabSelected(index)); // 이벤트 전달
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }
