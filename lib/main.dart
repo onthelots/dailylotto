@@ -64,14 +64,15 @@ Future<void> fcmSetting() async {
   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
     print("✅ 알림 권한 허용됨");
 
-    // "테스트 알림 구독"
-    await messaging.subscribeToTopic('test_topic');
+    // 공지사항 알림 구독
+    await messaging.subscribeToTopic('notice_topic');
 
-    // "행운의숫자" 주제 구독: 매일 알림 용
+    // 매일 전송되는 알림 구독
     await messaging.subscribeToTopic('daily_topic');
 
-    // "로또추천" 주제 구독: 주간 알림 용
-    await messaging.subscribeToTopic('saturday_topic');
+    // 매일 전송되는 알림 구독
+    await messaging.subscribeToTopic('weekly_topic');
+
   } else {
     print("❌ 알림 권한 거부됨");
   }
