@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../core/constants.dart';
 import '../history/history_screen.dart';
 import '../home/home_screen.dart';
@@ -10,7 +11,25 @@ import 'bloc/bottom_nav_bloc/bottom_nav_bloc.dart';
 import 'bloc/bottom_nav_bloc/bottom_nav_event.dart';
 import 'bloc/bottom_nav_bloc/bottom_nav_state.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    _permissionWithNotification();
+  }
+
+  void _permissionWithNotification() async {
+    if (await Permission.notification.isDenied) {
+      await Permission.notification.request();
+    }
+  }
 
   final List<Widget> _tabs = [
     HomeScreen(),
