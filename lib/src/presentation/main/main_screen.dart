@@ -1,8 +1,9 @@
 import 'dart:io';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../core/constants.dart';
 import '../history/history_screen.dart';
 import '../home/home_screen.dart';
@@ -10,6 +11,10 @@ import '../mypage/mypage_screen.dart';
 import 'bloc/bottom_nav_bloc/bottom_nav_bloc.dart';
 import 'bloc/bottom_nav_bloc/bottom_nav_event.dart';
 import 'bloc/bottom_nav_bloc/bottom_nav_state.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print('Handling a background message ${message.messageId}');
+}
 
 class MainScreen extends StatefulWidget {
 
@@ -22,13 +27,98 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    _permissionWithNotification();
+    fcmSetting();
   }
 
-  void _permissionWithNotification() async {
-    if (await Permission.notification.isDenied) {
-      await Permission.notification.request();
+  Future<void> fcmSetting() async {
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    await messaging.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print("✅ 알림 권한 허용됨");
+
+      // 공지사항 알림 구독
+      await messaging.subscribeToTopic('notice_topic');
+
+      // 매일 전송되는 알림 구독
+      await messaging.subscribeToTopic('daily_topic');
+
+      // 매일 전송되는 알림 구독
+      await messaging.subscribeToTopic('weekly_topic');
+
+    } else {
+      print("❌ 알림 권한 거부됨");
     }
+
+    const AndroidNotificationChannel channel = AndroidNotificationChannel(
+        'high_importance_channel', // id
+        'High Importance Notifications',
+        description: 'This channel is used for important notifications.',
+        importance: Importance.high,
+        playSound: true);
+
+    var initialzationSettingsIOS = const DarwinInitializationSettings(
+      requestSoundPermission: true,
+      requestBadgePermission: true,
+      requestAlertPermission: true,
+    );
+
+    var initializationSettingsAndroid =
+    const AndroidInitializationSettings('@mipmap/launcher_icon');
+
+    var initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initialzationSettingsIOS);
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        IOSFlutterLocalNotificationsPlugin>()
+        ?.getActiveNotifications();
+
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+    );
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+
+      if (message.notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification?.title,
+          notification?.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              icon: '@mipmap/launcher_icon',
+            ),
+          ),
+        );
+      }
+    });
   }
 
   final List<Widget> _tabs = [

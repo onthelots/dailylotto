@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -34,7 +36,7 @@
 		<string>fetch</string>
 	</array>
 	<key>NSUserNotificationsUsageDescription</key>
-    <string>앱의 주요 기능을 사용하기 위한 푸시 알림을 받기 위해 권한이 필요합니다.</string>
+	<string>앱의 주요 기능을 사용하기 위한 푸시 알림을 받기 위해 권한이 필요합니다.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -42,10 +44,10 @@
 	<key>FirebaseMessagingAutoInitEnabled</key>
 	<false/>
 	<key>NSAppTransportSecurity</key>
-    <dict>
-        <key>NSAllowsArbitraryLoads</key>
-        <true/>
-    </dict>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
