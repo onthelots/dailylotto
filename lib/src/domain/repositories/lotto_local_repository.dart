@@ -1,28 +1,33 @@
-import '../../data/models/lotto_round.dart';
+import '../../data/models/lotto_local_model.dart';
 import '../../data/sources/lotto_local_datasource.dart';
 
-class LottoRepository {
-  final LottoLocalDataSource localDataSource;
+class LottoLocalRepository {
+  final LottoLocalDataSource dataSource;
 
-  LottoRepository(this.localDataSource);
+  LottoLocalRepository({required this.dataSource});
 
-  // 로또 생성 시, HIVE 저장 (현재 회차)
-  Future<void> saveLottoRound(LottoRound round) async {
-    await localDataSource.saveLottoRound(round);
+  // 번호 생성 후 저장
+  Future<void> saveLottoRound(LottoLocalModel round) {
+    return dataSource.saveLottoRound(round);
   }
 
-  // 새로운 회차 HIVE 생성
-  Future<void> createNewRound(int newRound) async {
-    await localDataSource.createNewRound(newRound);
+  // 특정 회차 데이터 가져오기
+  LottoLocalModel? getLottoRound(int round) {
+    return dataSource.getLottoRound(round);
   }
 
-  // 현재 회차 가져오기
-  LottoRound? getLottoRound(int round) {
-    return localDataSource.getLottoRound(round);
+  // 모든 회차 데이터 가져오기
+  List<LottoLocalModel> getAllRounds() {
+    return dataSource.getAllRounds();
   }
 
-  // 전체 회차 가져오기
-  List<LottoRound> getAllRounds() {
-    return localDataSource.getAllRounds();
+  // 당첨번호 업데이트
+  Future<void> updateWinningNumbers(int round, List<int> winningNumbers) {
+    return dataSource.updateWinningNumbers(round, winningNumbers);
+  }
+
+  // 새로운 회차 추가
+  Future<void> createNewRound(int newRound) {
+    return dataSource.createNewRound(newRound);
   }
 }

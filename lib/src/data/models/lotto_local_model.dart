@@ -1,7 +1,8 @@
 import 'package:hive/hive.dart';
+part 'lotto_local_model.g.dart'; // 자동 생성된 파일
 
 @HiveType(typeId: 0)
-class LottoRound {
+class LottoLocalModel {
   @HiveField(0)
   int round; // 회차 번호
 
@@ -11,7 +12,7 @@ class LottoRound {
   @HiveField(2)
   List<int>? winningNumbers; // 해당 회차 당첨번호
 
-  LottoRound({
+  LottoLocalModel({
     required this.round,
     required this.entries,
     this.winningNumbers,
@@ -35,11 +36,15 @@ class LottoEntry {
   @HiveField(4)
   String? result; // '당첨', '낙첨', '예정'
 
+  @HiveField(5)
+  bool isDefault;  // 기본값인지 여부를 체크하는 필드. 즉 오늘 날짜에 생성한 번호가 없을 경우 true로 설정되므로, 이를 활용하여 분기처리가 가능함
+
   LottoEntry({
     required this.date,
     required this.numbers,
     required this.recommendReason,
     required this.dailyTip,
     this.result,
+    this.isDefault = false, // 기본값 플래그
   });
 }
