@@ -1,9 +1,12 @@
 import 'package:dailylotto/src/core/di/locator.dart';
+import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_bloc.dart';
+import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_state.dart';
+import 'package:dailylotto/src/scatch_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -52,6 +55,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => ThemeBloc()..add(ThemeInitialEvent()), // 앱 실행 시 테마 초기화
+        ),
+        BlocProvider(
+          create: (context) => TimeBloc()..add(RefreshTimeEvent()), // 시간 가져오기
         ),
         BlocProvider(
           create: (context) => locator<LottoRemoteBloc>()..add(FetchLatestRound()),

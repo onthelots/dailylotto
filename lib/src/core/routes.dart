@@ -2,6 +2,7 @@ import 'package:dailylotto/src/presentation/history/history_screen.dart';
 import 'package:dailylotto/src/presentation/main/main_screen.dart';
 import 'package:dailylotto/src/presentation/mypage/mypage_screen.dart';
 import 'package:dailylotto/src/presentation/introduce/Introduce_screen.dart';
+import 'package:dailylotto/src/scatch_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../presentation/home/home_screen.dart';
@@ -24,6 +25,8 @@ class Routes {
   static const String game_3 = '/g3'; // 게임 화면3
   static const String game_4 = '/g4'; // 게임 화면4
   static const String result = '/result'; // 게임 결과
+
+  static const String scatch = '/scatch'; // 테스트 화면
 }
 
 class AppRouter {
@@ -48,6 +51,10 @@ class AppRouter {
       case Routes.introduce:
         return MaterialPageRoute(
           builder: (_) => IntroduceScreen(),
+        );
+      case Routes.scatch:
+        return MaterialPageRoute(
+          builder: (_) => ScatchScreen(),
         );
       default:
         return null;
