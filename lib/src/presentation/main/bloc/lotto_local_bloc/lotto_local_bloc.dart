@@ -1,3 +1,4 @@
+import 'package:dailylotto/src/core/constants.dart';
 import 'package:dailylotto/src/data/models/lotto_local_model.dart';
 import 'package:dailylotto/src/domain/usecases/lotto_local_usecase.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
@@ -37,8 +38,8 @@ class LottoLocalBloc extends Bloc<LottoLocalEvent, LottoLocalState> {
           orElse: () => LottoEntry(
             date: today,
             numbers: [],  // 기본값
-            recommendReason: "기본 추천 이유",
-            dailyTip: "기본 조언",
+            recommendReason: reasonPlaceholder,
+            dailyTip: dailyTipPlaceholder,
             isDefault: true,  // 기본값 처리
           ),
         );

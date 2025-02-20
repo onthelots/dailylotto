@@ -30,6 +30,7 @@ class _IntroduceScreenState extends State<IntroduceScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Column(
         children: [
@@ -38,8 +39,8 @@ class _IntroduceScreenState extends State<IntroduceScreen> {
               controller: _pageController,
               children: [
                 PageContent(
-                  title: "매일, 새로운 선택과 답변을 해주세요!\nAI가 당신만을 위한 번호를 알려드려요",
-                  subtitle: "매일, 새로운 선택과 답변을 해주세요\nAI가 당신만을 위한 번호를 알려드려요",
+                  title: "AI 분석을 통해 로또 번호를 추천해드려요",
+                  subtitle: "매일 단 한번의 기회를 놓치지 마시고,\n당신만의 행운의 숫자를 만나보세요!",
                   image: Lottie.asset(
                     "assets/animations/splash_ai_lottie.json",
                     repeat: true,
@@ -48,8 +49,8 @@ class _IntroduceScreenState extends State<IntroduceScreen> {
                   ),
                 ),
                 PageContent(
-                  title: "추첨일이 다가오기 전에!\n최대한 많이 행운의 숫자를 생성하세요",
-                  subtitle: "매주 토요일, 생성한 숫자를 활용해 도전해보세요\n단, 이 모든 것은 당신의 '행운'에 달려있습니다",
+                  title: "아직까지 랜덤 생성 번호를 사용하나요?",
+                  subtitle: "이제, 당신의 행운을 시험해보세요!\n어느새 매주 추첨일이 기다려질거에요",
                   image: Lottie.asset(
                     "assets/animations/splash_luck_lottie.json",
                     repeat: true,
@@ -58,8 +59,8 @@ class _IntroduceScreenState extends State<IntroduceScreen> {
                   ),
                 ),
                 PageContent(
-                  title: "매일 진행되는 번호추천을 잊지 않도록\n반드시 알람설정을 허용해주세요",
-                  subtitle: "하루 한번, 잊지 않도록 푸시 알림이 도착해요\n기회를 놓치지 않도록 도와드릴게요",
+                  title: "서비스 이용을 위해 알림을 허용해주세요",
+                  subtitle: "혹시, 오늘 번호 생성을 잊으셨나요?\n하루 한번, PUSH 알림을 보내드릴게요",
                   image: Lottie.asset(
                     "assets/animations/splash_alert_lottie.json",
                     repeat: true,
@@ -118,6 +119,8 @@ class PageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size; // 화면 크기 가져오기
+    final double imageSize = size.width * 0.55; // 화면 너비의 70%를 이미지 크기로 설정
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
@@ -135,21 +138,24 @@ class PageContent extends StatelessWidget {
                     title,
                     style: Theme.of(context).textTheme.labelLarge,
                     maxLines: 2,
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 10),
                   Text(
                     subtitle,
                     style: Theme.of(context).textTheme.bodyMedium,
                     maxLines: 2,
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
               const SizedBox(height: 30),
+
               Center(
                 child: SizedBox(
                   child: image,
-                  width: 280,
-                  height: 280,
+                  width: imageSize,
+                  height: imageSize,
                 ),
               ),
             ],

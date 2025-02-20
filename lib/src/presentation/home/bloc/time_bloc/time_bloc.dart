@@ -3,9 +3,10 @@ import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_state.dart'
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TimeBloc extends Bloc<TimeEvent, TimeState> {
-  TimeBloc() : super(TimeState.fromPeriod(_getCurrentPeriod())) {
+  TimeBloc() : super(TimeState.fromPeriod(_getCurrentPeriod(), _getCurrentDate())) {
     on<RefreshTimeEvent>((event, emit) {
-      emit(TimeState.fromPeriod(_getCurrentPeriod()));
+      // RefreshTimeEvent 발생 시, 현재 날짜로 새로운 TimeState를 emit
+      emit(TimeState.fromPeriod(_getCurrentPeriod(), _getCurrentDate()));
     });
   }
 
@@ -19,5 +20,11 @@ class TimeBloc extends Bloc<TimeEvent, TimeState> {
     } else {
       return TimePeriod.evening;
     }
+  }
+
+  // 현재 날짜를 "yyyy년 MM월 dd일" 형식으로 반환
+  static String _getCurrentDate() {
+    final now = DateTime.now();
+    return "${now.year}년 ${now.month.toString().padLeft(2, '0')}월 ${now.day.toString().padLeft(2, '0')}일";
   }
 }

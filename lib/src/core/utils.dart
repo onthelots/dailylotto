@@ -5,15 +5,15 @@ class LottoUtils {
   // 로또 번호 색상 반환
   static Color getLottoBallColor(int number) {
     if (number <= 10) {
-      return AppColors.lightSecondary; // lightSecondary: 더 부드러운 노란색 느낌
+      return Color(0xFFFFB81C); // 어두운 노란색 (RGB: 255, 184, 28)
     } else if (number <= 20) {
-      return AppColors.darkAccent; // darkAccent: 좀 더 고급스러운 파란색
+      return Color(0xFF3578E5); // 선명한 파란색 (RGB: 53, 120, 229)
     } else if (number <= 30) {
-      return AppColors.darkPrimary; // darkPrimary: 차분한 빨간색
+      return Color(0xFFEF4343); // 선명한 빨간색 (RGB: 239, 67, 67)
     } else if (number <= 40) {
-      return AppColors.lightPrimary; // lightPrimary: 따뜻한 회색 톤
+      return Color(0xFF9E9E9E); // 부드러운 회색 (RGB: 158, 158, 158)
     } else {
-      return AppColors.lightAccent; // lightAccent: 부드러운 초록색
+      return Color(0xFF388E3C); // 선명한 초록색 (RGB: 56, 142, 60)
     }
   }
 
