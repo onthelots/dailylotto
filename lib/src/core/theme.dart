@@ -10,15 +10,18 @@ class AppTheme {
     primaryColor: AppColors.lightPrimary, // 주요색상
     focusColor: AppColors.lightAccent,
     scaffoldBackgroundColor: AppColors.lightBackground, // 백그라운드 색상
-    highlightColor: AppColors.lightAccent,
+    highlightColor: AppColors.lightSecondary,
+    cardColor: AppColors.lightBoxBackground,
+    disabledColor: AppColors.lightCheckBox,
 
     // - text
     textTheme: const TextTheme(
       displayLarge: TextStyle(color: Colors.black87, fontSize: 32),
       displayMedium: TextStyle(color: Colors.black54, fontSize: 25, fontWeight: FontWeight.bold),
+      titleMedium: TextStyle(color: Colors.black87, fontSize: 17, fontWeight: FontWeight.bold),
       bodyLarge: TextStyle(color: Colors.black87, fontSize: 20, fontWeight: FontWeight.bold),
       bodyMedium: TextStyle(color: Colors.black54, fontSize: 16),
-      bodySmall: TextStyle(color: Colors.black54, fontSize: 13),
+      bodySmall: TextStyle(color: Colors.black54, fontSize: 13, fontWeight: FontWeight.w300),
       labelLarge: TextStyle(color: Colors.black87, fontSize: 20, fontWeight: FontWeight.bold), // 버튼 라벨 텍스트 크기 (카테고리)
       labelMedium: TextStyle(color: Colors.black54, fontSize: 16, fontWeight: FontWeight.w800), // Section 타이틀
       labelSmall: TextStyle(color: Colors.black54, fontSize: 13, fontWeight: FontWeight.w600), // 위치, 장소
@@ -47,15 +50,18 @@ class AppTheme {
     primaryColor: AppColors.darkPrimary,
     focusColor: AppColors.darkAccent,
     scaffoldBackgroundColor: AppColors.darkBackground,
-    highlightColor: AppColors.darkAccent,
+    highlightColor: AppColors.darkSecondary,
+    cardColor: AppColors.darkBoxBackground,
+    disabledColor: AppColors.darkCheckBox,
 
     // - text
     textTheme: const TextTheme(
       displayLarge: TextStyle(color: Colors.white, fontSize: 32),
       displayMedium: TextStyle(color: Colors.white70, fontSize: 25, fontWeight: FontWeight.bold),
+      titleMedium: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold),
       bodyLarge: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
       bodyMedium: TextStyle(color: Colors.white70, fontSize: 16),
-      bodySmall: TextStyle(color: Colors.white70, fontSize: 13),
+      bodySmall: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w300),
       labelLarge: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold), // 버튼 라벨 텍스트 크기 (카테고리)
       labelMedium: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.w800), // Section 타이틀
       labelSmall: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w600), // 위치, 장소

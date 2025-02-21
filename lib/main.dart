@@ -1,12 +1,11 @@
 import 'package:dailylotto/src/core/di/locator.dart';
+import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_bloc.dart';
+import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_state.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:dailylotto/src/core/routes.dart';
 import 'package:dailylotto/src/core/shared_preference.dart';
 import 'package:dailylotto/src/core/theme.dart';
@@ -54,6 +53,9 @@ class MyApp extends StatelessWidget {
           create: (context) => ThemeBloc()..add(ThemeInitialEvent()), // 앱 실행 시 테마 초기화
         ),
         BlocProvider(
+          create: (context) => TimeBloc(), // 시간 가져오기
+        ),
+        BlocProvider(
           create: (context) => locator<LottoRemoteBloc>()..add(FetchLatestRound()),
         ),
         BlocProvider(
@@ -66,10 +68,20 @@ class MyApp extends StatelessWidget {
             listener: (context, state) {
               if (state is LottoLoaded) {
                 final remoteRound = state.latestRound.round;
-                print(">>> 앱 초기 시점에, Remote로 부터 latestRound값 받아오기 ${remoteRound}");
+                context
+                    .read<LottoLocalBloc>()
+                    .add(UpdateWinningNumbersEvent(
+                    round: state.latestRound.round,
+                    winningNumbers: state.latestRound.winningNumbers,
+                    bonusNumber: state.latestRound.bonusNumber));
+
                 context
                     .read<LottoLocalBloc>()
                     .add(LoadLottoNumbersEvent(remoteRound));
+
+                context
+                    .read<TimeBloc>()
+                    .add(RefreshTimeEvent());
               }
             },
           ),

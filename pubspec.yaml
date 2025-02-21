@@ -45,6 +45,8 @@ dependencies:
   firebase_messaging: ^15.2.2
   http: ^1.3.0
   get_it: ^8.0.3
+  flutter_animate: ^4.5.2
+  hugeicons: ^0.0.7
 
 dev_dependencies:
   flutter_test:
@@ -60,5 +62,6 @@ flutter:
   assets:
      - .env
      - assets/
+     - assets/images/
      - assets/data/
      - assets/animations/

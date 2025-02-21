@@ -22,8 +22,8 @@ class LottoLocalUseCase {
   }
 
   // 당첨번호 업데이트
-  Future<void> updateWinningNumbers(int round, List<int> winningNumbers) {
-    return repository.updateWinningNumbers(round, winningNumbers);
+  Future<void> updateWinningNumbers(int round, List<int> winningNumbers, int bonusNumber) {
+    return repository.updateWinningNumbers(round, winningNumbers, bonusNumber);
   }
 
   // 새로운 회차 추가
