@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import '../../../../core/constants.dart';
+
 enum TimePeriod { morning, lunch, evening }
 
 class TimeState {
@@ -6,6 +9,7 @@ class TimeState {
   final String subtitle;
   final String date;
   final String imagePath;
+  final Color background;
 
   TimeState({
     required this.period,
@@ -13,6 +17,7 @@ class TimeState {
     required this.subtitle,
     required this.date,
     required this.imagePath,
+    required this.background,
   });
 
   factory TimeState.fromPeriod(TimePeriod period, String date) {
@@ -24,14 +29,16 @@ class TimeState {
           subtitle: "오늘도 멋진 하루를 시작하세요",
           date: date,
           imagePath: "assets/animations/morning_lottie.json",
+          background: AppColors.lightPrimary,
         );
       case TimePeriod.lunch:
         return TimeState(
           period: period,
-          title: "즐거운 점심시간!",
-          subtitle: "맛있는 점심 드시고 힘내세요",
+          title: "새로운 도전, 지금 시작!",
+          subtitle: "목표를 향해 나아가세요",
           date: date,
           imagePath: "assets/animations/lunch_lottie.json",
+          background: AppColors.lightSecondary,
         );
       case TimePeriod.evening:
         return TimeState(
@@ -40,6 +47,7 @@ class TimeState {
           subtitle: "오늘 하루도 수고 많으셨습니다",
           date: date,
           imagePath: "assets/animations/evening_lottie.json",
+          background: AppColors.darkTertiary,
         );
     }
   }

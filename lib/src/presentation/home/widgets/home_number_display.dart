@@ -46,103 +46,121 @@ class LottoNumberDisplay extends StatelessWidget {
       {required BuildContext context,
       required List<int> todayNumbers,
       required String date}) {
-    return Container(
-      height: 80,
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-      ),
-      padding: const EdgeInsets.all(15),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1), // alpha 값만 설정
-              offset: Offset(0, 2), // 그림자 위치 (수평, 수직)
-              blurRadius: 3, // 흐림 정도 (작게 설정)
-              spreadRadius: 1, // 그림자의 확장 정도
+    return BlocBuilder<TimeBloc, TimeState>(
+      builder: (context, state) {
+        return Container(
+          height: 80,
+          decoration: BoxDecoration(
+            color: state.background,
+          ),
+          padding: const EdgeInsets.all(15),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(30),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1), // alpha 값만 설정
+                  offset: Offset(0, 2), // 그림자 위치 (수평, 수직)
+                  blurRadius: 3, // 흐림 정도 (작게 설정)
+                  spreadRadius: 1, // 그림자의 확장 정도
+                ),
+              ],
             ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-
-            Text('Daily pick', style: Theme.of(context).textTheme.bodySmall),
-
-            Wrap(
-              spacing: 8, // 번호 간격
-              children: todayNumbers
-                  .map<Widget>(
-                      (number) => LottoUtils.lottoBall(number)) // 위젯 리스트로 변환
-                  .toList(),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text('Daily pick',
+                    style: Theme.of(context).textTheme.bodySmall),
+                Wrap(
+                  spacing: 8, // 번호 간격
+                  children: todayNumbers
+                      .map<Widget>((number) =>
+                          LottoUtils.lottoBall(number: number, width: 30.0, height: 30.0)) // 위젯 리스트로 변환
+                      .toList(),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
   // 로또 번호가 생성되지 않았을 경우 버튼 화면
   Widget _buildLottoGenerationButton(
-      {required BuildContext context, required String today, required int round}) {
-    return Container(
-      height: 80,
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-      ),
-      padding: const EdgeInsets.all(15),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1), // alpha 값만 설정
-              offset: Offset(0, 2), // 그림자 위치 (수평, 수직)
-              blurRadius: 3, // 흐림 정도 (작게 설정)
-              spreadRadius: 1, // 그림자의 확장 정도
+      {required BuildContext context,
+      required String today,
+      required int round}) {
+    return BlocBuilder<TimeBloc, TimeState>(
+      builder: (context, state) {
+        return Container(
+          height: 80,
+          decoration: BoxDecoration(
+            color: state.background,
+          ),
+          padding: const EdgeInsets.all(15),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1), // alpha 값만 설정
+                  offset: Offset(0, 2), // 그림자 위치 (수평, 수직)
+                  blurRadius: 3, // 흐림 정도 (작게 설정)
+                  spreadRadius: 1, // 그림자의 확장 정도
+                ),
+              ],
             ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // 제목
+                Text('오늘 생성된 번호가 없습니다',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(color: Colors.grey)),
 
-            // 제목
-            Text('오늘 생성된 번호가 없습니다', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey)),
-
-            // 생성하기
-            TextButton(
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.arrow_circle_right_rounded,
-                    color: Theme.of(context).primaryColor,
+                // 생성하기
+                TextButton(
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.arrow_circle_right_rounded,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text('AI 추천받기',
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelSmall
+                              ?.copyWith(
+                                  color: Theme.of(context).primaryColor)),
+                    ],
                   ),
-                  SizedBox(width: 5,),
-                  Text('AI 추천받기',
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(color: Theme.of(context).primaryColor)),
-                ],
-              ),
-              onPressed: () {
-                context.read<LottoLocalBloc>().add(
-                  GenerateLottoNumbersEvent(
-                    round: round,
-                    date: today,
-                    numbers: _generateUniqueLottoNumbers(),
-                    recommendReason: reasonPlaceholder,
-                    dailyTip: dailyTipPlaceholder,
-                  ),
-                );
-              },
+                  onPressed: () {
+                    context.read<LottoLocalBloc>().add(
+                          GenerateLottoNumbersEvent(
+                            round: round,
+                            date: today,
+                            numbers: _generateUniqueLottoNumbers(),
+                            recommendReason: reasonPlaceholder,
+                            dailyTip: dailyTipPlaceholder,
+                          ),
+                        );
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

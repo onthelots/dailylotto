@@ -18,10 +18,10 @@ class LottoUtils {
   }
 
   // 로또 공 UI 위젯 반환
-  static Widget lottoBall(int number) {
+  static Widget lottoBall({required int number, required double width, required double height}) {
     return Container(
-      width: 30,
-      height: 30,
+      width: width,
+      height: height,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: getLottoBallColor(number),
@@ -35,5 +35,15 @@ class LottoUtils {
         ),
       ),
     );
+  }
+
+  // 1인당 당첨금액 반올림 (억/만 단위)
+  static String formatPrizeAmount(int amount) {
+    if (amount >= 100000000) {
+      return "약 ${(amount / 100000000).round()}억 원"; // 1억 단위로 반올림
+    } else if (amount >= 10000) {
+      return "약 ${(amount / 10000).round()}만 원"; // 1만 단위로 반올림
+    }
+    return "$amount원"; // 1만 원 미만은 그대로 출력
   }
 }

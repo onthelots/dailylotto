@@ -28,20 +28,34 @@ class LottoLocalDataSource {
   }
 
   // 당첨번호 업데이트
-  Future<void> updateWinningNumbers(int round, List<int> winningNumbers) async {
-    final lottoRound = _box.get(round); // 특정 회차의 round 가져오기
+  Future<void> updateWinningNumbers(int round, List<int> winningNumbers, int bonusNumber) async {
+    final lottoRound = _box.get(round);
 
-    if (lottoRound == null) return;  // 회차가 없으면 리턴
+    if (lottoRound == null) return;
 
-      // 반복문을 통해, 특정 회차 데이터의 당첨/낙첨 여부 확인
-      for (var entry in lottoRound.entries) {
-        final isWinner = entry.numbers.toSet().containsAll(winningNumbers);
-        entry.result = isWinner ? "당첨 🎉" : "낙첨 ❌";
+    for (var entry in lottoRound.entries) {
+      final matchedNumbers = entry.numbers.where((num) => winningNumbers.contains(num)).length;
+      final hasBonus = entry.numbers.contains(bonusNumber);
+
+      // 당첨 등수 판별
+      if (matchedNumbers == 6) {
+        entry.result = "1등";
+      } else if (matchedNumbers == 5 && hasBonus) {
+        entry.result = "2등";
+      } else if (matchedNumbers == 5) {
+        entry.result = "3등";
+      } else if (matchedNumbers == 4) {
+        entry.result = "4등";
+      } else if (matchedNumbers == 3) {
+        entry.result = "5등";
+      } else {
+        entry.result = "낙첨";
       }
-      // 이후, 저장
-      await _box.put(round, lottoRound);
+    }
 
+    await _box.put(round, lottoRound); // 업데이트된 데이터 저장
   }
+
 
   // 새로운 회차 추가
   Future<void> createNewRound(int newRound) async {

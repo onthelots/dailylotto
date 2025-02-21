@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dailylotto/src/presentation/weekly/weekly_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -123,7 +124,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _tabs = [
     HomeScreen(),
-    HistoryScreen(),
+    WeeklyScreen(),
     MyPageScreen(),
   ];
 

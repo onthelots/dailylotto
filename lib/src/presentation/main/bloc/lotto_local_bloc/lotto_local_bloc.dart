@@ -4,8 +4,6 @@ import 'package:dailylotto/src/domain/usecases/lotto_local_usecase.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'dart:math';
-
 import 'package:intl/intl.dart';
 
 // 🟢 BLoC 정의
@@ -28,8 +26,7 @@ class LottoLocalBloc extends Bloc<LottoLocalEvent, LottoLocalState> {
           print("LoadLottoNumbersEvent : lottoData가 null이 아닙니다.");
         }
 
-        // 오늘 생성된 로또 번호가 있는지 확인
-        // >> 어제 생성했더라도, 오늘 날짜로 갱신하여 다시 앱을 실행시키면 > today에 생성된 Entry가 없으므로, 임시 데이터를 할당함
+
         final today = DateFormat('yyyy-MM-dd').format(
             DateTime.now());
         LottoEntry? todayEntry;
@@ -39,13 +36,16 @@ class LottoLocalBloc extends Bloc<LottoLocalEvent, LottoLocalState> {
             date: today,
             numbers: [],  // 기본값
             recommendReason: reasonPlaceholder,
-            dailyTip: dailyTipPlaceholder,
+            dailyTip: "\n오늘의 팁이 없나요?\nAI 추천을 통해\n번호를 생성해주세요!",
             isDefault: true,  // 기본값 처리
           ),
         );
 
         print("LoadLottoNumbersEvent : 오늘 저장된 Entry : ${todayEntry?.isDefault}");
         emit(LottoNumbersLoaded(lottoData!, todayEntry)); // 현재 회차 Data
+
+        // 🔹 당첨번호가 존재하면 UpdateWinningNumbersEvent 실행
+
       } catch (e) {
         emit(LottoNumbersError("로또 데이터를 불러오는 중 오류 발생: ${e.toString()}"));
       }
@@ -92,8 +92,7 @@ class LottoLocalBloc extends Bloc<LottoLocalEvent, LottoLocalState> {
     // 🔵 당첨번호 업데이트
     on<UpdateWinningNumbersEvent>((event, emit) async {
       try {
-        await useCase.updateWinningNumbers(event.round, event.winningNumbers);
-        emit(UpdateWinningNumbers());
+        await useCase.updateWinningNumbers(event.round, event.winningNumbers, event.bonusNumber);
       } catch (e) {
         emit(LottoNumbersError("당첨번호 업데이트 중 오류 발생: ${e.toString()}"));
       }

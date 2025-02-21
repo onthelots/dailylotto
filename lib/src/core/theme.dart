@@ -12,6 +12,7 @@ class AppTheme {
     scaffoldBackgroundColor: AppColors.lightBackground, // 백그라운드 색상
     highlightColor: AppColors.lightSecondary,
     cardColor: AppColors.lightBoxBackground,
+    disabledColor: AppColors.lightCheckBox,
 
     // - text
     textTheme: const TextTheme(
@@ -51,6 +52,7 @@ class AppTheme {
     scaffoldBackgroundColor: AppColors.darkBackground,
     highlightColor: AppColors.darkSecondary,
     cardColor: AppColors.darkBoxBackground,
+    disabledColor: AppColors.darkCheckBox,
 
     // - text
     textTheme: const TextTheme(

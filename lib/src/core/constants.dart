@@ -5,20 +5,24 @@ import 'package:unicons/unicons.dart';
 class AppColors {
   static const Color lightPrimary = Color(0xffD9534F);
   static const Color lightSecondary = Color(0xffF39C12);
+  static const Color lightTertiary = Color(0xff34495E);
   static const Color lightAccent = Color(0xff2ECC71);
   static const Color lightBackground = Color(0xffFFFFFF);
-  static const Color lightBoxBackground = Color(0xffF8F8F8); // 기존 배경보다 약간 어두운 색
+  static const Color lightBoxBackground = Color(0xffF8F8F8);
   static const Color lightActiveButton = Color(0xffD9534F);
   static const Color lightInactiveButton = Color(0xff333333);
+  static const Color lightCheckBox = Color(0xffE0E0E0);
 
   // Dark Mode Colors
   static const Color darkPrimary = Color(0xffD9534F);
   static const Color darkSecondary = Color(0xffE67E22);
+  static const Color darkTertiary = Color(0xff121921);
   static const Color darkAccent = Color(0xff1ABC9C);
   static const Color darkBackground = Color(0xff1E1E1E);
-  static const Color darkBoxBackground = Color(0xff252525); // 기존 배경보다 약간 밝은 색상
+  static const Color darkBoxBackground = Color(0xff252525);
   static const Color darkActiveButton = Color(0xffC0392B);
   static const Color darkInactiveButton = Color(0xff333333);
+  static const Color darkCheckBox = Color(0xff3A3A3A);
 }
 
 /// BottomNavigationBar

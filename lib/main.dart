@@ -1,16 +1,11 @@
 import 'package:dailylotto/src/core/di/locator.dart';
 import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_bloc.dart';
 import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_event.dart';
-import 'package:dailylotto/src/presentation/home/widgets/home_card_display.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_state.dart';
-import 'package:dailylotto/src/scatch_screen.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:dailylotto/src/core/routes.dart';
 import 'package:dailylotto/src/core/shared_preference.dart';
 import 'package:dailylotto/src/core/theme.dart';
@@ -75,7 +70,15 @@ class MyApp extends StatelessWidget {
                 final remoteRound = state.latestRound.round;
                 context
                     .read<LottoLocalBloc>()
+                    .add(UpdateWinningNumbersEvent(
+                    round: state.latestRound.round,
+                    winningNumbers: state.latestRound.winningNumbers,
+                    bonusNumber: state.latestRound.bonusNumber));
+
+                context
+                    .read<LottoLocalBloc>()
                     .add(LoadLottoNumbersEvent(remoteRound));
+
                 context
                     .read<TimeBloc>()
                     .add(RefreshTimeEvent());
@@ -93,7 +96,6 @@ class MyApp extends StatelessWidget {
               darkTheme: AppTheme.darkTheme,
               themeMode: themeMode,
               initialRoute: initialRoute,
-              // home: HomeCardScreen(),
               onGenerateRoute: _router.onGenerateRoute,
             );
           },

@@ -43,10 +43,12 @@ class GenerateLottoNumbersEvent extends LottoLocalEvent {
 class UpdateWinningNumbersEvent extends LottoLocalEvent {
   final int round;
   final List<int> winningNumbers;
+  final int bonusNumber;
 
   UpdateWinningNumbersEvent({
     required this.round,
     required this.winningNumbers,
+    required this.bonusNumber,
   });
 
   @override
