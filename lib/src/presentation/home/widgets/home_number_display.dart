@@ -120,10 +120,7 @@ class LottoNumberDisplay extends StatelessWidget {
               children: [
                 // 제목
                 Text('오늘 생성된 번호가 없습니다',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(color: Colors.grey)),
+                    style: Theme.of(context).textTheme.bodySmall),
 
                 // 생성하기
                 TextButton(

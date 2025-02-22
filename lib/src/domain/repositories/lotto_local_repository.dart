@@ -30,4 +30,9 @@ class LottoLocalRepository {
   Future<void> createNewRound(int newRound) {
     return dataSource.createNewRound(newRound);
   }
+
+  // 더미데이터 추가
+  Future<void> createDummyRoundLocalData(int round) {
+    return dataSource.createDummyRoundLocalData(round);
+  }
 }

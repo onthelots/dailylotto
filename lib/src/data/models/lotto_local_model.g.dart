@@ -19,6 +19,7 @@ class LottoLocalModelAdapter extends TypeAdapter<LottoLocalModel> {
     return LottoLocalModel(
       round: fields[0] as int,
       entries: (fields[1] as List).cast<LottoEntry>(),
+      timeStamp: fields[3] as DateTime,
       winningNumbers: (fields[2] as List?)?.cast<int>(),
     );
   }
@@ -26,13 +27,15 @@ class LottoLocalModelAdapter extends TypeAdapter<LottoLocalModel> {
   @override
   void write(BinaryWriter writer, LottoLocalModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.round)
       ..writeByte(1)
       ..write(obj.entries)
       ..writeByte(2)
-      ..write(obj.winningNumbers);
+      ..write(obj.winningNumbers)
+      ..writeByte(3)
+      ..write(obj.timeStamp);
   }
 
   @override
@@ -62,13 +65,14 @@ class LottoEntryAdapter extends TypeAdapter<LottoEntry> {
       recommendReason: fields[2] as String,
       dailyTip: fields[3] as String,
       result: fields[4] as String?,
+      isDefault: fields[5] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, LottoEntry obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.date)
       ..writeByte(1)
@@ -78,7 +82,9 @@ class LottoEntryAdapter extends TypeAdapter<LottoEntry> {
       ..writeByte(3)
       ..write(obj.dailyTip)
       ..writeByte(4)
-      ..write(obj.result);
+      ..write(obj.result)
+      ..writeByte(5)
+      ..write(obj.isDefault);
   }
 
   @override

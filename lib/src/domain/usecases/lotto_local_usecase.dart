@@ -31,6 +31,11 @@ class LottoLocalUseCase {
     return repository.createNewRound(newRound);
   }
 
+  // 더미데이터  추가
+  Future<void> createDummyRoundLocalData(int round) {
+    return repository.createDummyRoundLocalData(round);
+  }
+
   // 오늘 날짜에 대한 로또 번호가 이미 생성된 상태인지 확인
   Future<bool> isLottoNumbersAlreadyGenerated(int round, String date) async {
     final roundData = await repository.getLottoRound(round);

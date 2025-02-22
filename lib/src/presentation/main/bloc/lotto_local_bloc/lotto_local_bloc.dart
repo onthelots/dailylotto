@@ -16,49 +16,58 @@ class LottoLocalBloc extends Bloc<LottoLocalEvent, LottoLocalState> {
     on<LoadLottoNumbersEvent>((event, emit) async {
       emit(LottoNumbersLoading());
       try {
-        print("LoadLottoNumbersEvent : try 구문 실행중");
+        print("--- 현재 회차 ${event.round} 업데이트 ---");
+        print("LoadLottoNumbersEvent : 다가오는 회차는? ${event.round}");
+
         var lottoData = useCase.getLottoRound(event.round);
+
         if (lottoData == null) {
-          print("LoadLottoNumbersEvent : lottoData가 null입니다.");
+          print("LoadLottoNumbersEvent : ${event.round}회차 컨테이너에 저장된 데이터가 없습니다");
           await useCase.createNewRound(event.round);
           lottoData = await useCase.getLottoRound(event.round);
+          print("LoadLottoNumbersEvent : ${event.round}회차 컨테이너를 생성합니다 (비어있는 Entry)");
         } else {
-          print("LoadLottoNumbersEvent : lottoData가 null이 아닙니다.");
+          print("LoadLottoNumbersEvent : ${event.round}회차 컨테이너가 이미 존재하네요!");
         }
 
+        final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
-        final today = DateFormat('yyyy-MM-dd').format(
-            DateTime.now());
-        LottoEntry? todayEntry;
-        todayEntry = lottoData?.entries.firstWhere(
+        // 🔹 이전 회차 데이터 가져오기
+        final previousRound = event.round - 1;
+        final previousData = useCase.getLottoRound(previousRound);
+
+        // 🔹 오늘 날짜에 해당하는 Entry 찾기
+        // 3가지 경우를 다루며 -> lottoData.entries (현재 컨테이너)를 사용함
+        // 1) 현재 컨테이너에 오늘 날짜 데이터가 있음 -> 해당 데이터 반환
+        // 2) 현재 컨테이너에 오늘 날짜 데이터가 없으나, 이전 엔트리에는 존재함 -> 이전 데이터에서 가져옴 (이건, 토요일에 컨테이너가 생성될 때, 당일 생성한 번호가 존재할 때 이전 회차 데이터를 가져와서 할당하는 것임)
+        // 3) 현재 컨테이너와 이전 컨테이너 모두 없음 -> 기본값 생성
+        LottoEntry todayEntry = (lottoData?.entries.firstWhere(
               (entry) => entry.date == today,
-          orElse: () => LottoEntry(
-            date: today,
-            numbers: [],  // 기본값
-            recommendReason: reasonPlaceholder,
-            dailyTip: "\n오늘의 팁이 없나요?\nAI 추천을 통해\n번호를 생성해주세요!",
-            isDefault: true,  // 기본값 처리
-          ),
-        );
+          orElse: () {
+            // 이전 데이터에서 찾기
+            if (previousData != null) {
+              try {
+                return previousData.entries.firstWhere(
+                      (entry) => entry.date == today,
+                );
+              } catch (_) {
+                print("LoadLottoNumbersEvent: 이전 회차인 ${previousRound} 컨테이너에 생성된 오늘 날짜의 번호가 없어요.");
+              }
+            }
 
-        print("LoadLottoNumbersEvent : 오늘 저장된 Entry : ${todayEntry?.isDefault}");
+            return LottoEntry(
+              date: today,
+              numbers: [],
+              recommendReason: "추천 이유 없음",
+              dailyTip: "\n오늘의 팁이 없나요?\nAI 추천을 통해\n번호를 생성해주세요!",
+              isDefault: true,
+            );
+          },
+        ))!;
+        print("LoadLottoNumbersEvent: 오늘 번호를 생성하지 않았나요? ${todayEntry.isDefault}");
         emit(LottoNumbersLoaded(lottoData!, todayEntry)); // 현재 회차 Data
-
-        // 🔹 당첨번호가 존재하면 UpdateWinningNumbersEvent 실행
-
       } catch (e) {
         emit(LottoNumbersError("로또 데이터를 불러오는 중 오류 발생: ${e.toString()}"));
-      }
-    });
-
-    // 🔵 전체 회차 데이터 불러오기
-    on<LoadAllLottoNumbersEvent>((event, emit) async {
-      emit(LottoNumbersLoading());
-      try {
-        final allData = useCase.getAllRounds();
-        emit(AllLottoNumbersLoaded(allData));
-      } catch (e) {
-        emit(LottoNumbersError("모든 회차 데이터를 불러오는 중 오류 발생: ${e.toString()}"));
       }
     });
 
@@ -95,6 +104,15 @@ class LottoLocalBloc extends Bloc<LottoLocalEvent, LottoLocalState> {
         await useCase.updateWinningNumbers(event.round, event.winningNumbers, event.bonusNumber);
       } catch (e) {
         emit(LottoNumbersError("당첨번호 업데이트 중 오류 발생: ${e.toString()}"));
+      }
+    });
+
+    // 🟢 더미데이터 추가
+    on<CreateDummyRoundData>((event, emit) async {
+      try {
+        await useCase.createDummyRoundLocalData(event.round); // 1159회차 데이터 추가
+      } catch (e) {
+        emit(LottoNumbersError("더미데이터 생성 실패: ${e.toString()}"));
       }
     });
   }

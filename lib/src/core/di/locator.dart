@@ -12,6 +12,7 @@ import 'package:hive_flutter/adapters.dart';
 
 import '../../domain/repositories/lotto_local_repository.dart';
 import '../../domain/usecases/lotto_local_usecase.dart';
+import '../../presentation/weekly/bloc/round_list_bloc/round_list_bloc.dart';
 
 final locator = GetIt.instance;
 
@@ -58,4 +59,8 @@ Future<void> setupLocator() async {
   // 2. Lotto Local
   locator.registerFactory<LottoLocalBloc>(
           () => LottoLocalBloc(useCase: locator<LottoLocalUseCase>()));
+
+  // 3. All Round List
+  locator.registerFactory<RoundListBloc>(
+          () => RoundListBloc(useCase: locator<LottoLocalUseCase>()));
 }
