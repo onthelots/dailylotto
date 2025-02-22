@@ -12,9 +12,13 @@ class LottoLocalModel {
   @HiveField(2)
   List<int>? winningNumbers; // 해당 회차 당첨번호
 
+  @HiveField(3)
+  DateTime timeStamp; // 추첨일
+
   LottoLocalModel({
     required this.round,
     required this.entries,
+    required this.timeStamp,
     this.winningNumbers,
   });
 }

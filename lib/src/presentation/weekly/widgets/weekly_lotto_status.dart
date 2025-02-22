@@ -10,21 +10,12 @@ import '../../main/bloc/lotto_remote_bloc/lotto_remote_state.dart';
 class WeeklyLottoStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LottoRemoteBloc, LottoRemoteState>(
-      builder: (context, remoteState) {
-        if (remoteState is LottoLoaded) {
-          final latestRound = remoteState.latestRound.round;
-
-          return BlocBuilder<LottoLocalBloc, LottoLocalState>(
-            builder: (context, localState) {
-              if (localState is LottoNumbersLoaded) {
-                return WeeklyLottoUI(
-                  latestRound: latestRound,
-                  entries: localState.lottoData.entries,
-                );
-              }
-              return CircularProgressIndicator();
-            },
+    return BlocBuilder<LottoLocalBloc, LottoLocalState>(
+      builder: (context, localState) {
+        if (localState is LottoNumbersLoaded) {
+          return WeeklyLottoUI(
+            latestRound: localState.lottoData.round,
+            entries: localState.lottoData.entries,
           );
         }
         return CircularProgressIndicator();
@@ -52,9 +43,27 @@ class WeeklyLottoUI extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "이번주 진행상황",
-          style: Theme.of(context).textTheme.titleMedium,
+        RichText(
+          maxLines: 1,
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: "이번주 진행상황",
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium,
+              ),
+              WidgetSpan(
+                child: SizedBox(width: 5), // 간격 추가
+              ),
+              TextSpan(
+                text: "(${latestRound}회차)",
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  letterSpacing: -0.3, // 음수 값을 사용하면 간격이 줄어듦
+                ),
+              ),
+            ],
+          ),
         ),
 
         SizedBox(height: 10),
@@ -90,6 +99,15 @@ class WeeklyLottoUI extends StatelessWidget {
                             .textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)
                         : Theme.of(context).textTheme.bodySmall,
                   ),
+
+                  const SizedBox(height: 3),
+
+                  if (isToday)
+                    Container(
+                      width: 13, // 텍스트 너비만큼 동적으로 설정하려면 LayoutBuilder를 사용할 수도 있음
+                      height: 2.5, // 높이 조절
+                      color: Theme.of(context).primaryColor, // 오늘 날짜 강조 색상
+                    ),
                 ],
               );
             }),

@@ -17,7 +17,7 @@ class LottoUtils {
     }
   }
 
-  // 로또 공 UI 위젯 반환
+  // 로또 공 UI 위젯
   static Widget lottoBall({required int number, required double width, required double height}) {
     return Container(
       width: width,
@@ -34,6 +34,23 @@ class LottoUtils {
           fontWeight: FontWeight.w600,
         ),
       ),
+    );
+  }
+
+  // 로또 숫자 UI 위젯
+  static Widget lottoNumber(
+      {required int number,
+      required double width,
+      required double height,
+      required bool isCorrect,
+      required BuildContext context}) {
+    return Container(
+      width: width,
+      height: height,
+      alignment: Alignment.center,
+      child: Text(number.toString(),
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: isCorrect ? Theme.of(context).hintColor : null)),
     );
   }
 

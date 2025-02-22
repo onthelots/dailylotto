@@ -16,9 +16,6 @@ class LoadLottoNumbersEvent extends LottoLocalEvent {
   List<Object?> get props => [round];
 }
 
-// ✅ 전체 데이터 로드
-class LoadAllLottoNumbersEvent extends LottoLocalEvent {}
-
 // ✅ 로또 번호 생성
 class GenerateLottoNumbersEvent extends LottoLocalEvent {
   final int round;
@@ -53,4 +50,14 @@ class UpdateWinningNumbersEvent extends LottoLocalEvent {
 
   @override
   List<Object?> get props => [round, winningNumbers];
+}
+
+// ✅ 더미데이터 추가
+class CreateDummyRoundData extends LottoLocalEvent {
+  final int round;
+
+  CreateDummyRoundData(this.round);
+
+  @override
+  List<Object?> get props => [round];
 }

@@ -2,6 +2,7 @@ import 'package:dailylotto/src/presentation/history/history_screen.dart';
 import 'package:dailylotto/src/presentation/main/main_screen.dart';
 import 'package:dailylotto/src/presentation/mypage/mypage_screen.dart';
 import 'package:dailylotto/src/presentation/introduce/Introduce_screen.dart';
+import 'package:dailylotto/src/presentation/weekly/all_round_screen.dart';
 import 'package:dailylotto/src/presentation/weekly/weekly_screen.dart';
 import 'package:dailylotto/src/scatch_screen.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,10 @@ class Routes {
   static const String home = '/home'; // 홈 (탭바)
   static const String weekly = '/weekly'; // 번호기록 (탭바)
   static const String mypage = '/mypage'; // 마임페이지 (탭바)
+
+
+  // details
+  static const String allround = '/allround'; // 번호기록 (탭바)
 
   // game
   static const String game_1 = '/g1'; // 게임 화면1
@@ -56,6 +61,10 @@ class AppRouter {
       case Routes.scatch:
         return MaterialPageRoute(
           builder: (_) => ScatchScreen(),
+        );
+      case Routes.allround:
+        return MaterialPageRoute(
+          builder: (_) => AllRoundsScreen(),
         );
       default:
         return null;

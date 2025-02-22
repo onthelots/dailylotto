@@ -24,15 +24,6 @@ class LottoNumbersLoaded extends LottoLocalState {
 // ✅ 당첨번호 업데이트
 class UpdateWinningNumbers extends LottoLocalState {}
 
-// ✅ 전체 데이터 로드 완료 상태
-class AllLottoNumbersLoaded extends LottoLocalState {
-  final List<LottoLocalModel> allLottoData;
-
-  AllLottoNumbersLoaded(this.allLottoData);
-
-  @override
-  List<Object?> get props => [allLottoData];
-}
 
 // ✅ 에러 상태
 class LottoNumbersError extends LottoLocalState {

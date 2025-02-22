@@ -1,8 +1,9 @@
 import 'package:dailylotto/src/presentation/weekly/widgets/latest_round_display.dart';
 import 'package:dailylotto/src/presentation/weekly/widgets/weekly_lotto_status.dart';
+import 'package:dailylotto/src/presentation/weekly/all_round_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/utils.dart';
+import '../../core/routes.dart';
 
 class WeeklyScreen extends StatelessWidget {
   const WeeklyScreen({super.key});
@@ -57,12 +58,7 @@ class WeeklyScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.qr_code_scanner_outlined),
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('준비중입니다'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
+              Navigator.of(context).pushNamed(Routes.allround);
             },
           ),
         ],
@@ -85,100 +81,11 @@ class WeeklyScreen extends StatelessWidget {
                   SizedBox(
                     height: 15.0,
                   ),
-                  DrawNumbersList(
-                    roundTitle: "1160회",
-                    numbersList: [
-                      [2, 3, 14, 28, 25, 41],
-                      [2, 3, 14, 28, 25, 41],
-                      [2, 3, 14, 28, 25, 41],
-                    ],
-                    statusList: ["예정", "예정", "예정"],
-                  ),
-                  DrawNumbersList(
-                    roundTitle: "1160회",
-                    numbersList: [
-                      [2, 3, 14, 28, 25, 41],
-                      [2, 3, 14, 28, 25, 41],
-                      [2, 3, 14, 28, 25, 41],
-                    ],
-                    statusList: ["예정", "예정", "예정"],
-                  ),
                 ],
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  // 스크롤 전 보이는 헤더 UI
-  Widget _buildHeader(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: WeeklyLottoStatus(),
-        ),
-      ],
-    );
-  }
-}
-
-// 🎯 재사용 가능한 회차별 번호 리스트 위젯
-class DrawNumbersList extends StatelessWidget {
-  final String roundTitle;
-  final List<List<int>> numbersList;
-  final List<String> statusList;
-
-  const DrawNumbersList({
-    super.key,
-    required this.roundTitle,
-    required this.numbersList,
-    required this.statusList,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            roundTitle,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-
-          const SizedBox(height: 10),
-
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              children: List.generate(numbersList.length, (index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: numbersList[index]
-                            .map((num) => LottoUtils.lottoBall(number: num, width: 30.0, height: 30.0))
-                            .toList(),
-                      ),
-                      Text(statusList[index]),
-                    ],
-                  ),
-                );
-              }),
-            ),
-          ),
-        ],
       ),
     );
   }
