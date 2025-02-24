@@ -21,10 +21,6 @@ class LottoNumbersLoaded extends LottoLocalState {
   List<Object?> get props => [lottoData, todayEntry];
 }
 
-// ✅ 당첨번호 업데이트
-class UpdateWinningNumbers extends LottoLocalState {}
-
-
 // ✅ 에러 상태
 class LottoNumbersError extends LottoLocalState {
   final String message;

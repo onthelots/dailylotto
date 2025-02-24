@@ -1,8 +1,8 @@
 import 'package:dailylotto/src/presentation/weekly/widgets/latest_round_display.dart';
+import 'package:dailylotto/src/presentation/weekly/widgets/latest_weekly_numbers.dart';
 import 'package:dailylotto/src/presentation/weekly/widgets/weekly_lotto_status.dart';
-import 'package:dailylotto/src/presentation/weekly/all_round_screen.dart';
 import 'package:flutter/material.dart';
-
+import '../../core/constants.dart';
 import '../../core/routes.dart';
 
 class WeeklyScreen extends StatelessWidget {
@@ -23,22 +23,22 @@ class WeeklyScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).primaryColor,
         scrolledUnderElevation: 0,
         leadingWidth: 200.0,
         leading: Align(
             alignment: Alignment.centerLeft, // 세로축 중앙, 가로축 왼쪽 정렬
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              padding: EdgeInsets.symmetric(horizontal: appBarLeadingPadding),
               child: RichText(
                 maxLines: 1,
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: "다음 회차까지",
+                      text: "다음 추첨일까지",
                       style: Theme.of(context)
                           .textTheme
-                          .labelMedium,
+                          .labelMedium?.copyWith(color: Colors.white),
                     ),
                     WidgetSpan(
                       child: SizedBox(width: 4), // 간격 추가
@@ -47,8 +47,7 @@ class WeeklyScreen extends StatelessWidget {
                       text: getDDayText(),
                       style: Theme.of(context)
                           .textTheme
-                          .labelMedium
-                          ?.copyWith(color: Theme.of(context).primaryColor),
+                          .labelMedium?.copyWith(color: Colors.white),
                     ),
                   ],
                 ),
@@ -67,23 +66,31 @@ class WeeklyScreen extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: boxPadding, vertical: boxPadding),
               child: Column(
                 children: [
                   WeeklyLottoStatus(),
-
                   const SizedBox(
-                    height: 30.0,
+                    height: 40.0,
                   ),
-
                   LatestRoundDisplay(),
-
-                  SizedBox(
-                    height: 15.0,
-                  ),
                 ],
               ),
             ),
+            const Divider(
+              height: 40.0,
+              thickness: 10.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: boxPadding, vertical: boxPadding),
+              child: Column(
+                children: [
+                  LatestWeeklyNumberDisplay(),
+                ],
+              ),
+            )
           ],
         ),
       ),

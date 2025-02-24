@@ -1,5 +1,10 @@
+import 'package:dailylotto/src/presentation/question/bloc/question_bloc.dart';
+import 'package:dailylotto/src/presentation/question/bloc/question_event.dart';
+import 'package:dailylotto/src/presentation/question/bloc/question_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'core/constants.dart';
+import 'core/di/locator.dart';
 
 class ScatchScreen extends StatefulWidget {
   @override
@@ -7,40 +12,28 @@ class ScatchScreen extends StatefulWidget {
 }
 
 class _ScatchScreenState extends State<ScatchScreen> {
-  int currentStep = 0; // 현재 질문 단계 (0~2)
-  List<int?> answers = [null, null, null]; // 3개의 답변 저장
-  bool isLoading = false; // 로딩 상태
+  int currentStep = 0;
+  List<int?> answers = [null, null, null];
 
   void selectOption(int index) {
     setState(() {
       answers[currentStep] = index;
-      if (currentStep < 2) {
-        // 선택하면 바로 다음 단계로 넘어감
-        currentStep++;
-      } else {
-        // 마지막 질문이므로 로딩을 시작하고 결과로 이동
-        isLoading = true;
-      }
     });
 
-    // 3번째 질문에서 선택 후 2초간 로딩 인디케이터를 표시하고 결과를 보여줌
-    if (currentStep == 3) {
-      Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(Duration(milliseconds: 500), () {
+      if (currentStep < 2) {
         setState(() {
-          isLoading = false; // 로딩을 끝내고 결과 화면으로 이동
+          currentStep++;
         });
-
-        // 결과 다이얼로그 표시
+      } else {
         showResultDialog();
-      });
-    }
+      }
+    });
   }
 
   void showResultDialog() {
     String resultText = """
-    질문 1: 선택 ${answers[0] != null ? answers[0]! + 1 : "없음"}
-    질문 2: 선택 ${answers[1] != null ? answers[1]! + 1 : "없음"}
-    질문 3: 선택 ${answers[2] != null ? answers[2]! + 1 : "없음"}
+    ${answers.map((e) => e != null ? "선택 ${e! + 1}" : "선택 안 함").join("\n")}
     """;
 
     showDialog(
@@ -60,80 +53,143 @@ class _ScatchScreenState extends State<ScatchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> questions = [
-      "질문 1: 좋아하는 숫자는?",
-      "질문 2: 가장 자주 쓰는 번호는?",
-      "질문 3: 행운의 숫자는?",
-    ];
-
-    return Scaffold(
-      backgroundColor: Colors.blueGrey[50],
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // 질문 텍스트 애니메이션
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.2,
-              child: Text(
-                questions[currentStep], // 현재 질문 표시
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
-                ),
-              ).animate().fadeIn(duration: 600.ms).moveY(begin: 80, end: 0),
+    return BlocProvider(
+      create: (context) => locator<QuestionBloc>()..add(LoadQuestionsEvent()),
+        child: Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          appBar: AppBar(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            centerTitle: true,
+            scrolledUnderElevation: 0,
+            title: Text(
+              'AI 번호생성',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.color
+                    ?.withValues(alpha: 0.6),
+              ),
             ),
+          ),
+          body: BlocBuilder<QuestionBloc, QuestionState>(
+            builder: (context, state) {
+              if (state is QuestionLoadingState) {
+                return Center(child: CircularProgressIndicator());
+              } else if (state is QuestionErrorState) {
+                return Center(child: Text("오류 발생: ${state.message}"));
+              } else if (state is QuestionLoadedState) {
+                final questions = state.questions;
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: boxPadding, vertical: 50.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
 
-            // 선택지 버튼 (3개)
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.4,
-              child: Column(
-                children: List.generate(3, (index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15.0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: answers[currentStep] == index
-                            ? Colors.blueAccent
-                            : Colors.grey[300],
-                        foregroundColor: answers[currentStep] == index
-                            ? Colors.white
-                            : Colors.black,
-                        minimumSize: Size(250, 60),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                        /// Prograss Bar
+                        SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: CircularProgressIndicator(
+                            value: (currentStep + 1) / 3,
+                            backgroundColor: Colors.grey[400],
+                            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+                            strokeWidth: 3,
+                          ),
                         ),
-                        elevation: 5,
-                        shadowColor: Colors.black.withOpacity(0.3),
-                      ),
-                      onPressed: () => selectOption(index),
-                      child: Text(
-                        "선택 ${index + 1}",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    )
-                        .animate()
-                        .fadeIn(duration: 1500.ms)
-                        .then(delay: (index * 500).ms), // 버튼별 딜레이 조정
-                  );
-                }),
-              ),
-            ),
 
-            // 로딩 인디케이터 표시 (마지막 선택 후)
-            if (isLoading)
-              Positioned(
-                bottom: 50,
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent),
-                ),
-              ),
-          ],
+                        const SizedBox(height: 10),
+
+                        /// Step
+                        Text(
+                          "Step ${currentStep + 1}",
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).primaryColor),
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        /// 질문
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: contentPaddingIntoBox,
+                              horizontal: contentPaddingIntoBox),
+                          child: AnimatedSwitcher(
+                            duration: Duration(milliseconds: 500),
+                            child: Column(
+                              children: [
+
+                                Text(
+                                  questions[currentStep].question,
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: 20),
+
+                        /// 질문 리스트
+                        Column(
+                          children: List.generate(3, (index) {
+                            bool isSelected = answers[currentStep] == index;
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 15.0),
+                              child: GestureDetector(
+                                onTap: () => selectOption(index),
+                                child: Container(
+                                  height: 60,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: contentPaddingIntoBox,
+                                      horizontal: contentPaddingIntoBox),
+                                  decoration: BoxDecoration(
+                                    color: isSelected ? Theme.of(context).highlightColor : Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withValues(alpha: 0.1), // 그림자 색상
+                                        blurRadius: 10, // 흐림 정도 (값이 클수록 더 부드러운 그림자)
+                                        spreadRadius: 2, // 그림자 확산 정도
+                                        offset: Offset(3, 5), // 그림자의 위치 (x, y)
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+
+                                      SizedBox(width: 5),
+
+                                      Icon(
+                                        isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                                        color: isSelected ? Colors.white : Colors.black54,
+                                      ),
+                                      SizedBox(width: 10),
+
+                                      Expanded(
+                                        child: Text(
+                                          questions[currentStep].options[index],
+                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: isSelected ? Colors.white : Colors.black54, fontWeight: FontWeight.w800),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+              return Container();
+            },
+          ),
         ),
-      ),
-    );
+      );
   }
 }

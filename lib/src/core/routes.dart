@@ -2,7 +2,7 @@ import 'package:dailylotto/src/presentation/history/history_screen.dart';
 import 'package:dailylotto/src/presentation/main/main_screen.dart';
 import 'package:dailylotto/src/presentation/mypage/mypage_screen.dart';
 import 'package:dailylotto/src/presentation/introduce/Introduce_screen.dart';
-import 'package:dailylotto/src/presentation/weekly/all_round_screen.dart';
+import 'package:dailylotto/src/presentation/weekly/round_list/all_round_screen.dart';
 import 'package:dailylotto/src/presentation/weekly/weekly_screen.dart';
 import 'package:dailylotto/src/scatch_screen.dart';
 import 'package:flutter/material.dart';

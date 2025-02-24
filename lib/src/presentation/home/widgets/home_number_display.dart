@@ -53,14 +53,14 @@ class LottoNumberDisplay extends StatelessWidget {
           decoration: BoxDecoration(
             color: state.background,
           ),
-          padding: const EdgeInsets.all(15),
+          padding: const EdgeInsets.all(boxPadding),
           child: Container(
             decoration: BoxDecoration(
               color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(30),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1), // alpha 값만 설정
+                  color: Colors.black.withValues(alpha: 0.2), // alpha 값만 설정
                   offset: Offset(0, 2), // 그림자 위치 (수평, 수직)
                   blurRadius: 3, // 흐림 정도 (작게 설정)
                   spreadRadius: 1, // 그림자의 확장 정도
@@ -100,7 +100,7 @@ class LottoNumberDisplay extends StatelessWidget {
           decoration: BoxDecoration(
             color: state.background,
           ),
-          padding: const EdgeInsets.all(15),
+          padding: const EdgeInsets.all(boxPadding),
           child: Container(
             decoration: BoxDecoration(
               color: Theme.of(context).cardColor,

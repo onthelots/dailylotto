@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import '../../../core/constants.dart';
 import '../../../data/models/lotto_local_model.dart';
 import '../../main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import '../../main/bloc/lotto_local_bloc/lotto_local_state.dart';
-import '../../main/bloc/lotto_remote_bloc/lotto_remote_bloc.dart';
-import '../../main/bloc/lotto_remote_bloc/lotto_remote_state.dart';
 
 class WeeklyLottoStatus extends StatelessWidget {
   @override
@@ -66,14 +65,22 @@ class WeeklyLottoUI extends StatelessWidget {
           ),
         ),
 
-        SizedBox(height: 10),
+        SizedBox(height: 15),
 
         Container(
-          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+          padding: const EdgeInsets.symmetric(vertical: contentPaddingIntoBox, horizontal: contentPaddingIntoBox),
 
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1), // 그림자 색상
+                blurRadius: 10, // 흐림 정도 (값이 클수록 더 부드러운 그림자)
+                spreadRadius: 2, // 그림자 확산 정도
+                offset: Offset(3, 5), // 그림자의 위치 (x, y)
+              ),
+            ],
           ),
 
           child: Row(

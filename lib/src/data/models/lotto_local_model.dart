@@ -18,8 +18,8 @@ class LottoLocalModel {
   LottoLocalModel({
     required this.round,
     required this.entries,
-    required this.timeStamp,
     this.winningNumbers,
+    required this.timeStamp,
   });
 }
 

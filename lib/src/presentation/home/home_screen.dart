@@ -1,14 +1,12 @@
-import 'package:dailylotto/src/core/utils.dart';
+import 'package:dailylotto/src/core/constants.dart';
 import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_bloc.dart';
 import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_state.dart';
 import 'package:dailylotto/src/presentation/home/widgets/home_card_display.dart';
 import 'package:dailylotto/src/presentation/home/widgets/home_title_display.dart';
 import 'package:dailylotto/src/presentation/home/widgets/home_number_display.dart';
-import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -18,51 +16,47 @@ class HomeScreen extends StatelessWidget {
     return BlocBuilder<TimeBloc, TimeState>(
       builder: (context, state) {
         return Scaffold(
-          body: CustomScrollView(slivers: <Widget>[
-            // <----- 확장 AppBar ----->
-            SliverAppBar(
-              scrolledUnderElevation: 0.0,
-              expandedHeight: 180,
-              // 동적 높이 반영, // 고정된 값으로 높이 설정
-              floating: false,
-              pinned: false,
-              // 📌 스크롤 시 앱바 고정
-              backgroundColor: state.background,
-              flexibleSpace: FlexibleSpaceBar(
-                background: _buildHeader(context), // 📌 스크롤 전 상단 UI
-              ),
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.notifications),
-                  onPressed: () {
-                    // TODO: - Trailing (Notification)
-                  },
+          body: CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                scrolledUnderElevation: 0.0,
+                expandedHeight: 180,
+                floating: false,
+                pinned: true,
+                backgroundColor: state.background,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: _buildHeader(context),
                 ),
-              ],
-            ),
-
-            // <----- 번호관련 Header (스크롤 시 AppBar는 사라지지만, Header는 pinned 속성을 통해 고정 가능) ----->
-            SliverPersistentHeader(
-              pinned: false,
-              delegate: _LottoNumberHeaderDelegate(
-                child: const LottoNumberDisplay(),
-                minExtent: 80,
-                maxExtent: 80,
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.notifications),
+                    onPressed: () {},
+                  ),
+                ],
               ),
-            ),
 
-            // <----- Sliver Box (스크롤 가능한 컨텐츠) ----->
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-                child: Column(
-                  children: [
-                    HomeCardDisplay(),
-                  ],
+              SliverPersistentHeader(
+                pinned: false,
+                delegate: _LottoNumberHeaderDelegate(
+                  child: const LottoNumberDisplay(),
+                  minExtent: 80,
+                  maxExtent: 80,
                 ),
               ),
-            )
-          ]),
+
+              const SliverFillRemaining(
+                hasScrollBody: false,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: boxPadding, vertical: boxPadding),
+                  child: Column(
+                    children: [
+                      HomeCardDisplay(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -74,7 +68,7 @@ class HomeScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          padding: const EdgeInsets.symmetric(horizontal: boxPadding),
           child: HomeTitleDisplay(),
         ),
       ],
