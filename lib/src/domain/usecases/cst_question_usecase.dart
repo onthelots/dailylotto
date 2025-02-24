@@ -2,11 +2,11 @@ import 'package:dailylotto/src/data/models/cst_question_model.dart';
 import 'package:dailylotto/src/domain/repositories/cst_question_repository.dart';
 
 class GetThreeRandomQuestionsUseCase {
-  final CstQuestionRepository _repository;
+  final CstQuestionRepository repository;
 
-  GetThreeRandomQuestionsUseCase(this._repository);
+  GetThreeRandomQuestionsUseCase({required this.repository});
 
   Future<List<CSTQuestion>> execute() async {
-    return await _repository.getThreeRandomQuestions();
+    return await repository.getThreeRandomQuestions();
   }
 }

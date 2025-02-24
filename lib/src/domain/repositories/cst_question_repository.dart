@@ -3,12 +3,12 @@ import 'package:dailylotto/src/data/models/cst_question_model.dart';
 import 'package:dailylotto/src/data/sources/cst_question_datasource.dart';
 
 class CstQuestionRepository{
-  final QuestionDataSource _dataSource;
+  final QuestionDataSource dataSource;
 
-  CstQuestionRepository(this._dataSource);
+  CstQuestionRepository({required this.dataSource});
 
   Future<List<CSTQuestion>> getThreeRandomQuestions() async {
-    final cstQuestionList = await _dataSource.getCSTQuestions();
+    final cstQuestionList = await dataSource.getCSTQuestions();
     cstQuestionList.shuffle();
     return cstQuestionList.sublist(0, 3);
   }

@@ -13,8 +13,11 @@ import 'package:dailylotto/src/core/theme.dart';
 import 'package:dailylotto/src/presentation/main/bloc/theme_bloc/theme_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/theme_bloc/theme_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/theme_bloc/theme_state.dart';
+import 'package:dailylotto/src/presentation/weekly/bloc/latest_round_bloc/latest_round_bloc.dart';
+import 'package:dailylotto/src/presentation/weekly/bloc/latest_round_bloc/latest_round_event.dart';
 import 'package:dailylotto/src/presentation/weekly/bloc/round_list_bloc/round_list_bloc.dart';
 import 'package:dailylotto/src/presentation/weekly/bloc/round_list_bloc/round_list_event.dart';
+import 'package:dailylotto/src/scatch_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,6 +67,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => locator<LottoLocalBloc>(),
         ),
+        BlocProvider(
+          create: (context) => locator<LatestRoundBloc>(),
+        ),
       ],
       child: MultiBlocListener(
         listeners: [
@@ -88,6 +94,10 @@ class MyApp extends StatelessWidget {
                     .read<LottoLocalBloc>()
                     .add(LoadLottoNumbersEvent(currentRound));
 
+                // 3. Local 내 저장된 최근회차 나타내기 (2번째 탭)
+                context.read<LatestRoundBloc>().add(LoadLatestRoundEvent());
+
+                // 4. 타이머 리셋
                 context
                     .read<TimeBloc>()
                     .add(RefreshTimeEvent());

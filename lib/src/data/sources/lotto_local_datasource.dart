@@ -56,22 +56,24 @@ class LottoLocalDataSource {
       print("날짜: ${entry.date}, 번호: ${entry.numbers}, 결과: ${entry.result}");
     }
 
+    lottoRound.winningNumbers = winningNumbers;
+
     await _box.put(round, lottoRound); // 업데이트된 데이터 저장
     print("updateWinningNumbers: 회차 $round 업데이트 완료");
   }
-
 
   // 새로운 회차 추가
   Future<void> createNewRound(int newRound) async {
 
     // 새로운 회차가 이미 존재하는지 여부 확인
     if (!_box.containsKey(newRound)) {
+
       // 다가오는 토요일 날짜 계산
       final now = DateTime.now();
       final daysUntilSaturday = (DateTime.saturday - now.weekday) % 7;
       final nextSaturday = now.add(Duration(days: daysUntilSaturday == 0 ? 7 : daysUntilSaturday));
 
-      // 없다면, entries가 빈 상황으로 저장
+      // !!!! 없다면, 'entries'가 빈 상황으로 저장 (winning numbers는? null)
       final newLottoRound = LottoLocalModel(round: newRound, entries: [], timeStamp: nextSaturday);
       await _box.put(newRound, newLottoRound);
     }

@@ -49,7 +49,7 @@ class UpdateWinningNumbersEvent extends LottoLocalEvent {
   });
 
   @override
-  List<Object?> get props => [round, winningNumbers];
+  List<Object?> get props => [round, winningNumbers, bonusNumber];
 }
 
 // ✅ 더미데이터 추가

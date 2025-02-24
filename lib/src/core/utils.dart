@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'constants.dart';
 
 class LottoUtils {
@@ -32,25 +33,51 @@ class LottoUtils {
         style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.w600,
+          fontSize: 14.0,
         ),
       ),
     );
   }
 
-  // 로또 숫자 UI 위젯
-  static Widget lottoNumber(
-      {required int number,
-      required double width,
-      required double height,
-      required bool isCorrect,
-      required BuildContext context}) {
+  // 일정한 배경색
+  static Widget lottoSolidBall({
+    required Color color,
+    required int number,
+    required double width,
+    required double height,
+  }) {
     return Container(
       width: width,
       height: height,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: number == -1 ? Colors.grey : AppColors.lightAccent,
+      ),
       alignment: Alignment.center,
-      child: Text(number.toString(),
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: isCorrect ? Theme.of(context).hintColor : null)),
+      child: Text(
+        number == -1 ? "?" : number.toString(), // -1이면 '?'로 표시
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+          fontSize: 14.0,
+        ),
+      ),
+    );
+  }
+
+
+  // 로또 숫자 UI 위젯 (배경 없음)
+  static Widget lottoNumber({
+    required int number,
+    required bool isCorrect,
+  }) {
+    return Text(
+      number.toString(),
+      style: TextStyle(
+        color: isCorrect ? AppColors.lightAccent : null,
+        fontWeight: FontWeight.w600,
+        fontSize: 12.0,
+      ),
     );
   }
 
@@ -62,5 +89,10 @@ class LottoUtils {
       return "약 ${(amount / 10000).round()}만 원"; // 1만 단위로 반올림
     }
     return "$amount원"; // 1만 원 미만은 그대로 출력
+  }
+
+  // timestamp to 년-월-일
+  static String formattedTimestamp(DateTime dateTime) {
+    return DateFormat('yyyy-MM-dd').format(dateTime);
   }
 }
