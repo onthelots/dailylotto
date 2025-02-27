@@ -7,7 +7,7 @@ class LatestRoundBloc extends Bloc<LatestRoundEvent, LatestRoundState> {
   final LottoLocalUseCase useCase;
   LatestRoundBloc({required this.useCase}) : super(LatestRoundListLoading()) {
 
-    // ✅ 전체 데이터 로드
+    // ✅ 최근 데이터 로드
     on<LoadLatestRoundEvent>((event, emit) async {
       emit(LatestRoundListLoading());
       try {

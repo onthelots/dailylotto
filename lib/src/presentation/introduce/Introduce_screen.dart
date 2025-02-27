@@ -32,43 +32,48 @@ class _IntroduceScreenState extends State<IntroduceScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
       body: Column(
         children: [
           Expanded(
-            child: PageView(
-              controller: _pageController,
-              children: [
-                PageContent(
-                  title: "AI 분석을 통해 로또 번호를 추천해드려요",
-                  subtitle: "매일 단 한번의 기회를 놓치지 마시고,\n당신만의 행운의 숫자를 만나보세요!",
-                  image: Lottie.asset(
-                    "assets/animations/splash_ai_lottie.json",
-                    repeat: true,
-                    fit: BoxFit.fill,
-                    frameRate: FrameRate.max,
+            child: Center(
+              child: PageView(
+                controller: _pageController,
+                children: [
+                  PageContent(
+                    title: "AI를 활용하여 로또 번호를 추천해드려요",
+                    subtitle: "매일 단 한번의 기회를 놓치지 마시고,\n당신만의 행운의 숫자를 만나보세요!",
+                    image: Lottie.asset(
+                      "assets/animations/splash_ai_lottie.json",
+                      repeat: true,
+                      fit: BoxFit.fill,
+                      frameRate: FrameRate.max,
+                    ),
                   ),
-                ),
-                PageContent(
-                  title: "아직까지 랜덤 생성 번호를 사용하나요?",
-                  subtitle: "이제, 당신의 행운을 시험해보세요!\n어느새 매주 추첨일이 기다려질거에요",
-                  image: Lottie.asset(
-                    "assets/animations/splash_luck_lottie.json",
-                    repeat: true,
-                    fit: BoxFit.fill,
-                    frameRate: FrameRate.max,
+                  PageContent(
+                    title: "아직까지 랜덤 생성 번호를 사용하나요?",
+                    subtitle: "이제, 당신의 행운을 시험해보세요!\n어느새 매주 추첨일이 기다려질거에요",
+                    image: Lottie.asset(
+                      "assets/animations/splash_luck_lottie.json",
+                      repeat: true,
+                      fit: BoxFit.fill,
+                      frameRate: FrameRate.max,
+                    ),
                   ),
-                ),
-                PageContent(
-                  title: "서비스 이용을 위해 알림을 허용해주세요",
-                  subtitle: "혹시, 오늘 번호 생성을 잊으셨나요?\n하루 한번, PUSH 알림을 보내드릴게요",
-                  image: Lottie.asset(
-                    "assets/animations/splash_alert_lottie.json",
-                    repeat: true,
-                    fit: BoxFit.fill,
-                    frameRate: FrameRate.max,
+                  PageContent(
+                    title: "서비스 이용을 위해 알림을 허용해주세요",
+                    subtitle: "혹시, 오늘 번호 생성을 잊으셨나요?\n하루 한번, PUSH 알림을 보내드릴게요",
+                    image: Lottie.asset(
+                      "assets/animations/splash_alert_lottie.json",
+                      repeat: true,
+                      fit: BoxFit.fill,
+                      frameRate: FrameRate.max,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           // 인디케이터 위치 조정
@@ -120,46 +125,43 @@ class PageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size; // 화면 크기 가져오기
-    final double imageSize = size.width * 0.55; // 화면 너비의 70%를 이미지 크기로 설정
+    final double imageSize = size.width * 0.7; // 화면 너비의 70%를 이미지 크기로 설정
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 50.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.labelLarge,
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    subtitle,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 30),
-
-              Center(
-                child: SizedBox(
-                  child: image,
-                  width: imageSize,
-                  height: imageSize,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 0.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.labelLarge,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
                 ),
+                const SizedBox(height: 10),
+                Text(
+                  subtitle,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+
+            Center(
+              child: SizedBox(
+                child: image,
+                width: imageSize,
+                height: imageSize,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

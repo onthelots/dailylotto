@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import '../../../core/routes.dart';
 import '../../../core/utils.dart';
 import '../../main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import '../../main/bloc/lotto_local_bloc/lotto_local_event.dart';
@@ -119,7 +120,7 @@ class LottoNumberDisplay extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // 제목
-                Text('오늘 생성된 번호가 없습니다',
+                Text('오늘 생성된 번호가 없어요',
                     style: Theme.of(context).textTheme.bodySmall),
 
                 // 생성하기
@@ -133,7 +134,7 @@ class LottoNumberDisplay extends StatelessWidget {
                       SizedBox(
                         width: 5,
                       ),
-                      Text('AI 추천받기',
+                      Text('퀴즈풀고 AI 추천받기',
                           style: Theme.of(context)
                               .textTheme
                               .labelSmall
@@ -142,15 +143,7 @@ class LottoNumberDisplay extends StatelessWidget {
                     ],
                   ),
                   onPressed: () {
-                    context.read<LottoLocalBloc>().add(
-                          GenerateLottoNumbersEvent(
-                            round: round,
-                            date: today,
-                            numbers: _generateUniqueLottoNumbers(),
-                            recommendReason: reasonPlaceholder,
-                            dailyTip: dailyTipPlaceholder,
-                          ),
-                        );
+                   Navigator.of(context).pushNamed(Routes.dailyQuestion, arguments: round);
                   },
                 ),
               ],
@@ -159,19 +152,5 @@ class LottoNumberDisplay extends StatelessWidget {
         );
       },
     );
-  }
-
-  // 랜덤 로또번호 생성
-  List<int> _generateUniqueLottoNumbers() {
-    Random random = Random();
-    Set<int> lottoNumbers = Set<int>();
-
-    // 6개의 숫자를 생성할 때까지 반복
-    while (lottoNumbers.length < 6) {
-      int number = random.nextInt(45) + 1; // 1 ~ 45까지의 숫자
-      lottoNumbers.add(number); // Set에 추가, 겹치면 자동으로 제외됨
-    }
-
-    return lottoNumbers.toList(); // Set을 List로 변환하여 반환
   }
 }

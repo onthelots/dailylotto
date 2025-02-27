@@ -1,9 +1,14 @@
+import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
+import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_state.dart';
 import 'package:dailylotto/src/presentation/weekly/widgets/latest_round_display.dart';
 import 'package:dailylotto/src/presentation/weekly/widgets/latest_weekly_numbers.dart';
 import 'package:dailylotto/src/presentation/weekly/widgets/weekly_lotto_status.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/constants.dart';
 import '../../core/routes.dart';
+import 'bloc/latest_round_bloc/latest_round_bloc.dart';
+import 'bloc/latest_round_bloc/latest_round_event.dart';
 
 class WeeklyScreen extends StatelessWidget {
   const WeeklyScreen({super.key});
@@ -26,41 +31,31 @@ class WeeklyScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).primaryColor,
         scrolledUnderElevation: 0,
         leadingWidth: 200.0,
-        leading: Align(
-            alignment: Alignment.centerLeft, // 세로축 중앙, 가로축 왼쪽 정렬
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: appBarLeadingPadding),
-              child: RichText(
-                maxLines: 1,
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "다음 추첨일까지",
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelMedium?.copyWith(color: Colors.white),
-                    ),
-                    WidgetSpan(
-                      child: SizedBox(width: 4), // 간격 추가
-                    ),
-                    TextSpan(
-                      text: getDDayText(),
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelMedium?.copyWith(color: Colors.white),
-                    ),
-                  ],
+        title: Padding(
+          padding: EdgeInsets.symmetric(horizontal: appBarLeadingPadding),
+          child: RichText(
+            maxLines: 1,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: "다음 추첨일까지",
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium?.copyWith(color: Colors.white),
                 ),
-              ),
-            )),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.qr_code_scanner_outlined),
-            onPressed: () {
-              Navigator.of(context).pushNamed(Routes.allround);
-            },
+                WidgetSpan(
+                  child: SizedBox(width: 4), // 간격 추가
+                ),
+                TextSpan(
+                  text: getDDayText(),
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium?.copyWith(color: Colors.white),
+                ),
+              ],
+            ),
           ),
-        ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -79,18 +74,25 @@ class WeeklyScreen extends StatelessWidget {
               ),
             ),
             const Divider(
-              height: 40.0,
+              height: 30.0,
               thickness: 10.0,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: boxPadding, vertical: boxPadding),
-              child: Column(
-                children: [
-                  LatestWeeklyNumberDisplay(),
-                ],
+            BlocListener<LottoLocalBloc, LottoLocalState>(
+              listener: (context, state) {
+                if (state is LottoNumbersLoaded) {
+                  context.read<LatestRoundBloc>().add(LoadLatestRoundEvent());
+                }
+              },
+              child: const Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: boxPadding, vertical: boxPadding),
+                child: Column(
+                  children: [
+                    LatestWeeklyNumberDisplay(),
+                  ],
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../models/lotto_remote_model.dart';
 
 class LottoRemoteDataSource {

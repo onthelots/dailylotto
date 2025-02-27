@@ -1,5 +1,11 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import '../data/models/lotto_local_model.dart';
 import 'constants.dart';
 
 class LottoUtils {
@@ -35,6 +41,7 @@ class LottoUtils {
           fontWeight: FontWeight.w600,
           fontSize: 14.0,
         ),
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -59,8 +66,9 @@ class LottoUtils {
         style: TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.w600,
-          fontSize: 14.0,
+          fontSize: 13.0,
         ),
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -71,15 +79,20 @@ class LottoUtils {
     required int number,
     required bool isCorrect,
   }) {
-    return Text(
-      number.toString(),
-      style: TextStyle(
-        color: isCorrect ? AppColors.lightAccent : null,
-        fontWeight: FontWeight.w600,
-        fontSize: 12.0,
+    return SizedBox(
+      width: 30, // ✅ 모든 숫자의 너비를 동일하게 설정
+      child: Text(
+        number.toString(),
+        style: TextStyle(
+          color: isCorrect ? AppColors.lightAccent : null,
+          fontWeight: FontWeight.w600,
+          fontSize: 13.0,
+        ),
+        textAlign: TextAlign.center, // ✅ 텍스트를 가운데 정렬
       ),
     );
   }
+
 
   // 1인당 당첨금액 반올림 (억/만 단위)
   static String formatPrizeAmount(int amount) {

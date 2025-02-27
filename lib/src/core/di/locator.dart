@@ -1,22 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dailylotto/src/data/models/lotto_local_model.dart';
+import 'package:dailylotto/src/data/sources/daily_question_datasource.dart';
 import 'package:dailylotto/src/data/sources/lotto_local_datasource.dart';
 import 'package:dailylotto/src/data/sources/lotto_remote_datasource.dart';
-import 'package:dailylotto/src/domain/repositories/cst_question_repository.dart';
+import 'package:dailylotto/src/domain/repositories/daily_question_repository.dart';
 import 'package:dailylotto/src/domain/repositories/lotto_remote_repository.dart';
+import 'package:dailylotto/src/domain/usecases/daily_question_usecase.dart';
 import 'package:dailylotto/src/domain/usecases/lotto_remote_usecase.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_bloc.dart';
-import 'package:dailylotto/src/presentation/question/bloc/question_bloc.dart';
 import 'package:dailylotto/src/presentation/weekly/bloc/latest_round_bloc/latest_round_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
-
-import '../../data/sources/cst_question_datasource.dart';
 import '../../domain/repositories/lotto_local_repository.dart';
-import '../../domain/usecases/cst_question_usecase.dart';
 import '../../domain/usecases/lotto_local_usecase.dart';
+import '../../presentation/question/bloc/daily_question_bloc.dart';
 import '../../presentation/weekly/bloc/round_list_bloc/round_list_bloc.dart';
 
 final locator = GetIt.instance;
@@ -57,15 +56,15 @@ Future<void> setupLocator() async {
 
 
 
-  /// Game
-  locator.registerLazySingleton<QuestionDataSource>(
-          () => QuestionDataSource());
+  /// Daily Question
+  locator.registerLazySingleton<DailyQuestionFirebaseDataSource>(
+          () => DailyQuestionFirebaseDataSource(firestore: locator<FirebaseFirestore>()));
 
-  locator.registerLazySingleton<CstQuestionRepository>(
-          () => CstQuestionRepository(dataSource: locator<QuestionDataSource>()));
+  locator.registerLazySingleton<DailyQuestionRepository>(
+          () => DailyQuestionRepository(dataSource: locator<DailyQuestionFirebaseDataSource>()));
 
-  locator.registerLazySingleton<GetThreeRandomQuestionsUseCase>(
-          () => GetThreeRandomQuestionsUseCase(repository: locator<CstQuestionRepository>()));
+  locator.registerLazySingleton<DailyQuestionUseCase>(
+          () => DailyQuestionUseCase(repository: locator<DailyQuestionRepository>()));
 
   // <----- Bloc ----->
 
@@ -85,7 +84,7 @@ Future<void> setupLocator() async {
   locator.registerFactory<LatestRoundBloc>(
           () => LatestRoundBloc(useCase: locator<LottoLocalUseCase>()));
 
-  // 5. cst_question
-  locator.registerFactory<QuestionBloc>(
-          () => QuestionBloc(useCase: locator<GetThreeRandomQuestionsUseCase>()));
+  // 5. question
+  locator.registerFactory<DailyQuestionBloc>(
+          () => DailyQuestionBloc(getDailyQuestionUseCase: locator<DailyQuestionUseCase>()));
 }

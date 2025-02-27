@@ -1,13 +1,16 @@
-import 'package:dailylotto/src/presentation/history/history_screen.dart';
+import 'package:dailylotto/src/data/models/lotto_local_model.dart';
 import 'package:dailylotto/src/presentation/main/main_screen.dart';
 import 'package:dailylotto/src/presentation/mypage/mypage_screen.dart';
 import 'package:dailylotto/src/presentation/introduce/Introduce_screen.dart';
+import 'package:dailylotto/src/presentation/question/ai_recommendation_screen.dart';
 import 'package:dailylotto/src/presentation/weekly/round_list/all_round_screen.dart';
 import 'package:dailylotto/src/presentation/weekly/weekly_screen.dart';
-import 'package:dailylotto/src/scatch_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../data/models/lotto_remote_model.dart';
 import '../presentation/home/home_screen.dart';
+import '../presentation/latest_result/lastest_result_screen.dart';
+import '../presentation/question/question_screen.dart';
 
 class Routes {
   static const String splash = '/';
@@ -21,9 +24,11 @@ class Routes {
   static const String weekly = '/weekly'; // 번호기록 (탭바)
   static const String mypage = '/mypage'; // 마임페이지 (탭바)
 
-
-  // details
+  // round list
   static const String allround = '/allround'; // 번호기록 (탭바)
+
+  // latest round result
+  static const String latestRoundResult = '/latestRoundResult'; // 최근 회차 결과
 
   // game
   static const String game_1 = '/g1'; // 게임 화면1
@@ -32,7 +37,8 @@ class Routes {
   static const String game_4 = '/g4'; // 게임 화면4
   static const String result = '/result'; // 게임 결과
 
-  static const String scatch = '/scatch'; // 테스트 화면
+  static const String dailyQuestion = '/dailyQuestion'; // 번호 생성 퀴즈
+  static const String recommendation = '/recommendation'; // 번호 생성 결과
 }
 
 class AppRouter {
@@ -58,9 +64,19 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => IntroduceScreen(),
         );
-      case Routes.scatch:
+      case Routes.dailyQuestion:
+        final currentRound = settings.arguments as int;
         return MaterialPageRoute(
-          builder: (_) => ScatchScreen(),
+          builder: (_) => QuestionScreen(currentRound: currentRound),
+        );
+      case Routes.latestRoundResult:
+        final latestRound = settings.arguments as LottoRemoteModel;
+        return MaterialPageRoute(
+          builder: (_) => LastestResultScreen(latestRound: latestRound),
+        );
+      case Routes.recommendation:
+        return MaterialPageRoute(
+          builder: (_) => AiRecommendationScreen(),
         );
       case Routes.allround:
         return MaterialPageRoute(

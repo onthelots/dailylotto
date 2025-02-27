@@ -3,9 +3,10 @@ import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_re
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hugeicons/hugeicons.dart';
+import '../../../core/routes.dart';
 import '../../../core/utils.dart';
 import '../../../data/models/lotto_remote_model.dart';
+import '../../latest_result/lastest_result_screen.dart';
 
 class LatestRoundDisplay extends StatelessWidget {
   const LatestRoundDisplay({super.key});
@@ -94,7 +95,7 @@ class LatestRoundUI extends StatelessWidget {
 
                       GestureDetector(
                         onTap: () {
-                          print("당첨정보 확인");
+                          Navigator.of(context).pushNamed(Routes.latestRoundResult, arguments: latestRound);
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,

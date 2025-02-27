@@ -3,7 +3,6 @@ import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_bloc.dart';
 import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
-import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_state.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_state.dart';
@@ -13,11 +12,10 @@ import 'package:dailylotto/src/core/theme.dart';
 import 'package:dailylotto/src/presentation/main/bloc/theme_bloc/theme_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/theme_bloc/theme_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/theme_bloc/theme_state.dart';
+import 'package:dailylotto/src/presentation/question/bloc/daily_question_bloc.dart';
+import 'package:dailylotto/src/presentation/question/bloc/daily_question_event.dart';
 import 'package:dailylotto/src/presentation/weekly/bloc/latest_round_bloc/latest_round_bloc.dart';
 import 'package:dailylotto/src/presentation/weekly/bloc/latest_round_bloc/latest_round_event.dart';
-import 'package:dailylotto/src/presentation/weekly/bloc/round_list_bloc/round_list_bloc.dart';
-import 'package:dailylotto/src/presentation/weekly/bloc/round_list_bloc/round_list_event.dart';
-import 'package:dailylotto/src/scatch_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,7 +66,10 @@ class MyApp extends StatelessWidget {
           create: (context) => locator<LottoLocalBloc>(),
         ),
         BlocProvider(
-          create: (context) => locator<LatestRoundBloc>(),
+          create: (context) => locator<LatestRoundBloc>()..add(LoadLatestRoundEvent()),
+        ),
+        BlocProvider(
+          create: (context) => locator<DailyQuestionBloc>()..add(LoadDailyQuestionEvent()),
         ),
       ],
       child: MultiBlocListener(
