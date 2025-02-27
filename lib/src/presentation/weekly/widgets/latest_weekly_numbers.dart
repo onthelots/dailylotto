@@ -15,37 +15,42 @@ class LatestWeeklyNumberDisplay extends StatelessWidget {
         if (state is LatestRoundListLoaded) {
           final latestRoundList = state.latestRoundList;
 
-          return ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: latestRoundList.length,
-            itemBuilder: (context, index) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          return Column(
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        "내 생성 번호",
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      Spacer(),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(Routes.allround);
-                        },
-                        child: Text(
-                          "전체보기",
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      )
-                    ],
+                  Text(
+                    "내 생성 번호",
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  const SizedBox(height: 15),
-                  RoundNumberList(roundData: latestRoundList[index]),
+                  Spacer(),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(Routes.allround);
+                    },
+                    child: Text(
+                      "전체보기",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  )
                 ],
-              );
-            },
+              ),
+
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: latestRoundList.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 15),
+                      RoundNumberList(roundData: latestRoundList[index]),
+                    ],
+                  );
+                },
+              ),
+            ],
           );
         }
         return const Center(child: CircularProgressIndicator());

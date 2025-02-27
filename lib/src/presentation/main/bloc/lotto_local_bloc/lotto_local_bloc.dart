@@ -12,7 +12,7 @@ class LottoLocalBloc extends Bloc<LottoLocalEvent, LottoLocalState> {
 
   LottoLocalBloc({required this.useCase}) : super(LottoNumbersLoading()) {
 
-    // 🔵 특정 회차 데이터 불러오기
+    // 🔵 오늘 회차 데이터 불러오기
     on<LoadLottoNumbersEvent>((event, emit) async {
       emit(LottoNumbersLoading());
       try {
@@ -77,9 +77,26 @@ class LottoLocalBloc extends Bloc<LottoLocalEvent, LottoLocalState> {
         print("GenerateLottoNumbersEvent : 생성 시작");
         final existingRound = useCase.getLottoRound(event.round);
         print("GenerateLottoNumbersEvent : 현재 회차 정보 : ${existingRound?.round}");
+
+
+        List<int> selectedNumbers = List.from(event.numbers);
+        if (selectedNumbers.length < 6) {
+          // 기존 숫자를 제외한 1~45의 남은 숫자 목록 생성
+          List<int> availableNumbers = List.generate(45, (index) => index + 1)
+              .where((int num) => !selectedNumbers.contains(num))
+              .toList();
+
+          // 남은 숫자를 무작위로 섞어서 부족한 개수만큼 추가
+          availableNumbers.shuffle();
+          selectedNumbers.addAll(availableNumbers.take(6 - selectedNumbers.length));
+        }
+
+        // 🔵 번호 정렬
+        selectedNumbers.sort();
+
         final newEntry = LottoEntry(
           date: event.date,
-          numbers: event.numbers,
+          numbers: selectedNumbers,
           recommendReason: event.recommendReason,
           dailyTip: event.dailyTip,
         );
@@ -91,8 +108,8 @@ class LottoLocalBloc extends Bloc<LottoLocalEvent, LottoLocalState> {
         await useCase.saveLottoRound(existingRound!); // 저장 후 상태 갱신
         print("GenerateLottoNumbersEvent : 저장");
 
-
-        emit(LottoNumbersLoaded(existingRound, newEntry)); // 상태 갱신
+        // Loaded 상태가 아닐 경우에만 Loaded로 실행할 것
+        emit(LottoNumbersLoaded(existingRound, newEntry));
       } catch (e) {
         emit(LottoNumbersError("로또 번호 생성 중 오류 발생: ${e.toString()}"));
       }

@@ -140,18 +140,16 @@ class RoundNumberList extends StatelessWidget {
                         const SizedBox(width: 12.0), // 날짜와 로또 번호 사이 간격 추가
 
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max, // ✅ Row를 가득 채우도록 설정
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: entry.numbers
-                              .map((int num) => Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                    child: LottoUtils.lottoNumber(
-                                      number: num,
-                                      isCorrect: roundData.winningNumbers
-                                              ?.contains(num) ??
-                                          false,
-                                    ),
-                                  ))
+                              .map((int num) => LottoUtils.lottoNumber(
+                                number: num,
+                                isCorrect: roundData.winningNumbers
+                                        ?.contains(num) ??
+                                    false,
+                              ))
                               .toList(),
                         ),
 

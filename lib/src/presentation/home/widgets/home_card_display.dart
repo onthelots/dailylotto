@@ -1,10 +1,16 @@
 import 'package:dailylotto/src/core/constants.dart';
+import 'package:dailylotto/src/data/models/lotto_local_model.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
+import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_state.dart';
+import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_state.dart';
+import 'package:dailylotto/src/presentation/weekly/bloc/latest_round_bloc/latest_round_bloc.dart';
+import 'package:dailylotto/src/presentation/weekly/bloc/latest_round_bloc/latest_round_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/routes.dart';
+import '../../main/bloc/lotto_remote_bloc/lotto_remote_bloc.dart';
 
 class HomeCardDisplay extends StatelessWidget {
   const HomeCardDisplay({super.key});
@@ -13,7 +19,14 @@ class HomeCardDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LottoLocalBloc, LottoLocalState>(
       builder: (context, state) {
-        final dailyTip = (state is LottoNumbersLoaded) ? state.todayEntry?.dailyTip : dailyTipPlaceholder;
+        final LottoEntry? todayEntry;
+        if ((state is LottoNumbersLoaded)) {
+          todayEntry = state.todayEntry;
+        } else {
+          todayEntry = null;
+        }
+        final dailyTip = todayEntry?.dailyTip ?? dailyTipPlaceholder;
+
         return Column(
           children: [
             Row(
@@ -24,8 +37,12 @@ class HomeCardDisplay extends StatelessWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      // TODO: - 오늘 생성카드 정보 확인
-                      print("오늘 생성카드 정보 확인");
+                      if (todayEntry?.isDefault == false) {
+                        Navigator.of(context).pushNamed(Routes.recommendation);
+                      } else {
+                        // TODO: - 다이얼로그 띄우고 번호생성 뷰로 이동
+                        print("오늘 생성된 번호가 없습니다");
+                      }
                     },
                     child: Container(
                       height: 250,
@@ -45,10 +62,9 @@ class HomeCardDisplay extends StatelessWidget {
                                     style: Theme.of(context).textTheme.titleMedium,
                                 ),
                                 const SizedBox(height: 8),
-                                // Flexible로 텍스트가 길어지면 자연스럽게 처리
                                 Wrap(children: [
                                   Text(
-                                    dailyTip ?? dailyTipPlaceholder,
+                                    dailyTip,
                                     maxLines: 6,
                                     softWrap: true,
                                     overflow: TextOverflow.ellipsis,
@@ -88,7 +104,6 @@ class HomeCardDisplay extends StatelessWidget {
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              print("생성번호 리스트");
                               Navigator.of(context).pushNamed(Routes.allround);
                             },
                             child: Container(
@@ -129,44 +144,56 @@ class HomeCardDisplay extends StatelessWidget {
                         const SizedBox(height: 15), // 위아래 간격
 
                         /// 두 번째 작은 카드
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              print("최근 회차결과");
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).cardColor,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Stack(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(contentPaddingIntoBox),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                                      children: [
-                                        Text(
-                                          "최근 회차 결과",
-                                          style: Theme.of(context).textTheme.titleMedium,
+                        BlocBuilder<LottoRemoteBloc, LottoRemoteState>(
+                          builder: (context, remoteState) {
+                            
+                            return Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (remoteState is LottoLoaded) {
+                                    final latestRound = remoteState.latestRound;
+                                    Navigator.of(context).pushNamed(Routes.latestRoundResult, arguments: latestRound);
+                                  }
+                                  print("최근 회차결과");
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).cardColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(
+                                            contentPaddingIntoBox),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          children: [
+                                            Text(
+                                              "최근 회차 결과",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium,
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      Positioned(
+                                        bottom: 13,
+                                        right: 13,
+                                        child: Image.asset(
+                                          'assets/images/award.png',
+                                          width: 45,
+                                          height: 45,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-
-                                  Positioned(
-                                    bottom: 13,
-                                    right: 13,
-                                    child: Image.asset(
-                                      'assets/images/award.png',
-                                      width: 45,
-                                      height: 45,
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -225,9 +252,10 @@ class HomeCardDisplay extends StatelessWidget {
                       Spacer(),
 
                       Image.asset(
-                        'assets/images/award.png',
-                        width: 60,
-                        height: 60,
+                        'assets/images/ai.png',
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.cover,
                       ),
                     ],
                   ),

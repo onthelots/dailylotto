@@ -36,12 +36,14 @@ class _AllRoundsScreenState extends State<AllRoundsScreen> {
                   Text(
                     '회차별 생성번호',
                     style: Theme.of(context).textTheme.titleMedium,
+                    textAlign: TextAlign.center,
                   ),
                   Text(
                     selectedYear != null && selectedMonth != null
                         ? '${selectedYear! % 100}년 ${selectedMonth!.toString()}월'
                         : '전체',
                     style: Theme.of(context).textTheme.bodySmall,
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),

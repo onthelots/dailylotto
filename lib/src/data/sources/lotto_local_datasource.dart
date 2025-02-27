@@ -81,16 +81,26 @@ class LottoLocalDataSource {
 
   // 더미데이터 추가
   Future<void> createDummyRoundLocalData(int round) async {
-    if (!_box.containsKey(round)) {
-      final now = DateTime.now();
-      final daysUntilSaturday = (DateTime.saturday - now.weekday) % 7;
-      final nextSaturday = now.add(Duration(days: daysUntilSaturday == 0 ? 7 : daysUntilSaturday));
-      final newLottoRound = LottoLocalModel(round: round, entries:[
-        LottoEntry(date: '2025-02-10', numbers: [2,5,7,15,25,38], recommendReason: '오늘은 2월 10일', dailyTip: '오늘은 2월 10일'),
-        LottoEntry(date: '2025-02-12', numbers: [3,9,27,28,40,41], recommendReason: '오늘은 2월 12일', dailyTip: '오늘은 2월 12일'),
-        LottoEntry(date: '2025-02-14', numbers: [3,7,9,27,28,38], recommendReason: '오늘은 2월 14일', dailyTip: '오늘은 2월 14일'),
-      ], timeStamp: nextSaturday);
-      await _box.put(round, newLottoRound);
-    }
+    final now = DateTime.now();
+    final daysUntilSaturday = (DateTime.saturday - now.weekday) % 7;
+    final nextSaturday = now.add(Duration(days: daysUntilSaturday == 0 ? 7 : daysUntilSaturday));
+
+    // 기존 데이터 삭제
+    await _box.delete(round);
+
+    // 새로운 LottoLocalModel 생성
+    final newLottoRound = LottoLocalModel(
+      round: round,
+      entries: [
+        LottoEntry(date: '2025-02-17', numbers: [7,13,18,36,40,41], recommendReason: '오늘은 2월 10일', dailyTip: '오늘은 2월 10일'),
+        LottoEntry(date: '2025-02-18', numbers: [3,9,27,28,40,41], recommendReason: '오늘은 2월 12일', dailyTip: '오늘은 2월 12일'),
+        LottoEntry(date: '2025-02-20', numbers: [3,7,9,27,28,38], recommendReason: '오늘은 2월 14일', dailyTip: '오늘은 2월 14일'),
+        LottoEntry(date: '2025-02-21', numbers: [1,3,5,7,9,45], recommendReason: '오늘은 2월 14일', dailyTip: '오늘은 2월 14일'),
+      ],
+      timeStamp: nextSaturday,
+    );
+
+    // 새로운 데이터 저장 (기존 데이터 덮어쓰기)
+    await _box.put(round, newLottoRound);
   }
 }
