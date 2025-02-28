@@ -1,7 +1,6 @@
 import 'package:dailylotto/src/core/shared_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../core/constants.dart';
 import '../../core/routes.dart';

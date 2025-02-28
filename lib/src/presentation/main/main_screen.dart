@@ -5,14 +5,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants.dart';
-import '../history/history_screen.dart';
+import '../../core/routes.dart';
 import '../home/home_screen.dart';
 import '../mypage/mypage_screen.dart';
 import 'bloc/bottom_nav_bloc/bottom_nav_bloc.dart';
 import 'bloc/bottom_nav_bloc/bottom_nav_event.dart';
 import 'bloc/bottom_nav_bloc/bottom_nav_state.dart';
 
+@pragma('vm:entry-point') // ✅ AOT 컴파일에서 삭제되지 않도록 보호
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('Handling a background message ${message.messageId}');
 }
@@ -28,7 +30,8 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    fcmSetting();
+    fcmSetting(); // fcm 세팅
+    checkInitialMessage(); //
   }
 
   Future<void> fcmSetting() async {
@@ -53,15 +56,7 @@ class _MainScreenState extends State<MainScreen> {
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       print("✅ 알림 권한 허용됨");
-
-      // 공지사항 알림 구독
-      await messaging.subscribeToTopic('notice_topic');
-
-      // 매일 전송되는 알림 구독
-      await messaging.subscribeToTopic('daily_topic');
-
-      // 매일 전송되는 알림 구독
-      await messaging.subscribeToTopic('weekly_topic');
+      await _checkAndSubscribeTopics();
 
     } else {
       print("❌ 알림 권한 거부됨");
@@ -101,6 +96,7 @@ class _MainScreenState extends State<MainScreen> {
       initializationSettings,
     );
 
+    /// 알림 띄우기
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
@@ -120,6 +116,47 @@ class _MainScreenState extends State<MainScreen> {
         );
       }
     });
+
+    /// 알림 탭 시, 이동하는 화면
+    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+  }
+
+  Future<void> checkInitialMessage() async {
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      handleMessage(initialMessage);
+    }
+  }
+
+  void handleMessage(RemoteMessage message) {
+    if (message.notification != null) {
+      String? topic = message.data['topic'];
+      print("🔔 푸시 알림 수신: topic = $topic");
+
+      if (topic == 'notice_topic') {
+        Navigator.of(context).pushNamed(Routes.notice);
+      } else {
+        print("⚠️ 해당 알림은 이동할 화면이 없음");
+      }
+    }
+  }
+
+  Future<void> _checkAndSubscribeTopics() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // 키가 없을 경우에만 기본값 true로 설정
+    if (!prefs.containsKey('notice_topic')) {
+      await prefs.setBool('notice_topic', true);
+      await FirebaseMessaging.instance.subscribeToTopic('notice_topic');
+    }
+    if (!prefs.containsKey('daily_topic')) {
+      await prefs.setBool('daily_topic', true);
+      await FirebaseMessaging.instance.subscribeToTopic('daily_topic');
+    }
+    if (!prefs.containsKey('weekly_topic')) {
+      await prefs.setBool('weekly_topic', true);
+      await FirebaseMessaging.instance.subscribeToTopic('weekly_topic');
+    }
   }
 
   final List<Widget> _tabs = [

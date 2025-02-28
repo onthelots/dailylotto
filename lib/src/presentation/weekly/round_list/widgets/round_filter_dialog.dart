@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
 
 class FilterDialog extends StatefulWidget {
   final int selectedYear;
   final int selectedMonth;
   final Function(int, int) onFilterSelected;
-  final VoidCallback onResetFilter; // 초기화 버튼을 위한 콜백 추가
+  final VoidCallback onResetFilter;
 
   const FilterDialog({
     super.key,
     required this.selectedYear,
     required this.selectedMonth,
     required this.onFilterSelected,
-    required this.onResetFilter, // 초기화 기능 추가
+    required this.onResetFilter,
   });
 
   @override
@@ -42,12 +44,16 @@ class _FilterDialogState extends State<FilterDialog> {
           ),
           Spacer(),
           IconButton(
-              onPressed: () {
-                widget.onResetFilter(); // 초기화 실행
-                Navigator.pop(context);
-              },
-              tooltip: '초기화',
-              icon: Icon(Icons.refresh_outlined))
+            onPressed: () {
+              widget.onResetFilter();
+              Navigator.pop(context);
+            },
+            tooltip: '초기화',
+            icon: Icon(
+              Icons.refresh_outlined,
+              color: Theme.of(context).hintColor,
+            ),
+          ),
         ],
       ),
       content: Row(
@@ -59,7 +65,10 @@ class _FilterDialogState extends State<FilterDialog> {
               10,
                   (index) => DropdownMenuItem(
                 value: DateTime.now().year - index,
-                child: Text('${DateTime.now().year - index}년', style: Theme.of(context).textTheme.bodyMedium,),
+                child: Text(
+                  '${DateTime.now().year - index}년',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ),
             ),
             onChanged: (value) {
@@ -70,9 +79,7 @@ class _FilterDialogState extends State<FilterDialog> {
               }
             },
           ),
-          const SizedBox(width: 30,),
-
-          // 월 선택 드롭다운
+          const SizedBox(width: 30),
           DropdownButton<int>(
             dropdownColor: Theme.of(context).scaffoldBackgroundColor,
             value: _selectedMonth,
@@ -80,7 +87,10 @@ class _FilterDialogState extends State<FilterDialog> {
               12,
                   (index) => DropdownMenuItem(
                 value: index + 1,
-                child: Text('${index + 1}월', style: Theme.of(context).textTheme.bodyMedium),
+                child: Text(
+                  '${index + 1}월',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ),
             ),
             onChanged: (value) {
@@ -96,14 +106,14 @@ class _FilterDialogState extends State<FilterDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child:  Text('취소', style: Theme.of(context).textTheme.labelMedium),
+          child: Text('취소', style: Theme.of(context).textTheme.labelMedium),
         ),
         TextButton(
           onPressed: () {
             widget.onFilterSelected(_selectedYear, _selectedMonth);
             Navigator.pop(context);
           },
-          child:  Text('적용', style: Theme.of(context).textTheme.labelMedium),
+          child: Text('적용', style: Theme.of(context).textTheme.labelMedium),
         ),
       ],
     );

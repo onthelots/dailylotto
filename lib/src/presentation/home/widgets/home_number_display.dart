@@ -121,7 +121,7 @@ class LottoNumberDisplay extends StatelessWidget {
               children: [
                 // 제목
                 Text('오늘 생성된 번호가 없어요',
-                    style: Theme.of(context).textTheme.bodySmall),
+                    style: Theme.of(context).textTheme.labelMedium),
 
                 // 생성하기
                 TextButton(
@@ -134,10 +134,10 @@ class LottoNumberDisplay extends StatelessWidget {
                       SizedBox(
                         width: 5,
                       ),
-                      Text('퀴즈풀고 AI 추천받기',
+                      Text('AI 추천받기',
                           style: Theme.of(context)
                               .textTheme
-                              .labelSmall
+                              .labelMedium
                               ?.copyWith(
                                   color: Theme.of(context).primaryColor)),
                     ],

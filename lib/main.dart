@@ -17,13 +17,20 @@ import 'package:dailylotto/src/presentation/question/bloc/daily_question_event.d
 import 'package:dailylotto/src/presentation/weekly/bloc/latest_round_bloc/latest_round_bloc.dart';
 import 'package:dailylotto/src/presentation/weekly/bloc/latest_round_bloc/latest_round_event.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (!kIsWeb &&
+      kDebugMode &&
+      defaultTargetPlatform == TargetPlatform.android) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
+  }
 
   // env (gemini api key)
   await dotenv.load(fileName: ".env"); // env (api key)
@@ -39,7 +46,9 @@ Future<void> main() async {
   ]);
 
   // run
-  runApp(MyApp(initialRoute: initialRoute));
+  Future.delayed(Duration(seconds: 2), () {
+    runApp(MyApp(initialRoute: initialRoute));
+  });
 }
 
 class MyApp extends StatelessWidget {

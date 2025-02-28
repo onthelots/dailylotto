@@ -53,8 +53,30 @@ class LastestResultScreen extends StatelessWidget {
 
             if (roundData.entries.isEmpty) {
               return Center(
-                  child: Text('최근 회차에 생성된 번호가 없습니다',
-                      style: Theme.of(context).textTheme.titleMedium));
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 150,
+                    height: 150,
+                    child: Image.asset('assets/images/empty.png', fit: BoxFit.contain,),
+                  ),
+                  Text(
+                    '최근 추첨회차에 생성한 번호가 없어요',
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelMedium
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    '다음 회차를 목표로 매일 번호를 생성하세요!',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ));
             }
 
             final hasWinningEntry = roundData.entries.any((entry) =>

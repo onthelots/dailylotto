@@ -32,13 +32,16 @@ class _QuestionScreenState extends State<QuestionScreen> {
         scrolledUnderElevation: 0,
         leading: SizedBox.shrink(), // 기본 back 버튼 제거
         actions: [
-          IconButton(
-            iconSize: 30.0,
-            icon: Icon(
-              Icons.cancel,
-              color: Theme.of(context).hintColor,
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: IconButton(
+              iconSize: 35.0,
+              icon: Icon(
+                Icons.cancel,
+                color: Theme.of(context).hintColor,
+              ),
+              onPressed: () => Navigator.pop(context),
             ),
-            onPressed: () => Navigator.pop(context),
           ),
         ],
       ),
@@ -69,24 +72,27 @@ class _QuestionScreenState extends State<QuestionScreen> {
                       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
 
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).highlightColor,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        '오늘의 선택',
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.white),
+                        '당신의 선택은?',
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white),
                       ),
                     ),
 
                     SizedBox(
-                      height: 20,
+                      height: 5,
                     ),
               
                     // 질문 표시
-                    Text(
-                      _dailyQuestionContainer!.question,
-                      style: Theme.of(context).textTheme.displayMedium,
-                      textAlign: TextAlign.center,
+                    Padding(
+                      padding: const EdgeInsets.all(30.0),
+                      child: Text(
+                        _dailyQuestionContainer!.question,
+                        style: Theme.of(context).textTheme.displayMedium,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
               
                     SizedBox(
