@@ -1,12 +1,9 @@
 import 'package:dailylotto/src/core/constants.dart';
 import 'package:dailylotto/src/data/models/lotto_local_model.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
-import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_state.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_state.dart';
 import 'package:dailylotto/src/presentation/main/widgets/custom_common_dialog.dart';
-import 'package:dailylotto/src/presentation/weekly/bloc/latest_round_bloc/latest_round_bloc.dart';
-import 'package:dailylotto/src/presentation/weekly/bloc/latest_round_bloc/latest_round_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -61,7 +58,7 @@ class HomeCardDisplay extends StatelessWidget {
                       }
                     },
                     child: Container(
-                      height: 250,
+                      height: 260,
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(10),
@@ -112,7 +109,7 @@ class HomeCardDisplay extends StatelessWidget {
                 /// 오른쪽 카드 그룹 (작은 카드 2개)
                 Expanded(
                   child: Container(
-                    height: 250,
+                    height: 260,
                     child: Column(
                       children: [
 
@@ -222,10 +219,10 @@ class HomeCardDisplay extends StatelessWidget {
 
             GestureDetector(
               onTap: () {
-                print("앱 Notion 페이지로 이동");
+                Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.privacyPolicy);
               },
               child: Container(
-                height: 100,
+                height: 120,
                 decoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(10),
@@ -240,15 +237,18 @@ class HomeCardDisplay extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "매일 새롭게 생성되는 AI 추천번호",
-                            style: Theme.of(context).textTheme.labelSmall,
+                            "매일 만나는 나만의 AI 추천번호",
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
+                          SizedBox(
+                            height: 3,
                           ),
                           RichText(
                             text: TextSpan(
                               text: "데일리 로또",
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyLarge
+                                  .labelLarge
                                   ?.copyWith(
                                   color: Theme.of(context)
                                       .primaryColor), // 원하는 색상 적용
@@ -257,7 +257,7 @@ class HomeCardDisplay extends StatelessWidget {
                                   text: "를 소개합니다",
                                   style: Theme.of(context)
                                       .textTheme
-                                      .labelMedium, // 기존 스타일 유지
+                                      .labelLarge, // 기존 스타일 유지
                                 ),
                               ],
                             ),
@@ -269,8 +269,8 @@ class HomeCardDisplay extends StatelessWidget {
 
                       Image.asset(
                         'assets/images/ai.png',
-                        width: 80,
-                        height: 80,
+                        width: 100,
+                        height: 100,
                         fit: BoxFit.cover,
                       ),
                     ],

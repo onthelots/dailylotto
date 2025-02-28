@@ -34,12 +34,6 @@ class CustomBottomNavigationBar {
   ];
 }
 
-/// WebView Routes
-class WebRoutes {
-  static const String homepage = 'https://momentous-wallet-0f7.notion.site/1681c3f0e003806c9b50dde42728413a?pvs=73';
-  static const String termsOfUse = 'https://momentous-wallet-0f7.notion.site/1681c3f0e00380389faef7a3d636ce76?pvs=4';
-  static const String privacyPolicy = 'https://momentous-wallet-0f7.notion.site/17b1c3f0e00380b5ae92ec994b5ccca8?pvs=4';
-}
 
 const dailyTipPlaceholder = "오늘의 작은 진전이 내일의 큰 차이를 만듭니다. 지속적으로 나아가면 결국에는 목표에 도달할 수 있어요";
 const reasonPlaceholder = "빠른 결단을 나타내는 4번, 변화와 성장을 상징하는 11번과 29번, 기술적 혁신을 의미하는 18번과 23번을 선택했습니다.";

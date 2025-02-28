@@ -1,3 +1,4 @@
+import 'package:dailylotto/src/core/app_info/app_info_cubit.dart';
 import 'package:dailylotto/src/core/di/locator.dart';
 import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_bloc.dart';
 import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_event.dart';
@@ -79,6 +80,10 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => locator<DailyQuestionBloc>()..add(LoadDailyQuestionEvent()),
+        ),
+        // version
+        BlocProvider(
+          create: (context) => AppInfoCubit()..fetchAppVersion(),
         ),
       ],
       child: MultiBlocListener(
