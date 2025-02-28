@@ -86,7 +86,7 @@ class LottoUtils {
         style: TextStyle(
           color: isCorrect ? AppColors.lightAccent : null,
           fontWeight: FontWeight.w600,
-          fontSize: 13.0,
+          fontSize: 15.0,
         ),
         textAlign: TextAlign.center, // ✅ 텍스트를 가운데 정렬
       ),

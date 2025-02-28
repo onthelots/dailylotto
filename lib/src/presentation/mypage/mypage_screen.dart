@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../core/app_info/app_info_cubit.dart';
 import '../../core/constants.dart';
 import '../../core/routes.dart';
 
@@ -9,7 +11,7 @@ class MyPageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).cardColor,
         scrolledUnderElevation: 0,
         leadingWidth: 200.0,
         leading: Align(
@@ -21,82 +23,84 @@ class MyPageScreen extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            _buildStreakCard(),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              _buildSectionTitle(context: context, title: '앱 설정'),
 
-            Divider(
-              height: 20.0,
-              thickness: 15.0,
-              color: Theme.of(context).cardColor,
-            ),
-
-            _buildSectionTitle(context: context, title: '앱 설정'),
-
-            _buildListTile(
-              context: context,
-              title: '알림 설정',
-              onTap: () {
-                Navigator.of(context).pushNamed(Routes.notification);
-              },
-            ),
-            _buildListTile(
-              context: context,
-              title: '기본 테마',
-              onTap: () {
-                Navigator.of(context).pushNamed(Routes.theme);
-              },
-            ),
-
-            Divider(
-              height: 20.0,
-              thickness: 15.0,
-              color: Theme.of(context).cardColor,
-            ),
-
-            _buildSectionTitle(context: context, title: '이용약관 및 라이센스'),
-
-            _buildListTile(
-              context: context,
-              title: '이용약관 및 개인정보 처리방침',
-              onTap: () {
-
-              },
-            ),
-            _buildListTile(
-              context: context,
-              title: '오픈소스 라이센스',
-              onTap: () {
-
-              },
-            ),
-
-            Divider(
-              height: 20.0,
-              thickness: 15.0,
-              color: Theme.of(context).cardColor,
-            ),
-
-            _buildListTile(
+              _buildListTile(
                 context: context,
-              title: '앱 버전',
-              onTap: () {
+                title: '알림 설정',
+                onTap: () {
+                  Navigator.of(context).pushNamed(Routes.notification);
+                },
+              ),
+              _buildListTile(
+                context: context,
+                title: '기본 테마',
+                onTap: () {
+                  Navigator.of(context).pushNamed(Routes.theme);
+                },
+              ),
 
-              },
-              trailing: Text("v1.0.0")
-            ),
-            _buildListTile(
-              context: context,
-              title: '동행복권 홈페이지',
-              onTap: () {
+              Divider(
+                height: 20.0,
+                thickness: 15.0,
+                color: Theme.of(context).cardColor,
+              ),
 
-              },
-            ),
+              _buildSectionTitle(context: context, title: '약관 및 라이선스'),
+
+              _buildListTile(
+                context: context,
+                title: '이용약관',
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.termsOfUse);
+                },
+              ),
+              _buildListTile(
+                context: context,
+                title: '개인정보 처리방침',
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.privacyPolicy);
+                },
+              ),
+              _buildListTile(
+                context: context,
+                title: '오픈소스 라이선스',
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.openSource);
+                },
+              ),
+
+              Divider(
+                height: 20.0,
+                thickness: 15.0,
+                color: Theme.of(context).cardColor,
+              ),
+              BlocBuilder<AppInfoCubit, String>(
+                builder: (context, version) {
+                  return _buildListTile(
+                      context: context,
+                      title: '앱 버전',
+                      onTap: () {},
+                      trailing: Text('v${version}'));
+                },
+              ),
+              _buildListTile(
+                context: context,
+                title: '동행복권 홈페이지',
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.officialSite);
+                },
+              ),
 
 
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -3,8 +3,10 @@ import 'package:dailylotto/src/presentation/main/main_screen.dart';
 import 'package:dailylotto/src/presentation/mypage/mypage_screen.dart';
 import 'package:dailylotto/src/presentation/introduce/Introduce_screen.dart';
 import 'package:dailylotto/src/presentation/mypage/notification_screen.dart';
+import 'package:dailylotto/src/presentation/mypage/oss_license_screen.dart';
 import 'package:dailylotto/src/presentation/mypage/theme_screen.dart';
 import 'package:dailylotto/src/presentation/question/ai_recommendation_screen.dart';
+import 'package:dailylotto/src/presentation/web/webview_screen.dart';
 import 'package:dailylotto/src/presentation/weekly/round_list/all_round_screen.dart';
 import 'package:dailylotto/src/presentation/weekly/weekly_screen.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,7 @@ import '../presentation/home/home_screen.dart';
 import '../presentation/latest_result/lastest_result_screen.dart';
 import '../presentation/question/question_screen.dart';
 
+/// Screen Routes
 class Routes {
   static const String splash = '/';
   static const String main = '/main'; // 메인
@@ -40,9 +43,20 @@ class Routes {
   // settings
   static const String notification = '/notification'; // 알림 설정
   static const String theme = '/theme'; // 테마설정
-
+  static const String openSource = '/opensource'; // 오픈소스
+  static const String webView = '/webView'; // 웹뷰
 }
 
+/// WebView Routes
+class WebRoutes {
+  static const String appSite= 'https://youth.seoul.go.kr/orang/cntr/intro.do?key=2309210001&cntrId=CT00001'; // 앱 사이트
+  static const String officialSite= 'https://youth.seoul.go.kr/orang/cntr/intro.do?key=2309210001&cntrId=CT00001'; // 동행복권 사이트
+  static const String termsOfUse = 'https://momentous-wallet-0f7.notion.site/1681c3f0e00380389faef7a3d636ce76?pvs=4'; // 이용약관
+  static const String privacyPolicy = 'https://momentous-wallet-0f7.notion.site/17b1c3f0e00380b5ae92ec994b5ccca8?pvs=4'; // 개인정보 보호
+}
+
+
+/// AppRouter
 class AppRouter {
   Route? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -95,6 +109,15 @@ class AppRouter {
       case Routes.theme:
         return MaterialPageRoute(
           builder: (_) => ThemeScreen(),
+        );
+      case Routes.openSource:
+        return MaterialPageRoute(
+          builder: (_) => OssLicensesPage(),
+        );
+      case Routes.webView:
+        final url = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => WebViewScreen(url: url),
         );
       default:
         return null;
