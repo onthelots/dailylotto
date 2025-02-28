@@ -8,6 +8,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/routes.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -27,12 +29,16 @@ class HomeScreen extends StatelessWidget {
                 flexibleSpace: FlexibleSpaceBar(
                   background: _buildHeader(context),
                 ),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.notifications),
-                    onPressed: () {},
-                  ),
-                ],
+
+                // TODO: - 노티피케이션, 공지사항 작업 완료하기
+                // actions: [
+                //   IconButton(
+                //     icon: const Icon(Icons.notifications),
+                //     onPressed: () {
+                //       Navigator.of(context).pushNamed(Routes.notice);
+                //     },
+                //   ),
+                // ],
               ),
 
               SliverPersistentHeader(

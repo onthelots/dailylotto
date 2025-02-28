@@ -1,12 +1,13 @@
-import 'package:dailylotto/src/data/models/lotto_local_model.dart';
+import 'package:dailylotto/src/presentation/home/notice_screen.dart';
 import 'package:dailylotto/src/presentation/main/main_screen.dart';
 import 'package:dailylotto/src/presentation/mypage/mypage_screen.dart';
 import 'package:dailylotto/src/presentation/introduce/Introduce_screen.dart';
+import 'package:dailylotto/src/presentation/mypage/notification_screen.dart';
+import 'package:dailylotto/src/presentation/mypage/theme_screen.dart';
 import 'package:dailylotto/src/presentation/question/ai_recommendation_screen.dart';
 import 'package:dailylotto/src/presentation/weekly/round_list/all_round_screen.dart';
 import 'package:dailylotto/src/presentation/weekly/weekly_screen.dart';
 import 'package:flutter/material.dart';
-
 import '../data/models/lotto_remote_model.dart';
 import '../presentation/home/home_screen.dart';
 import '../presentation/latest_result/lastest_result_screen.dart';
@@ -16,8 +17,11 @@ class Routes {
   static const String splash = '/';
   static const String main = '/main'; // 메인
 
+  // notice
+  static const String notice = '/notice'; // 스플래시
+
   // splash
-  static const String introduce = '/introduce'; // 스플래시1
+  static const String introduce = '/introduce'; // 스플래시
 
   // tab
   static const String home = '/home'; // 홈 (탭바)
@@ -30,15 +34,13 @@ class Routes {
   // latest round result
   static const String latestRoundResult = '/latestRoundResult'; // 최근 회차 결과
 
-  // game
-  static const String game_1 = '/g1'; // 게임 화면1
-  static const String game_2 = '/g2'; // 게임 화면2
-  static const String game_3 = '/g3'; // 게임 화면3
-  static const String game_4 = '/g4'; // 게임 화면4
-  static const String result = '/result'; // 게임 결과
-
   static const String dailyQuestion = '/dailyQuestion'; // 번호 생성 퀴즈
-  static const String recommendation = '/recommendation'; // 번호 생성 결과
+  static const String recommendation = '/recommendation'; // 번호 생성 결과 (AI 추천결과)
+
+  // settings
+  static const String notification = '/notification'; // 알림 설정
+  static const String theme = '/theme'; // 테마설정
+
 }
 
 class AppRouter {
@@ -51,6 +53,10 @@ class AppRouter {
       case Routes.home:
         return MaterialPageRoute(
           builder: (_) => HomeScreen(),
+        );
+      case Routes.notice:
+        return MaterialPageRoute(
+          builder: (_) => NoticeScreen(),
         );
       case Routes.weekly:
         return MaterialPageRoute(
@@ -81,6 +87,14 @@ class AppRouter {
       case Routes.allround:
         return MaterialPageRoute(
           builder: (_) => AllRoundsScreen(),
+        );
+      case Routes.notification:
+        return MaterialPageRoute(
+          builder: (_) => NotificationScreen(),
+        );
+      case Routes.theme:
+        return MaterialPageRoute(
+          builder: (_) => ThemeScreen(),
         );
       default:
         return null;

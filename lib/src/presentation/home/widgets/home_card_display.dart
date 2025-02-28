@@ -4,6 +4,7 @@ import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_loc
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_state.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_state.dart';
+import 'package:dailylotto/src/presentation/main/widgets/custom_common_dialog.dart';
 import 'package:dailylotto/src/presentation/weekly/bloc/latest_round_bloc/latest_round_bloc.dart';
 import 'package:dailylotto/src/presentation/weekly/bloc/latest_round_bloc/latest_round_state.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +21,14 @@ class HomeCardDisplay extends StatelessWidget {
     return BlocBuilder<LottoLocalBloc, LottoLocalState>(
       builder: (context, state) {
         final LottoEntry? todayEntry;
+        final int? currentRound;
+
         if ((state is LottoNumbersLoaded)) {
           todayEntry = state.todayEntry;
+          currentRound = state.lottoData.round;
         } else {
           todayEntry = null;
+          currentRound = null;  // Ensure it's assigned here
         }
         final dailyTip = todayEntry?.dailyTip ?? dailyTipPlaceholder;
 
@@ -40,8 +45,19 @@ class HomeCardDisplay extends StatelessWidget {
                       if (todayEntry?.isDefault == false) {
                         Navigator.of(context).pushNamed(Routes.recommendation);
                       } else {
-                        // TODO: - 다이얼로그 띄우고 번호생성 뷰로 이동
-                        print("오늘 생성된 번호가 없습니다");
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) => CustomDialog(
+                            title: "AI 번호 추천을 받으시겠어요?",
+                            subtitle: "당신의 운을 시험해보세요. 답변을 토대로 오늘의 로또 번호를 추천해드립니다.",
+                            cancelText: "취소",
+                            confirmText: "좋아요",
+                            onConfirm: () {
+                              Navigator.of(context).pushNamed(Routes.dailyQuestion, arguments: currentRound);
+                            },
+                          ),
+                        );
                       }
                     },
                     child: Container(
@@ -146,7 +162,7 @@ class HomeCardDisplay extends StatelessWidget {
                         /// 두 번째 작은 카드
                         BlocBuilder<LottoRemoteBloc, LottoRemoteState>(
                           builder: (context, remoteState) {
-                            
+
                             return Expanded(
                               child: GestureDetector(
                                 onTap: () {
