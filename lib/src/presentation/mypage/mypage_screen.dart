@@ -173,7 +173,3 @@ class MyPageScreen extends StatelessWidget {
     );
   }
 }
-
-/*
-Navigator.of(context).pushNamed(Routes.notification);
- */

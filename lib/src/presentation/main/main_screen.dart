@@ -31,7 +31,6 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     fcmSetting(); // fcm 세팅
-    checkInitialMessage(); //
   }
 
   Future<void> fcmSetting() async {
@@ -76,7 +75,7 @@ class _MainScreenState extends State<MainScreen> {
     );
 
     var initializationSettingsAndroid =
-    const AndroidInitializationSettings('@mipmap/launcher_icon');
+    const AndroidInitializationSettings('@drawable/ic_notification');
 
     var initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid, iOS: initialzationSettingsIOS);
@@ -110,7 +109,7 @@ class _MainScreenState extends State<MainScreen> {
             android: AndroidNotificationDetails(
               channel.id,
               channel.name,
-              icon: '@mipmap/launcher_icon',
+              icon: '@drawable/ic_notification',
             ),
           ),
         );
@@ -118,28 +117,29 @@ class _MainScreenState extends State<MainScreen> {
     });
 
     /// 알림 탭 시, 이동하는 화면
-    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+    // FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
   }
 
-  Future<void> checkInitialMessage() async {
-    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
-    if (initialMessage != null) {
-      handleMessage(initialMessage);
-    }
-  }
-
-  void handleMessage(RemoteMessage message) {
-    if (message.notification != null) {
-      String? topic = message.data['topic'];
-      print("🔔 푸시 알림 수신: topic = $topic");
-
-      if (topic == 'notice_topic') {
-        Navigator.of(context).pushNamed(Routes.notice);
-      } else {
-        print("⚠️ 해당 알림은 이동할 화면이 없음");
-      }
-    }
-  }
+  // TODO: - 메세지 수신에 따라 -> 특정 뷰를 띄우기 위한 과정
+  // Future<void> checkInitialMessage() async {
+  //   RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+  //   if (initialMessage != null) {
+  //     handleMessage(initialMessage);
+  //   }
+  // }
+  //
+  // void handleMessage(RemoteMessage message) {
+  //   if (message.notification != null) {
+  //     String? topic = message.data['topic'];
+  //     print("🔔 푸시 알림 수신: topic = $topic");
+  //
+  //     if (topic == 'notice_topic') {
+  //       Navigator.of(context).pushNamed(Routes.notice);
+  //     } else {
+  //       print("⚠️ 해당 알림은 이동할 화면이 없음");
+  //     }
+  //   }
+  // }
 
   Future<void> _checkAndSubscribeTopics() async {
     final prefs = await SharedPreferences.getInstance();

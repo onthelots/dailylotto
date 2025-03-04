@@ -7,10 +7,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import '../../../core/routes.dart';
+import '../../../core/shared_preference.dart';
 import '../../../core/utils.dart';
 import '../../main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import '../../main/bloc/lotto_local_bloc/lotto_local_event.dart';
 import '../../main/bloc/lotto_local_bloc/lotto_local_state.dart';
+import '../../main/widgets/warning_check_dialog.dart';
 
 class LottoNumberDisplay extends StatelessWidget {
   const LottoNumberDisplay({Key? key}) : super(key: key);
@@ -142,8 +144,28 @@ class LottoNumberDisplay extends StatelessWidget {
                                   color: Theme.of(context).primaryColor)),
                     ],
                   ),
-                  onPressed: () {
-                   Navigator.of(context).pushNamed(Routes.dailyQuestion, arguments: round);
+                  onPressed: () async {
+                    // 2. 오늘 생성된 번호가 없을 경우
+                    // 주의사항 확인여부 파악
+                    final isWarningCheck = await SharedPreferencesHelper.getWaringCheckState();
+                    isWarningCheck ?
+                    Navigator.of(context).pushNamed(Routes.dailyQuestion, arguments: round)
+                        :
+                    showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) => WarningCheckDialog(
+                        title: "번호 생성 전 주의사항",
+                        subtitle:
+                        "본 서비스는 엔터테인먼트 목적으로 번호 생성 기능을 제공하며, 생성된 번호는 당첨을 보장하지 않습니다.\n로또 구매 및 관련 행위는 전적으로 사용자 본인의 책임입니다.",
+                        cancelText: "취소",
+                        confirmText: "확인했어요!",
+                        onConfirm: () async {
+                          await SharedPreferencesHelper.setWaringCheckStateToTrue();
+                          Navigator.of(context).pushNamed(Routes.dailyQuestion, arguments: round);
+                        },
+                      ),
+                    );
                   },
                 ),
               ],

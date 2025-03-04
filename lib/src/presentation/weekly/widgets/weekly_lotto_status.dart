@@ -42,29 +42,51 @@ class WeeklyLottoUI extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        RichText(
-          maxLines: 1,
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: "이번주 진행상황",
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium,
+        Row(
+          children: [
+            RichText(
+              maxLines: 1,
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "이번주 진행상황",
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium,
+                  ),
+                  WidgetSpan(
+                    child: SizedBox(width: 5), // 간격 추가
+                  ),
+                  TextSpan(
+                    text: "(${latestRound}회차)",
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      letterSpacing: -0.3, // 음수 값을 사용하면 간격이 줄어듦
+                    ),
+                  ),
+                ],
               ),
-              WidgetSpan(
-                child: SizedBox(width: 5), // 간격 추가
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Tooltip(
+              message: "매주 토요일 추첨이 완료되면\n다음 회차로 갱신됩니다.",
+              textStyle: Theme.of(context).textTheme.labelSmall,
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: BorderRadius.circular(8),
               ),
-              TextSpan(
-                text: "(${latestRound}회차)",
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  letterSpacing: -0.3, // 음수 값을 사용하면 간격이 줄어듦
-                ),
+              padding: EdgeInsets.all(10),
+              triggerMode: TooltipTriggerMode.tap, // 👈 한 번만 눌러도 툴팁 표시
+              showDuration: Duration(seconds: 2), // 2초 동안 표시
+              child: Icon(
+                Icons.info,
+                size: 18,
+                color: Theme.of(context).hintColor,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-
         SizedBox(height: 15),
 
         Container(

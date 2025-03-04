@@ -4,11 +4,10 @@ import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_state.dart'
 import 'package:dailylotto/src/presentation/home/widgets/home_card_display.dart';
 import 'package:dailylotto/src/presentation/home/widgets/home_title_display.dart';
 import 'package:dailylotto/src/presentation/home/widgets/home_number_display.dart';
-import 'package:flutter/gestures.dart';
+import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
+import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../core/routes.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

@@ -25,118 +25,121 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
+    return PopScope(
+      canPop: false, // 뒤로 가기 동작을 비활성화
+      child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        scrolledUnderElevation: 0,
-        leading: SizedBox.shrink(), // 기본 back 버튼 제거
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: IconButton(
-              iconSize: 35.0,
-              icon: Icon(
-                Icons.cancel,
-                color: Theme.of(context).hintColor,
-              ),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ),
-        ],
-      ),
-
-      body: BlocBuilder<DailyQuestionBloc, DailyQuestionState>(
-        builder: (context, state) {
-          if (state is DailyQuestionLoading) {
-            return Center(
-                child: CircularProgressIndicator(
-              color: Theme.of(context).primaryColor,
-            ));
-          } else if (state is DailyQuestionLoaded) {
-            _dailyQuestionContainer = state.dailyQuestion;
-
-            if (_dailyQuestionContainer == null) {
-              return const Center(child: Text('질문 생성 실패.'));
-            }
-
-            return SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: boxPadding, vertical: boxPadding),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-              
-                    // 둥근 모서리 태그
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).highlightColor,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        '당신의 선택은?',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white),
-                      ),
-                    ),
-
-                    SizedBox(
-                      height: 5,
-                    ),
-              
-                    // 질문 표시
-                    Padding(
-                      padding: const EdgeInsets.all(30.0),
-                      child: Text(
-                        _dailyQuestionContainer!.question,
-                        style: Theme.of(context).textTheme.displayMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-              
-                    SizedBox(
-                      height: 20,
-                    ),
-              
-                    // 선택지 버튼
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: _dailyQuestionContainer!.options.map((option) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: boxPadding, horizontal: boxPadding),
-                          child: _buildOptionButton(option.text),
-                        );
-                      }).toList(),
-                    ),
-                  ],
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          scrolledUnderElevation: 0,
+          leading: SizedBox.shrink(), // 기본 back 버튼 제거
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: IconButton(
+                iconSize: 35.0,
+                icon: Icon(
+                  Icons.cancel,
+                  color: Theme.of(context).hintColor,
                 ),
+                onPressed: () => Navigator.pop(context),
               ),
-            );
-          } else if (state is DailyQuestionError) {
-            return Center(child: Text('오류 발생: ${state.message}'));
-          }
-          return Center(child: Text('퀴즈 데이터를 불러오세요.'));
-        },
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 20.0),
-        child: ElevatedButton(
-          onPressed: _selectedOption == null
-              ? null // 선택하지 않으면 비활성화
-              : () => _handleRecommendation(),
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            backgroundColor: Theme
-                .of(context)
-                .highlightColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
             ),
-          ),
-          child: const Text(
-            "선택하기",
-            style: TextStyle(color: Colors.white),
+          ],
+        ),
+      
+        body: BlocBuilder<DailyQuestionBloc, DailyQuestionState>(
+          builder: (context, state) {
+            if (state is DailyQuestionLoading) {
+              return Center(
+                  child: CircularProgressIndicator(
+                color: Theme.of(context).primaryColor,
+              ));
+            } else if (state is DailyQuestionLoaded) {
+              _dailyQuestionContainer = state.dailyQuestion;
+      
+              if (_dailyQuestionContainer == null) {
+                return const Center(child: Text('질문 생성 실패.'));
+              }
+      
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: boxPadding, vertical: boxPadding),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                
+                      // 둥근 모서리 태그
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).highlightColor,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          '당신의 선택은?',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white),
+                        ),
+                      ),
+      
+                      SizedBox(
+                        height: 5,
+                      ),
+                
+                      // 질문 표시
+                      Padding(
+                        padding: const EdgeInsets.all(30.0),
+                        child: Text(
+                          _dailyQuestionContainer!.question,
+                          style: Theme.of(context).textTheme.displayMedium,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                
+                      SizedBox(
+                        height: 20,
+                      ),
+                
+                      // 선택지 버튼
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: _dailyQuestionContainer!.options.map((option) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: boxPadding, horizontal: boxPadding),
+                            child: _buildOptionButton(option.text),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            } else if (state is DailyQuestionError) {
+              return Center(child: Text('오류 발생: ${state.message}'));
+            }
+            return Center(child: Text('퀴즈 데이터를 불러오세요.'));
+          },
+        ),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 20.0),
+          child: ElevatedButton(
+            onPressed: _selectedOption == null
+                ? null // 선택하지 않으면 비활성화
+                : () => _handleRecommendation(),
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              backgroundColor: Theme
+                  .of(context)
+                  .highlightColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+            child: const Text(
+              "선택하기",
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ),
       ),

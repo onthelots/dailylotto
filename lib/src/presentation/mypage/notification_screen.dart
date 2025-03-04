@@ -12,7 +12,9 @@ class NotificationScreen extends StatefulWidget {
   _NotificationScreenState createState() => _NotificationScreenState();
 }
 
-class _NotificationScreenState extends State<NotificationScreen> with WidgetsBindingObserver {
+class _NotificationScreenState extends State<NotificationScreen>
+    with WidgetsBindingObserver {
+  bool _isLoading = false;
   bool _isNotificationAllowed = false;
   bool _isSubscribedNotice = false;
   bool _isSubscribedDaily = false;
@@ -41,7 +43,8 @@ class _NotificationScreenState extends State<NotificationScreen> with WidgetsBin
   /// 알림 권한 확인
   Future<void> _checkNotificationPermission() async {
     NotificationService notificationService = NotificationService();
-    AuthorizationStatus status = await notificationService.checkNotificationPermission();
+    AuthorizationStatus status =
+        await notificationService.checkNotificationPermission();
 
     print("🔔 안드로이드 알림 권한 상태: $status"); // 여기서 상태를 꼭 확인
 
@@ -72,60 +75,77 @@ class _NotificationScreenState extends State<NotificationScreen> with WidgetsBin
   void _subscribeToTopic(String topic) async {
     final prefs = await SharedPreferences.getInstance();
 
-    // UI 먼저 업데이트
     setState(() {
-      if (topic == 'notice_topic') _isSubscribedNotice = true;
-      if (topic == 'daily_topic') _isSubscribedDaily = true;
-      if (topic == 'weekly_topic') _isSubscribedWeekly = true;
+      _isLoading = true;
+      _showLoadingDialog(); // 로딩 다이얼로그 표시
     });
 
-    // 비동기적으로 구독 처리
-    Future.microtask(() async {
-      try {
-        await FirebaseMessaging.instance.subscribeToTopic(topic);
-        await prefs.setBool(topic, true);
-        print("✅ $topic 구독 완료");
-      } catch (error) {
-        print("❌ $topic 구독 실패: $error");
+    try {
+      await FirebaseMessaging.instance.subscribeToTopic(topic);
+      await prefs.setBool(topic, true);
 
-        // 실패 시 UI 롤백
+      // 성공 시 UI 업데이트
+      setState(() {
+        if (topic == 'notice_topic') _isSubscribedNotice = true;
+        if (topic == 'daily_topic') _isSubscribedDaily = true;
+        if (topic == 'weekly_topic') _isSubscribedWeekly = true;
+        _isLoading = false; // 로딩 종료
+      });
+      Navigator.of(context).pop(); // 다이얼로그 닫기
+
+      print("✅ $topic 구독 완료");
+    } catch (error) {
+      print("❌ $topic 구독 실패: $error");
+
+      // 실패 시 UI 유지 + 로딩 종료
+      setState(() {
         setState(() {
           if (topic == 'notice_topic') _isSubscribedNotice = false;
           if (topic == 'daily_topic') _isSubscribedDaily = false;
           if (topic == 'weekly_topic') _isSubscribedWeekly = false;
+          _isLoading = false; // 로딩 종료
         });
-      }
-    });
+        Navigator.of(context).pop(); // 다이얼로그 닫기
+      });
+    }
   }
 
   /// 특정 Topic 구독 취소
   void _unsubscribeFromTopic(String topic) async {
     final prefs = await SharedPreferences.getInstance();
 
-    // UI 먼저 업데이트
+    // 로딩 상태 활성화
     setState(() {
-      if (topic == 'notice_topic') _isSubscribedNotice = false;
-      if (topic == 'daily_topic') _isSubscribedDaily = false;
-      if (topic == 'weekly_topic') _isSubscribedWeekly = false;
+      _isLoading = true;
+      _showLoadingDialog(); // 로딩 다이얼로그 표시
     });
 
-    // 비동기적으로 구독 취소 처리
-    Future.microtask(() async {
-      try {
-        await FirebaseMessaging.instance.unsubscribeFromTopic(topic);
-        await prefs.setBool(topic, false);
-        print("❌ $topic 구독 취소 완료");
-      } catch (error) {
-        print("⚠️ $topic 구독 취소 실패: $error");
+    try {
+      await FirebaseMessaging.instance.unsubscribeFromTopic(topic);
+      await prefs.setBool(topic, false);
 
-        // 실패 시 UI 롤백
-        setState(() {
-          if (topic == 'notice_topic') _isSubscribedNotice = true;
-          if (topic == 'daily_topic') _isSubscribedDaily = true;
-          if (topic == 'weekly_topic') _isSubscribedWeekly = true;
-        });
-      }
-    });
+      // 성공 시 UI 업데이트
+      setState(() {
+        if (topic == 'notice_topic') _isSubscribedNotice = false;
+        if (topic == 'daily_topic') _isSubscribedDaily = false;
+        if (topic == 'weekly_topic') _isSubscribedWeekly = false;
+        _isLoading = false; // 로딩 종료
+      });
+      Navigator.of(context).pop(); // 다이얼로그 닫기
+
+      print("❌ $topic 구독 취소 완료");
+    } catch (error) {
+      print("⚠️ $topic 구독 취소 실패: $error");
+
+      // 실패 시 UI 원상 복구
+      setState(() {
+        if (topic == 'notice_topic') _isSubscribedNotice = true;
+        if (topic == 'daily_topic') _isSubscribedDaily = true;
+        if (topic == 'weekly_topic') _isSubscribedWeekly = true;
+        _isLoading = false; // 로딩 종료
+      });
+      Navigator.of(context).pop(); // 다이얼로그 닫기
+    }
   }
 
   /// iOS 설정 앱으로 이동
@@ -144,6 +164,7 @@ class _NotificationScreenState extends State<NotificationScreen> with WidgetsBin
     }
   }
 
+  /// 사용자가 직접 알림 권한 수정
   void _showPermissionDialog() {
     showDialog(
       barrierDismissible: false,
@@ -159,6 +180,23 @@ class _NotificationScreenState extends State<NotificationScreen> with WidgetsBin
       ),
     );
   }
+
+  /// 로딩 인디케이터
+  void _showLoadingDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // 사용자가 닫을 수 없도록 설정
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Center(
+          child: CircularProgressIndicator(
+            color: Theme.of(context).scaffoldBackgroundColor,
+          ),
+        ),
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +228,6 @@ class _NotificationScreenState extends State<NotificationScreen> with WidgetsBin
                       SizedBox(
                         width: 5,
                       ),
-
                       Text(
                         '앱 알림이 꺼져있어요',
                         style: Theme.of(context).textTheme.titleMedium,
@@ -198,7 +235,6 @@ class _NotificationScreenState extends State<NotificationScreen> with WidgetsBin
                     ],
                   ),
                   Spacer(),
-
                   TextButton(
                     onPressed: () {
                       if (Platform.isIOS) {
@@ -211,7 +247,11 @@ class _NotificationScreenState extends State<NotificationScreen> with WidgetsBin
                       children: [
                         Text(
                           '알림설정 하기',
-                          style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).focusColor),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(
+                                  color: Theme.of(context).focusColor),
                         ),
                         Icon(
                           Icons.chevron_right_rounded,
@@ -222,9 +262,9 @@ class _NotificationScreenState extends State<NotificationScreen> with WidgetsBin
                   ),
                 ],
               ),
-
             if (_isNotificationAllowed) ...[
-              Text('푸시 알림 수신 설정', style: Theme.of(context).textTheme.titleMedium),
+              Text('푸시 알림 수신 설정',
+                  style: Theme.of(context).textTheme.titleMedium),
               SizedBox(height: 10),
 
               // 📢 Notice Topic
@@ -232,18 +272,21 @@ class _NotificationScreenState extends State<NotificationScreen> with WidgetsBin
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('공지사항 알림', style: Theme.of(context).textTheme.bodyMedium),
+                  Text('공지사항 알림',
+                      style: Theme.of(context).textTheme.bodyMedium),
                   Switch(
                     activeColor: Theme.of(context).cardColor,
                     activeTrackColor: Theme.of(context).primaryColor,
                     value: _isSubscribedNotice,
-                    onChanged: (value) {
-                      if (value) {
-                        _subscribeToTopic('notice_topic');
-                      } else {
-                        _unsubscribeFromTopic('notice_topic');
-                      }
-                    },
+                    onChanged: _isLoading
+                        ? null
+                        : (value) {
+                            if (value) {
+                              _subscribeToTopic('notice_topic');
+                            } else {
+                              _unsubscribeFromTopic('notice_topic');
+                            }
+                          },
                   ),
                 ],
               ),
@@ -255,18 +298,21 @@ class _NotificationScreenState extends State<NotificationScreen> with WidgetsBin
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('일일 알림', style: Theme.of(context).textTheme.bodyMedium),
+                  Text('일일 알림',
+                      style: Theme.of(context).textTheme.bodyMedium),
                   Switch(
                     activeColor: Theme.of(context).cardColor,
                     activeTrackColor: Theme.of(context).primaryColor,
                     value: _isSubscribedDaily,
-                    onChanged: (value) {
-                      if (value) {
-                        _subscribeToTopic('daily_topic');
-                      } else {
-                        _unsubscribeFromTopic('daily_topic');
-                      }
-                    },
+                    onChanged: _isLoading
+                        ? null
+                        : (value) {
+                            if (value) {
+                              _subscribeToTopic('daily_topic');
+                            } else {
+                              _unsubscribeFromTopic('daily_topic');
+                            }
+                          },
                   ),
                 ],
               ),
@@ -278,18 +324,21 @@ class _NotificationScreenState extends State<NotificationScreen> with WidgetsBin
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('추첨시간 알림', style: Theme.of(context).textTheme.bodyMedium),
+                  Text('추첨시간 알림',
+                      style: Theme.of(context).textTheme.bodyMedium),
                   Switch(
                     activeColor: Theme.of(context).cardColor,
                     activeTrackColor: Theme.of(context).primaryColor,
                     value: _isSubscribedWeekly,
-                    onChanged: (value) {
-                      if (value) {
-                        _subscribeToTopic('weekly_topic');
-                      } else {
-                        _unsubscribeFromTopic('weekly_topic');
-                      }
-                    },
+                    onChanged: _isLoading
+                        ? null
+                        : (value) {
+                            if (value) {
+                              _subscribeToTopic('weekly_topic');
+                            } else {
+                              _unsubscribeFromTopic('weekly_topic');
+                            }
+                          },
                   ),
                 ],
               ),
