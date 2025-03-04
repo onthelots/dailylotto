@@ -55,6 +55,8 @@ class LottoLocalBloc extends Bloc<LottoLocalEvent, LottoLocalState> {
               }
             }
 
+            // TODO: - 이부분에서, 걍 회차가 없을 경우 orElse
+            // 이전회차의 데이터를 중복적으로 리턴해서
             return LottoEntry(
               date: today,
               numbers: [],

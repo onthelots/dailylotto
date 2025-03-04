@@ -61,22 +61,27 @@ class WeeklyScreen extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: boxPadding, vertical: boxPadding),
-              child: Column(
-                children: [
-                  WeeklyLottoStatus(),
-                  const SizedBox(
-                    height: 40.0,
-                  ),
-                  LatestRoundDisplay(),
-                ],
-              ),
+              padding: const EdgeInsets.all(boxPadding),
+              child: WeeklyLottoStatus(),
             ),
-            const Divider(
-              height: 30.0,
-              thickness: 10.0,
+
+            Divider(
+              height: 20.0,
+              thickness: 15.0,
+              color: Theme.of(context).cardColor,
             ),
+
+            Padding(
+              padding: const EdgeInsets.all(boxPadding),
+              child: LatestRoundDisplay(),
+            ),
+
+            Divider(
+              height: 20.0,
+              thickness: 15.0,
+              color: Theme.of(context).cardColor,
+            ),
+
             BlocListener<LottoLocalBloc, LottoLocalState>(
               listener: (context, state) {
                 if (state is LottoNumbersLoaded) {
@@ -84,8 +89,7 @@ class WeeklyScreen extends StatelessWidget {
                 }
               },
               child: const Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: boxPadding, vertical: boxPadding),
+                padding: const EdgeInsets.all(boxPadding),
                 child: Column(
                   children: [
                     LatestWeeklyNumberDisplay(),

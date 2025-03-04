@@ -197,43 +197,43 @@ class LastestResultScreen extends StatelessWidget {
                                         itemCount: sortedEntries.length,
                                         itemBuilder: (context, index) {
                                           final entry = sortedEntries[index];
-                                          // 당첨된 경우
-                                          final isWinningEntry = entry.result == "1등" ||
-                                              entry.result == "2등" ||
-                                              entry.result == "3등" ||
-                                              entry.result == "4등" ||
-                                              entry.result == "5등";
+                                          final isWinningEntry = ["1등", "2등", "3등", "4등", "5등"].contains(entry.result);
 
-                                          return Card(
-                                            margin: EdgeInsets.symmetric(
-                                                vertical: 10.0),
-                                            color: Theme.of(context).cardColor,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(15.0),
-                                              side: BorderSide(
-                                                  color: isWinningEntry
-                                                      ? Theme.of(context).focusColor
-                                                      : Theme.of(context).cardColor,
-                                                  width: 2.0),
-                                            ),
-                                            child: ListTile(
-                                              title: Text(
-                                                  '번호: ${entry.numbers.join(', ')}',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleMedium),
-                                              subtitle: Text(
-                                                '${entry.date}',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                      .bodySmall),
-                                              trailing: Text(
-                                                entry.result ?? "예정",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .labelMedium?.copyWith(fontWeight: isWinningEntry ? FontWeight.w900 : FontWeight.w300, color: isWinningEntry ? resultPrimaryColor : null),
+                                          return Column(
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: Theme.of(context).cardColor,
+                                                  borderRadius: BorderRadius.circular(15.0),
+                                                  border: Border.all(
+                                                    color: isWinningEntry
+                                                        ? Theme.of(context).focusColor
+                                                        : Theme.of(context).disabledColor,
+                                                    width: isWinningEntry
+                                                        ? 2.0
+                                                        : 0.5,
+                                                  ),
+                                                ),
+                                                child: ListTile(
+                                                  title: Text(
+                                                    '${entry.date}',
+                                                    style: Theme.of(context).textTheme.bodySmall,
+                                                  ),
+                                                  subtitle: Text(
+                                                    '${entry.numbers.join(', ')}',
+                                                    style: Theme.of(context).textTheme.titleMedium,
+                                                  ),
+                                                  trailing: Text(
+                                                    entry.result ?? "예정",
+                                                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                                                      fontWeight: isWinningEntry ? FontWeight.w900 : FontWeight.w300,
+                                                      color: isWinningEntry ? resultPrimaryColor : null,
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
-                                            ),
+                                              SizedBox(height: 10.0), // 🔹 간격 추가
+                                            ],
                                           );
                                         },
                                       ),

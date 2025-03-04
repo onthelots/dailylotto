@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../models/lotto_local_model.dart';
 
@@ -91,11 +92,12 @@ class LottoLocalDataSource {
     // 새로운 LottoLocalModel 생성
     final newLottoRound = LottoLocalModel(
       round: round,
+      winningNumbers: [2,12,20,24,34,42],
       entries: [
-        LottoEntry(date: '2025-02-17', numbers: [7,13,18,36,40,41], recommendReason: '오늘은 2월 10일', dailyTip: '오늘은 2월 10일'),
-        LottoEntry(date: '2025-02-18', numbers: [3,9,27,28,40,41], recommendReason: '오늘은 2월 12일', dailyTip: '오늘은 2월 12일'),
-        LottoEntry(date: '2025-02-20', numbers: [3,7,9,27,28,38], recommendReason: '오늘은 2월 14일', dailyTip: '오늘은 2월 14일'),
-        LottoEntry(date: '2025-02-21', numbers: [1,3,5,7,9,45], recommendReason: '오늘은 2월 14일', dailyTip: '오늘은 2월 14일'),
+        LottoEntry(date: '2025-02-24', numbers: [2,12,20,24,34,42], recommendReason: '오늘은 2월 10일', dailyTip: '오늘은 2월 10일'),
+        LottoEntry(date: '2025-02-25', numbers: [3,9,27,28,40,41], recommendReason: '오늘은 2월 12일', dailyTip: '오늘은 2월 12일'),
+        LottoEntry(date: '2025-02-27', numbers: [3,7,9,27,28,38], recommendReason: '오늘은 2월 14일', dailyTip: '오늘은 2월 14일'),
+        LottoEntry(date: '2025-02-28', numbers: [1,3,5,7,9,45], recommendReason: '오늘은 2월 14일', dailyTip: '오늘은 2월 14일'),
       ],
       timeStamp: nextSaturday,
     );

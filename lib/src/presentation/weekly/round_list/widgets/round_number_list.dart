@@ -109,58 +109,57 @@ class RoundNumberList extends StatelessWidget {
             : Column(
                 children: List.generate(roundData.entries.length, (index) {
                   final entry = roundData.entries[index];
-                  return Container(
-                    height: 60,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: contentPaddingIntoBox,
-                        horizontal: contentPaddingIntoBox),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1), // 그림자 색상
-                          blurRadius: 10, // 흐림 정도 (값이 클수록 더 부드러운 그림자)
-                          spreadRadius: 2, // 그림자 확산 정도
-                          offset: Offset(3, 5), // 그림자의 위치 (x, y)
+                  return Column(
+                    children: [
+                      Container(
+                        height: 60,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: contentPaddingIntoBox,
+                            horizontal: contentPaddingIntoBox),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                      ],
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          entry.date,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.copyWith(fontSize: 11.0),
-                        ),
-
-                        const SizedBox(width: 12.0), // 날짜와 로또 번호 사이 간격 추가
-
-                        Row(
-                          mainAxisSize: MainAxisSize.max, // ✅ Row를 가득 채우도록 설정
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: entry.numbers
-                              .map((int num) => LottoUtils.lottoNumber(
-                                number: num,
-                                isCorrect: roundData.winningNumbers
-                                        ?.contains(num) ??
-                                    false,
-                              ))
-                              .toList(),
-                        ),
+                          children: [
+                            Text(
+                              entry.date,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(fontSize: 11.0),
+                            ),
 
-                        Spacer(),
+                            const SizedBox(width: 12.0), // 날짜와 로또 번호 사이 간격 추가
 
-                        Text(
-                          entry.result ?? "예정",
-                          style: Theme.of(context).textTheme.bodySmall,
+                            Row(
+                              mainAxisSize: MainAxisSize.max, // ✅ Row를 가득 채우도록 설정
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: entry.numbers
+                                  .map((int num) => LottoUtils.lottoNumber(
+                                    number: num,
+                                    isCorrect: roundData.winningNumbers
+                                            ?.contains(num) ??
+                                        false,
+                                  ))
+                                  .toList(),
+                            ),
+
+                            Spacer(),
+
+                            Text(
+                              entry.result ?? "예정",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      )
+                    ],
                   );
                 }),
               )

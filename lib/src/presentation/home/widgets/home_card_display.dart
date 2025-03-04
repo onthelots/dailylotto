@@ -1,14 +1,14 @@
 import 'package:dailylotto/src/core/constants.dart';
+import 'package:dailylotto/src/core/shared_preference.dart';
 import 'package:dailylotto/src/data/models/lotto_local_model.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_state.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_state.dart';
-import 'package:dailylotto/src/presentation/main/widgets/custom_common_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../core/routes.dart';
 import '../../main/bloc/lotto_remote_bloc/lotto_remote_bloc.dart';
+import '../../main/widgets/warning_check_dialog.dart';
 
 class HomeCardDisplay extends StatelessWidget {
   const HomeCardDisplay({super.key});
@@ -38,19 +38,28 @@ class HomeCardDisplay extends StatelessWidget {
                 /// 왼쪽 카드 (큰 카드)
                 Expanded(
                   child: GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      // 1. 생성된 번호가 존재할 경우
                       if (todayEntry?.isDefault == false) {
                         Navigator.of(context).pushNamed(Routes.recommendation);
                       } else {
+                        // 2. 오늘 생성된 번호가 없을 경우
+                        // 주의사항 확인여부 파악
+                        final isWarningCheck = await SharedPreferencesHelper.getWaringCheckState();
+                        isWarningCheck ?
+                        Navigator.of(context).pushNamed(Routes.dailyQuestion, arguments: currentRound)
+                        :
                         showDialog(
                           barrierDismissible: false,
                           context: context,
-                          builder: (context) => CustomDialog(
-                            title: "AI 번호 추천을 받으시겠어요?",
-                            subtitle: "당신의 운을 시험해보세요. 답변을 토대로 오늘의 로또 번호를 추천해드립니다.",
+                          builder: (context) => WarningCheckDialog(
+                            title: "번호 생성 전 주의사항",
+                            subtitle:
+                            "본 서비스는 엔터테인먼트 목적으로 번호 생성 기능을 제공하며, 생성된 번호는 당첨을 보장하지 않습니다.\n로또 구매 및 관련 행위는 전적으로 사용자 본인의 책임입니다.",
                             cancelText: "취소",
-                            confirmText: "좋아요",
-                            onConfirm: () {
+                            confirmText: "확인했어요!",
+                            onConfirm: () async {
+                              await SharedPreferencesHelper.setWaringCheckStateToTrue();
                               Navigator.of(context).pushNamed(Routes.dailyQuestion, arguments: currentRound);
                             },
                           ),
@@ -219,7 +228,7 @@ class HomeCardDisplay extends StatelessWidget {
 
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.privacyPolicy);
+                Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.appSite);
               },
               child: Container(
                 height: 120,

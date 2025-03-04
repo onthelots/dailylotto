@@ -49,10 +49,11 @@ class Routes {
 
 /// WebView Routes
 class WebRoutes {
-  static const String appSite= 'https://youth.seoul.go.kr/orang/cntr/intro.do?key=2309210001&cntrId=CT00001'; // 앱 사이트
-  static const String officialSite= 'https://youth.seoul.go.kr/orang/cntr/intro.do?key=2309210001&cntrId=CT00001'; // 동행복권 사이트
-  static const String termsOfUse = 'https://momentous-wallet-0f7.notion.site/1681c3f0e00380389faef7a3d636ce76?pvs=4'; // 이용약관
-  static const String privacyPolicy = 'https://momentous-wallet-0f7.notion.site/17b1c3f0e00380b5ae92ec994b5ccca8?pvs=4'; // 개인정보 보호
+  static const String appSite= 'https://momentous-wallet-0f7.notion.site/1a81c3f0e003806980e5e8bd7732fa83?pvs=4'; // 앱 사이트
+  static const String officialSite= 'https://dhlottery.co.kr/common.do?method=main'; // 동행복권 사이트
+  static const String termsOfUse = 'https://momentous-wallet-0f7.notion.site/1ab1c3f0e0038007958ee9680d3a3256?pvs=4'; // 이용약관
+  static const String privacyPolicy = 'https://momentous-wallet-0f7.notion.site/1ab1c3f0e003804a9e3ef0c151450022?pvs=4'; // 개인정보 보호
+  static const String warning = 'https://momentous-wallet-0f7.notion.site/1ab1c3f0e0038032a81ec06504765a09?pvs=4'; // 주의사항
 }
 
 

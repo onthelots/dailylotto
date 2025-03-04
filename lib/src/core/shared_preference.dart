@@ -27,12 +27,25 @@ class SharedPreferencesHelper {
   static Future<bool> getFirstRunState() async {
     final prefs = await SharedPreferences.getInstance();
     final bool? isFirstRun = prefs.getBool('isFirstRun');
-    return isFirstRun == null ? true : isFirstRun;
+    return isFirstRun ?? true;
   }
 
   // 앱 첫 구동여부 false로 설정할 것
   static Future<void> setFirstRunStateToFalse() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isFirstRun', false);
+  }
+
+  // 면책사항 확인 여부 확인
+  static Future<bool> getWaringCheckState() async {
+    final prefs = await SharedPreferences.getInstance();
+    final bool? isWaringCheck = prefs.getBool('isWaringCheck');
+    return isWaringCheck ?? false;
+  }
+
+  // 앱 첫 구동여부 false로 설정할 것
+  static Future<void> setWaringCheckStateToTrue() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isWaringCheck', true);
   }
 }
