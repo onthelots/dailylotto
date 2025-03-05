@@ -2,7 +2,7 @@
 > 매일 만나는 나만의 행운번호
 - 랜덤 번호 생성은 이제 그만! 당신의 선택과 운세를 분석해 AI가 맞춤형 로또 번호를 추천하는 서비스입니다.
 
-#### <a href="https://momentous-wallet-0f7.notion.site/1a81c3f0e003806980e5e8bd7732fa83?pvs=4"><img src="https://img.shields.io/badge/HomePage-000000?style=flat&logo=Notion&logoColor=white"/> <a href="https://apps.apple.com/kr/app/%EB%8D%B0%EC%9D%BC%EB%A6%AC%EB%A1%9C%EB%98%90/id6742641988"></a><img src="https://img.shields.io/badge/AppStore-000000?style=flat&logo=AppStore&logoColor=white"/></a>
+#### <a href="https://momentous-wallet-0f7.notion.site/1a81c3f0e003806980e5e8bd7732fa83?pvs=4"><img src="https://img.shields.io/badge/HomePage-000000?style=flat&logo=Notion&logoColor=white"/> <a href="https://apps.apple.com/kr/app/%EB%8D%B0%EC%9D%BC%EB%A6%AC%EB%A1%9C%EB%98%90/id6742641988"><img src="https://img.shields.io/badge/AppStore-000000?style=flat&logo=AppStore&logoColor=white"/></a>
 
 
 <br>
