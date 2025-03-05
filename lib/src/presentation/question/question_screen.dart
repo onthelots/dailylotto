@@ -3,11 +3,15 @@ import 'package:dailylotto/src/core/utils.dart';
 import 'package:dailylotto/src/data/models/daily_question_model.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
+import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_state.dart';
+import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_bloc.dart';
+import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_event.dart';
 import 'package:dailylotto/src/presentation/question/bloc/daily_question_bloc.dart';
 import 'package:dailylotto/src/presentation/question/bloc/daily_question_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:timezone/timezone.dart';
 import '../../core/routes.dart';
 
 class QuestionScreen extends StatefulWidget {
@@ -25,7 +29,14 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
+    return BlocListener<LottoLocalBloc, LottoLocalState>(
+      listener: (context, state) {
+        if (state is LottoNumbersLoaded) {
+          final todayEntryNumbers = state.todayEntry?.numbers;
+          context.read<LottoRemoteBloc>().add(SaveLottoEntry(numbers: todayEntryNumbers ?? [1,2,3,4,5,6], currrentRound: widget.currentRound));
+        }
+      },
+      child: PopScope(
       canPop: false, // 뒤로 가기 동작을 비활성화
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -47,7 +58,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
             ),
           ],
         ),
-      
+
         body: BlocBuilder<DailyQuestionBloc, DailyQuestionState>(
           builder: (context, state) {
             if (state is DailyQuestionLoading) {
@@ -57,22 +68,22 @@ class _QuestionScreenState extends State<QuestionScreen> {
               ));
             } else if (state is DailyQuestionLoaded) {
               _dailyQuestionContainer = state.dailyQuestion;
-      
+
               if (_dailyQuestionContainer == null) {
                 return const Center(child: Text('질문 생성 실패.'));
               }
-      
+
               return SingleChildScrollView(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: boxPadding, vertical: boxPadding),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                
+
                       // 둥근 모서리 태그
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      
+
                         decoration: BoxDecoration(
                           color: Theme.of(context).highlightColor,
                           borderRadius: BorderRadius.circular(20),
@@ -82,11 +93,11 @@ class _QuestionScreenState extends State<QuestionScreen> {
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white),
                         ),
                       ),
-      
+
                       SizedBox(
                         height: 5,
                       ),
-                
+
                       // 질문 표시
                       Padding(
                         padding: const EdgeInsets.all(30.0),
@@ -96,11 +107,11 @@ class _QuestionScreenState extends State<QuestionScreen> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                
+
                       SizedBox(
                         height: 20,
                       ),
-                
+
                       // 선택지 버튼
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -143,7 +154,8 @@ class _QuestionScreenState extends State<QuestionScreen> {
           ),
         ),
       ),
-    );
+    ),
+);
   }
 
   // 선택지 버튼 생성
@@ -158,7 +170,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
       child: Container(
         decoration: BoxDecoration(
           color: isSelected ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).cardColor, // 배경색
-          border: Border.all( // 테두리 추가
+          border: Border.all(
             color: isSelected ? Theme.of(context).highlightColor : Colors.grey,
             width: 0.3,
           ),

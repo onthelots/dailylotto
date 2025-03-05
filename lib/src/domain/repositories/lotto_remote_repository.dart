@@ -9,4 +9,8 @@ class LottoRemoteRepository {
   Stream<LottoRemoteModel> getLatestRound() {
     return dataSource.getLatestRound();
   }
+
+  Future<void> saveLottoEntry(List<int> numbers, int currentRound) async {
+    return dataSource.saveLottoEntry(numbers, currentRound);
+  }
 }
