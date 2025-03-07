@@ -9,7 +9,6 @@ import 'package:intl/intl.dart';
 import '../../../core/routes.dart';
 import '../../../core/shared_preference.dart';
 import '../../../core/utils.dart';
-import '../../main/bloc/lotto_local_bloc/lotto_local_state.dart';
 import '../../main/widgets/warning_check_dialog.dart';
 
 class LottoNumberDisplay extends StatelessWidget {

@@ -15,6 +15,8 @@ class RoundNumberList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final sortedEntries = List.of(roundData.entries)
+      ..sort((a, b) => b.date.compareTo(a.date));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -109,8 +111,8 @@ class RoundNumberList extends StatelessWidget {
               ),
             )
             : Column(
-                children: List.generate(roundData.entries.length, (index) {
-                  final entry = roundData.entries[index];
+                children: List.generate(sortedEntries.length, (index) {
+                  final entry = sortedEntries[index];
                   return Column(
                     children: [
                       GestureDetector(

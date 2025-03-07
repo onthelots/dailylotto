@@ -34,19 +34,41 @@ class _AiRecommendationScreenState extends State<AiRecommendationScreen> {
             return Scaffold(
               backgroundColor: Theme.of(context).primaryColor,
               appBar: AppBar(
+                toolbarHeight: 70,
                 backgroundColor: Theme.of(context).primaryColor,
                 scrolledUnderElevation: 0,
+                title: Column(
+                  children: [
+                    Text(
+                      "${selectEntry!.date}",
+                      style:
+                      Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      "${widget.recommendationArgs.round}회",
+                      style:
+                      Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
                 leading: SizedBox.shrink(), // 기본 back 버튼 제거
                 actions: [
-                  IconButton(
-                    iconSize: 30.0,
-                    icon: Icon(
-                      Icons.cancel,
-                      color: Colors.white,
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: IconButton(
+                      iconSize: 30.0,
+                      icon: Icon(
+                        Icons.cancel,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        widget.recommendationArgs.popUntil ? Navigator.popUntil(context, (route) => route.isFirst) : Navigator.pop(context);
+                      },
                     ),
-                    onPressed: () {
-                      widget.recommendationArgs.popUntil ? Navigator.popUntil(context, (route) => route.isFirst) : Navigator.pop(context);
-                    },
                   ),
                 ],
               ),
@@ -74,35 +96,28 @@ class _AiRecommendationScreenState extends State<AiRecommendationScreen> {
                             ),
                           ),
 
-                          Text(
-                            "오늘의 추천번호",
-                            style:
-                                Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                          ),
-
-                          const SizedBox(height: 5),
-
-                          Text(
-                            "(${selectEntry!.date})",
-                            style:
-                            Theme.of(context).textTheme.bodySmall?.copyWith(
-                              fontWeight: FontWeight.w300,
-                              color: Colors.white,
+                          Center(
+                            child: Text(
+                              "오늘의 추천번호",
+                              style:
+                                  Theme.of(context).textTheme.titleLarge?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
                             ),
                           ),
 
                           const SizedBox(height: 15),
 
-                          Text(
-                            selectEntry!.numbers.join(", "),
-                            style:
-                                Theme.of(context).textTheme.displaySmall?.copyWith(
-                                      fontSize: 28,
-                                      color: Colors.white70,
-                                    ),
+                          Center(
+                            child: Text(
+                              selectEntry.numbers.join(", "),
+                              style:
+                                  Theme.of(context).textTheme.displayMedium?.copyWith(
+                                        fontSize: 28,
+                                        color: Colors.white70,
+                                      ),
+                            ),
                           ),
                         ],
                       ),
@@ -139,7 +154,7 @@ class _AiRecommendationScreenState extends State<AiRecommendationScreen> {
                                   selectEntry.recommendReason,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .labelMedium
+                                      .bodyMedium
                                       ?.copyWith(
                                         color: Colors.white70,
                                       ),
@@ -165,7 +180,7 @@ class _AiRecommendationScreenState extends State<AiRecommendationScreen> {
                                   selectEntry.dailyTip,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .labelMedium
+                                      .bodyMedium
                                       ?.copyWith(
                                         color: Colors.white70,
                                       ),
