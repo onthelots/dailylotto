@@ -32,8 +32,6 @@ class RoundListBloc extends Bloc<RoundListEvent, RoundListState> {
 
         allRounds = data; // 원본 데이터 저장
 
-        print("latestTwo : ${allRounds.first.round}");
-
         emit(RoundListLoaded(allRounds));
       } catch (e) {
         emit(RoundListError("모든 회차 데이터를 불러오는 중 오류 발생: ${e.toString()}"));

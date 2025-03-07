@@ -1,7 +1,6 @@
 import 'package:dailylotto/src/presentation/weekly/bloc/latest_round_bloc/latest_round_event.dart';
 import 'package:dailylotto/src/presentation/weekly/bloc/latest_round_bloc/latest_round_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../data/models/lotto_local_model.dart';
 import '../../../../domain/usecases/lotto_local_usecase.dart';
 
 class LatestRoundBloc extends Bloc<LatestRoundEvent, LatestRoundState> {

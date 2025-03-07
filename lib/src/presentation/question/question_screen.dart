@@ -1,6 +1,7 @@
 import 'package:dailylotto/src/core/constants.dart';
 import 'package:dailylotto/src/core/utils.dart';
 import 'package:dailylotto/src/data/models/daily_question_model.dart';
+import 'package:dailylotto/src/data/models/lotto_local_model.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_state.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:timezone/timezone.dart';
 import '../../core/routes.dart';
+import '../../data/models/recommendation_args.dart';
 import 'bloc/daily_question_event.dart';
 
 class QuestionScreen extends StatefulWidget {
@@ -32,8 +34,8 @@ class _QuestionScreenState extends State<QuestionScreen> {
   Widget build(BuildContext context) {
     return BlocListener<LottoLocalBloc, LottoLocalState>(
       listener: (context, state) {
-        if (state is LottoNumbersLoaded) {
-          final todayEntryNumbers = state.todayEntry?.numbers;
+        if (state is DailyLottoNumberCreated) {
+          final todayEntryNumbers = state.dailyEntry?.numbers;
           context.read<LottoRemoteBloc>().add(SaveLottoEntry(
               numbers: todayEntryNumbers ?? [1, 2, 3, 4, 5, 6],
               currrentRound: widget.currentRound));
@@ -295,7 +297,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
     Future.delayed(const Duration(seconds: 3), () {
       if (navigator.mounted) {
         navigator.pop(); // 로딩 다이얼로그 닫기
-        navigator.pushNamed(Routes.recommendation); // 페이지 이동
+        navigator.pushNamed(Routes.recommendation, arguments: RecommendationArgs(round: widget.currentRound, date: LottoUtils.formattedTimestamp(DateTime.now()), popUntil: true)); // 페이지 이동
       }
     });
   }

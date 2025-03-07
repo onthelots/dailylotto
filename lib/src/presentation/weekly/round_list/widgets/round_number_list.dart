@@ -1,5 +1,7 @@
 import 'package:dailylotto/src/core/constants.dart';
+import 'package:dailylotto/src/data/models/recommendation_args.dart';
 import 'package:flutter/material.dart';
+import '../../../../core/routes.dart';
 import '../../../../core/utils.dart';
 import '../../../../data/models/lotto_local_model.dart';
 
@@ -111,49 +113,54 @@ class RoundNumberList extends StatelessWidget {
                   final entry = roundData.entries[index];
                   return Column(
                     children: [
-                      Container(
-                        height: 60,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: contentPaddingIntoBox,
-                            horizontal: contentPaddingIntoBox),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).cardColor,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              entry.date,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(fontSize: 11.0),
-                            ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pushNamed(Routes.recommendation, arguments: RecommendationArgs(round: roundData.round, date: entry.date, popUntil: false));
+                        },
+                        child: Container(
+                          height: 60,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: contentPaddingIntoBox,
+                              horizontal: contentPaddingIntoBox),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).cardColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                entry.date,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(fontSize: 11.0),
+                              ),
 
-                            const SizedBox(width: 12.0), // 날짜와 로또 번호 사이 간격 추가
+                              const SizedBox(width: 12.0), // 날짜와 로또 번호 사이 간격 추가
 
-                            Row(
-                              mainAxisSize: MainAxisSize.max, // ✅ Row를 가득 채우도록 설정
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: entry.numbers
-                                  .map((int num) => LottoUtils.lottoNumber(
-                                    number: num,
-                                    isCorrect: roundData.winningNumbers
-                                            ?.contains(num) ??
-                                        false,
-                                  ))
-                                  .toList(),
-                            ),
+                              Row(
+                                mainAxisSize: MainAxisSize.max, // ✅ Row를 가득 채우도록 설정
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: entry.numbers
+                                    .map((int num) => LottoUtils.lottoNumber(
+                                      number: num,
+                                      isCorrect: roundData.winningNumbers
+                                              ?.contains(num) ??
+                                          false,
+                                    ))
+                                    .toList(),
+                              ),
 
-                            Spacer(),
+                              Spacer(),
 
-                            Text(
-                              entry.result ?? "예정",
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          ],
+                              Text(
+                                entry.result ?? "예정",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       const SizedBox(

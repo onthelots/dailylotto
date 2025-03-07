@@ -11,6 +11,7 @@ import 'package:dailylotto/src/presentation/weekly/round_list/all_round_screen.d
 import 'package:dailylotto/src/presentation/weekly/weekly_screen.dart';
 import 'package:flutter/material.dart';
 import '../data/models/lotto_remote_model.dart';
+import '../data/models/recommendation_args.dart';
 import '../presentation/home/home_screen.dart';
 import '../presentation/latest_result/lastest_result_screen.dart';
 import '../presentation/question/question_screen.dart';
@@ -96,8 +97,9 @@ class AppRouter {
           builder: (_) => LastestResultScreen(latestRound: latestRound),
         );
       case Routes.recommendation:
+        final args = settings.arguments as RecommendationArgs;
         return MaterialPageRoute(
-          builder: (_) => AiRecommendationScreen(),
+          builder: (_) => AiRecommendationScreen(recommendationArgs: args),
         );
       case Routes.allround:
         return MaterialPageRoute(

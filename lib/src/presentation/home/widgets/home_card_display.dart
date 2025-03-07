@@ -1,13 +1,14 @@
 import 'package:dailylotto/src/core/constants.dart';
 import 'package:dailylotto/src/core/shared_preference.dart';
 import 'package:dailylotto/src/data/models/lotto_local_model.dart';
-import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
-import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_state.dart';
+import 'package:dailylotto/src/data/models/recommendation_args.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_state.dart';
+import 'package:dailylotto/src/presentation/main/bloc/weekly_lotto_bloc/weekly_lotto_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/routes.dart';
 import '../../main/bloc/lotto_remote_bloc/lotto_remote_bloc.dart';
+import '../../main/bloc/weekly_lotto_bloc/weekly_lotto_bloc.dart';
 import '../../main/widgets/warning_check_dialog.dart';
 
 class HomeCardDisplay extends StatelessWidget {
@@ -15,12 +16,12 @@ class HomeCardDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LottoLocalBloc, LottoLocalState>(
+    return BlocBuilder<WeeklyLottoBloc, WeeklyLottoState>(
       builder: (context, state) {
         final LottoEntry? todayEntry;
         final int? currentRound;
 
-        if ((state is LottoNumbersLoaded)) {
+        if ((state is WeeklyLottoNumbersLoaded)) {
           todayEntry = state.todayEntry;
           currentRound = state.lottoData.round;
         } else {
@@ -41,7 +42,7 @@ class HomeCardDisplay extends StatelessWidget {
                     onTap: () async {
                       // 1. 생성된 번호가 존재할 경우
                       if (todayEntry?.isDefault == false) {
-                        Navigator.of(context).pushNamed(Routes.recommendation);
+                        Navigator.of(context).pushNamed(Routes.recommendation, arguments: RecommendationArgs(round: currentRound!, date: todayEntry!.date, popUntil: true));
                       } else {
                         // 2. 오늘 생성된 번호가 없을 경우
                         // 주의사항 확인여부 파악

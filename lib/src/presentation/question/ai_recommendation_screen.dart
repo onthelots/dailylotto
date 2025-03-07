@@ -1,13 +1,26 @@
 import 'package:dailylotto/src/core/constants.dart';
-import 'package:dailylotto/src/core/utils.dart';
+import 'package:dailylotto/src/data/models/recommendation_args.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
+import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 
-class AiRecommendationScreen extends StatelessWidget {
-  const AiRecommendationScreen({super.key});
+class AiRecommendationScreen extends StatefulWidget {
+  final RecommendationArgs recommendationArgs;
+  const AiRecommendationScreen({super.key, required this.recommendationArgs});
+
+  @override
+  State<AiRecommendationScreen> createState() => _AiRecommendationScreenState();
+}
+
+class _AiRecommendationScreenState extends State<AiRecommendationScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<LottoLocalBloc>().add(LoadLottoNumbersEvent(recommendationArgs: widget.recommendationArgs));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +29,7 @@ class AiRecommendationScreen extends StatelessWidget {
       child: BlocBuilder<LottoLocalBloc, LottoLocalState>(
         builder: (context, state) {
           if (state is LottoNumbersLoaded) {
-            final todayEntry = state.todayEntry;
+            final selectEntry = state.selectEntry;
 
             return Scaffold(
               backgroundColor: Theme.of(context).primaryColor,
@@ -32,7 +45,7 @@ class AiRecommendationScreen extends StatelessWidget {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      Navigator.popUntil(context, (route) => route.isFirst);
+                      widget.recommendationArgs.popUntil ? Navigator.popUntil(context, (route) => route.isFirst) : Navigator.pop(context);
                     },
                   ),
                 ],
@@ -73,7 +86,7 @@ class AiRecommendationScreen extends StatelessWidget {
                           const SizedBox(height: 5),
 
                           Text(
-                            "(${todayEntry!.date})",
+                            "(${selectEntry!.date})",
                             style:
                             Theme.of(context).textTheme.bodySmall?.copyWith(
                               fontWeight: FontWeight.w300,
@@ -84,7 +97,7 @@ class AiRecommendationScreen extends StatelessWidget {
                           const SizedBox(height: 15),
 
                           Text(
-                            todayEntry!.numbers.join(", "),
+                            selectEntry!.numbers.join(", "),
                             style:
                                 Theme.of(context).textTheme.displaySmall?.copyWith(
                                       fontSize: 28,
@@ -123,7 +136,7 @@ class AiRecommendationScreen extends StatelessWidget {
                                 const SizedBox(height: 15),
 
                                 Text(
-                                  todayEntry.recommendReason,
+                                  selectEntry.recommendReason,
                                   style: Theme.of(context)
                                       .textTheme
                                       .labelMedium
@@ -149,7 +162,7 @@ class AiRecommendationScreen extends StatelessWidget {
                                 const SizedBox(height: 8),
 
                                 Text(
-                                  todayEntry.dailyTip,
+                                  selectEntry.dailyTip,
                                   style: Theme.of(context)
                                       .textTheme
                                       .labelMedium
