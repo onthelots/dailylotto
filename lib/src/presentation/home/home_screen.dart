@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                       // 현재까지 생성된 사용자의 전체 번호를 기반으로 -> 통계사항 나타내기
                       // functions을 통해, 매일 12:00, 18:00 2회차에 걸쳐 적절한 통계사항 나타낼 것
                       HomeAnalyticsDisplay(),
-                      
+
                       SizedBox(
                         height: 15,
                       ),
