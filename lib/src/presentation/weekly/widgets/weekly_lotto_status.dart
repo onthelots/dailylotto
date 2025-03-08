@@ -1,17 +1,18 @@
+import 'package:dailylotto/src/presentation/main/bloc/weekly_lotto_bloc/weekly_lotto_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import '../../../core/constants.dart';
 import '../../../data/models/lotto_local_model.dart';
-import '../../main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import '../../main/bloc/lotto_local_bloc/lotto_local_state.dart';
+import '../../main/bloc/weekly_lotto_bloc/weekly_lotto_state.dart';
 
 class WeeklyLottoStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LottoLocalBloc, LottoLocalState>(
+    return BlocBuilder<WeeklyLottoBloc, WeeklyLottoState>(
       builder: (context, localState) {
-        if (localState is LottoNumbersLoaded) {
+        if (localState is WeeklyLottoNumbersLoaded) {
           return WeeklyLottoUI(
             latestRound: localState.lottoData.round,
             entries: localState.lottoData.entries,

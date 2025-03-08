@@ -6,7 +6,13 @@ class LottoRemoteUseCase {
 
   LottoRemoteUseCase({required this.repository});
 
+  // 최근 회차 데이터 불러오기 -> Call 함수
   Stream<LottoRemoteModel> call() {
     return repository.getLatestRound();
+  }
+
+  // firebase 업로드
+  Future<void> saveLottoEntry({required List<int> numbers, required int currentRound}) async {
+    return repository.saveLottoEntry(numbers, currentRound);
   }
 }

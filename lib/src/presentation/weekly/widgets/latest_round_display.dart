@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/routes.dart';
 import '../../../core/utils.dart';
 import '../../../data/models/lotto_remote_model.dart';
-import '../../latest_result/lastest_result_screen.dart';
 
 class LatestRoundDisplay extends StatelessWidget {
   const LatestRoundDisplay({super.key});
