@@ -1,17 +1,14 @@
-import 'dart:math';
 import 'package:dailylotto/src/core/constants.dart';
 import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_bloc.dart';
 import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_state.dart';
+import 'package:dailylotto/src/presentation/main/bloc/weekly_lotto_bloc/weekly_lotto_bloc.dart';
+import 'package:dailylotto/src/presentation/main/bloc/weekly_lotto_bloc/weekly_lotto_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
 import '../../../core/routes.dart';
 import '../../../core/shared_preference.dart';
 import '../../../core/utils.dart';
-import '../../main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
-import '../../main/bloc/lotto_local_bloc/lotto_local_event.dart';
-import '../../main/bloc/lotto_local_bloc/lotto_local_state.dart';
 import '../../main/widgets/warning_check_dialog.dart';
 
 class LottoNumberDisplay extends StatelessWidget {
@@ -21,11 +18,11 @@ class LottoNumberDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
-    return BlocBuilder<LottoLocalBloc, LottoLocalState>(
+    return BlocBuilder<WeeklyLottoBloc, WeeklyLottoState>(
       builder: (context, state) {
-        if (state is LottoNumbersLoading) {
+        if (state is WeeklyLottoNumbersLoading) {
           return const Center(child: CircularProgressIndicator());
-        } else if (state is LottoNumbersLoaded) {
+        } else if (state is WeeklyLottoNumbersLoaded) {
 
           // 당일, 로또번호를 생성했을 경우
           if (state.todayEntry != null && state.todayEntry!.numbers.isNotEmpty) {
@@ -133,7 +130,7 @@ class LottoNumberDisplay extends StatelessWidget {
                         Icons.arrow_circle_right_rounded,
                         color: Theme.of(context).primaryColor,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       Text('AI 추천받기',

@@ -4,6 +4,7 @@ import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_bloc.dart';
 import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
+import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_state.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_state.dart';
@@ -13,6 +14,8 @@ import 'package:dailylotto/src/core/theme.dart';
 import 'package:dailylotto/src/presentation/main/bloc/theme_bloc/theme_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/theme_bloc/theme_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/theme_bloc/theme_state.dart';
+import 'package:dailylotto/src/presentation/main/bloc/weekly_lotto_bloc/weekly_lotto_bloc.dart';
+import 'package:dailylotto/src/presentation/main/bloc/weekly_lotto_bloc/weekly_lotto_event.dart';
 import 'package:dailylotto/src/presentation/question/bloc/daily_question_bloc.dart';
 import 'package:dailylotto/src/presentation/question/bloc/daily_question_event.dart';
 import 'package:dailylotto/src/presentation/weekly/bloc/latest_round_bloc/latest_round_bloc.dart';
@@ -23,6 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:intl/intl.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -54,9 +58,10 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   final String initialRoute;
+  int currentRound = 0; // 현재 진행중인 라운드를 갱신
   final _router = AppRouter();
 
-  MyApp({Key? key, required this.initialRoute}) : super(key: key);
+  MyApp({super.key, required this.initialRoute});
 
   // This widget is the root of your application.
   @override
@@ -76,6 +81,9 @@ class MyApp extends StatelessWidget {
           create: (context) => locator<LottoLocalBloc>(),
         ),
         BlocProvider(
+          create: (context) => locator<WeeklyLottoBloc>(),
+        ),
+        BlocProvider(
           create: (context) => locator<LatestRoundBloc>()..add(LoadLatestRoundEvent()),
         ),
         BlocProvider(
@@ -88,6 +96,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MultiBlocListener(
         listeners: [
+
+          // Listener 1 : 최신 회차 추첨(업데이트)에 따른 갱신
           BlocListener<LottoRemoteBloc, LottoRemoteState>(
             listener: (context, state) {
               if (state is LottoLoaded) {
@@ -95,6 +105,7 @@ class MyApp extends StatelessWidget {
                 // 진행되는 현재 회차값을 활용해야 함
                 // 따라서, Firebase에 있는 값은, latestRound이니, 앞으로 다가올 값을 적용하기 위해 +1을 실시함
                 final currentRound = state.latestRound.round + 1;
+                this.currentRound = currentRound;
 
                 // 1. 업데이트 (여기서는, latestRound값을 활용)
                 context
@@ -104,10 +115,10 @@ class MyApp extends StatelessWidget {
                     winningNumbers: state.latestRound.winningNumbers,
                     bonusNumber: state.latestRound.bonusNumber));
 
-                // 2. 현재 회차 데이터 불러오기 (여기서는 currentRound를 활용)
+                // 2. 이번주 데이터 불러오기 (여기서는 currentRound를 활용)
                 context
-                    .read<LottoLocalBloc>()
-                    .add(LoadLottoNumbersEvent(currentRound));
+                    .read<WeeklyLottoBloc>()
+                    .add(LoadWeeklyLottoEvent(round: currentRound));
 
                 // 3. Local 내 저장된 최근회차 나타내기 (2번째 탭)
                 context.read<LatestRoundBloc>().add(LoadLatestRoundEvent());
@@ -119,6 +130,15 @@ class MyApp extends StatelessWidget {
               }
             },
           ),
+
+          // Listener 2 : 번호 생성 완료 시, Weekly State 업데이트
+          BlocListener<LottoLocalBloc, LottoLocalState>(listener: (context, state) {
+            if (state is DailyLottoNumberCreated) {
+              context
+                  .read<WeeklyLottoBloc>()
+                  .add(LoadWeeklyLottoEvent(round: currentRound));
+            }
+          })
         ],
         child: BlocBuilder<ThemeBloc, ThemeState>(
           builder: (context, state) {

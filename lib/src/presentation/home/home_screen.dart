@@ -28,16 +28,6 @@ class HomeScreen extends StatelessWidget {
                 flexibleSpace: FlexibleSpaceBar(
                   background: _buildHeader(context),
                 ),
-
-                // TODO: - 노티피케이션, 공지사항 작업 완료하기
-                // actions: [
-                //   IconButton(
-                //     icon: const Icon(Icons.notifications),
-                //     onPressed: () {
-                //       Navigator.of(context).pushNamed(Routes.notice);
-                //     },
-                //   ),
-                // ],
               ),
 
               SliverPersistentHeader(

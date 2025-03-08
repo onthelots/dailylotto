@@ -1,3 +1,4 @@
+import 'package:dailylotto/src/data/models/recommendation_args.dart';
 import 'package:equatable/equatable.dart';
 
 // 🟢 이벤트 정의
@@ -8,12 +9,12 @@ abstract class LottoLocalEvent extends Equatable {
 
 // ✅ 특정 회차 로드
 class LoadLottoNumbersEvent extends LottoLocalEvent {
-  final int round;
+  final RecommendationArgs recommendationArgs;
 
-  LoadLottoNumbersEvent(this.round);
+  LoadLottoNumbersEvent({required this.recommendationArgs});
 
   @override
-  List<Object?> get props => [round];
+  List<Object?> get props => [recommendationArgs];
 }
 
 // ✅ 로또 번호 생성

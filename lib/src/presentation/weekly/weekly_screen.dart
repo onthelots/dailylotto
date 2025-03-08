@@ -1,12 +1,12 @@
-import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_state.dart';
+import 'package:dailylotto/src/presentation/main/bloc/weekly_lotto_bloc/weekly_lotto_bloc.dart';
+import 'package:dailylotto/src/presentation/main/bloc/weekly_lotto_bloc/weekly_lotto_state.dart';
 import 'package:dailylotto/src/presentation/weekly/widgets/latest_round_display.dart';
 import 'package:dailylotto/src/presentation/weekly/widgets/latest_weekly_numbers.dart';
 import 'package:dailylotto/src/presentation/weekly/widgets/weekly_lotto_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/constants.dart';
-import '../../core/routes.dart';
 import 'bloc/latest_round_bloc/latest_round_bloc.dart';
 import 'bloc/latest_round_bloc/latest_round_event.dart';
 
@@ -82,9 +82,9 @@ class WeeklyScreen extends StatelessWidget {
               color: Theme.of(context).cardColor,
             ),
 
-            BlocListener<LottoLocalBloc, LottoLocalState>(
+            BlocListener<WeeklyLottoBloc, WeeklyLottoState>(
               listener: (context, state) {
-                if (state is LottoNumbersLoaded) {
+                if (state is WeeklyLottoNumbersLoaded) {
                   context.read<LatestRoundBloc>().add(LoadLatestRoundEvent());
                 }
               },
