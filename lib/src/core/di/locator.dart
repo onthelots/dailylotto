@@ -7,6 +7,7 @@ import 'package:dailylotto/src/domain/repositories/daily_question_repository.dar
 import 'package:dailylotto/src/domain/repositories/lotto_remote_repository.dart';
 import 'package:dailylotto/src/domain/usecases/daily_question_usecase.dart';
 import 'package:dailylotto/src/domain/usecases/lotto_remote_usecase.dart';
+import 'package:dailylotto/src/presentation/lotto_stats/bloc/lotto_stats_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/weekly_lotto_bloc/weekly_lotto_bloc.dart';
@@ -92,4 +93,8 @@ Future<void> setupLocator() async {
   // 6. Weekly Lotto
   locator.registerFactory<WeeklyLottoBloc>(
           () => WeeklyLottoBloc(useCase: locator<LottoLocalUseCase>()));
+
+  // 7. Lotto Stats
+  locator.registerFactory<LottoStatsBloc>(
+          () => LottoStatsBloc(useCase: locator<LottoRemoteUseCase>()));
 }

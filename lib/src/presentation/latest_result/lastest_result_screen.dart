@@ -162,7 +162,7 @@ class LastestResultScreen extends StatelessWidget {
                     onPressed: () {
                       showModalBottomSheet(
                         showDragHandle: true,
-                        backgroundColor: Theme.of(context).cardColor,
+                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                         context: context,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
@@ -172,34 +172,40 @@ class LastestResultScreen extends StatelessWidget {
                           return DraggableScrollableSheet(
                             expand: false,
                             builder: (context, scrollController) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                        "${state.latestRoundList.first.round}회 결과",
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Text(
+                                        "${state.latestRoundList.first.round}회 생성번호",
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleLarge?.copyWith(color: resultPrimaryColor, fontWeight: FontWeight.w900)),
+                                  ),
 
-                                    const SizedBox(height: 10),
-                                    const Divider(
-                                      height: 20,
-                                      thickness: 2.0,
-                                      indent: 10.0,
-                                      endIndent: 10.0,
-                                    ),
-                                    Expanded(
-                                      child: ListView.builder(
-                                        controller: scrollController,
-                                        itemCount: sortedEntries.length,
-                                        itemBuilder: (context, index) {
-                                          final entry = sortedEntries[index];
-                                          final isWinningEntry = ["1등", "2등", "3등", "4등", "5등"].contains(entry.result);
+                                  Divider(
+                                    height: 20.0,
+                                    thickness: 5.0,
+                                    color: Theme.of(context).cardColor,
+                                  ),
 
-                                          return Column(
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+
+                                  Expanded(
+                                    child: ListView.builder(
+                                      controller: scrollController,
+                                      itemCount: sortedEntries.length,
+                                      itemBuilder: (context, index) {
+                                        final entry = sortedEntries[index];
+                                        final isWinningEntry = ["1등", "2등", "3등", "4등", "5등"].contains(entry.result);
+
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                          child: Column(
                                             children: [
                                               Container(
                                                 decoration: BoxDecoration(
@@ -234,12 +240,12 @@ class LastestResultScreen extends StatelessWidget {
                                               ),
                                               SizedBox(height: 10.0), // 🔹 간격 추가
                                             ],
-                                          );
-                                        },
-                                      ),
+                                          ),
+                                        );
+                                      },
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               );
                             },
                           );

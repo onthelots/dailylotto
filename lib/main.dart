@@ -2,6 +2,8 @@ import 'package:dailylotto/src/core/app_info/app_info_cubit.dart';
 import 'package:dailylotto/src/core/di/locator.dart';
 import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_bloc.dart';
 import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_event.dart';
+import 'package:dailylotto/src/presentation/lotto_stats/bloc/lotto_stats_bloc.dart';
+import 'package:dailylotto/src/presentation/lotto_stats/bloc/lotto_stats_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_state.dart';

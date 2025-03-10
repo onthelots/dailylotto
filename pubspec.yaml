@@ -49,6 +49,7 @@ dependencies:
   share_plus: ^10.1.4
   flutter_native_splash: ^2.4.5
   firebase_analytics: ^11.4.4
+  fl_chart: ^0.70.2
 
 flutter_native_splash:
   color: "#FFFFFF" # 스플래시 화면의 배경색 설정 (흰색)
