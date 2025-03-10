@@ -4,10 +4,10 @@ import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_state.dart'
 import 'package:dailylotto/src/presentation/home/widgets/home_card_display.dart';
 import 'package:dailylotto/src/presentation/home/widgets/home_title_display.dart';
 import 'package:dailylotto/src/presentation/home/widgets/home_number_display.dart';
-import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
-import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../core/routes.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -28,6 +28,11 @@ class HomeScreen extends StatelessWidget {
                 flexibleSpace: FlexibleSpaceBar(
                   background: _buildHeader(context),
                 ),
+                // actions: [
+                //   IconButton(onPressed: (){
+                //     Navigator.of(context).pushNamed(Routes.stats, arguments: 1162);
+                //   }, icon: const Icon(Icons.query_stats))
+                // ],
               ),
 
               SliverPersistentHeader(
@@ -43,11 +48,7 @@ class HomeScreen extends StatelessWidget {
                 hasScrollBody: false,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: boxPadding, vertical: boxPadding),
-                  child: Column(
-                    children: [
-                      HomeCardDisplay(),
-                    ],
-                  ),
+                  child: HomeCardDisplay(),
                 ),
               ),
             ],

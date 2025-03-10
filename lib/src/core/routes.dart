@@ -1,4 +1,5 @@
 import 'package:dailylotto/src/presentation/home/notice_screen.dart';
+import 'package:dailylotto/src/presentation/lotto_stats/lotto_stats_screen.dart';
 import 'package:dailylotto/src/presentation/main/main_screen.dart';
 import 'package:dailylotto/src/presentation/mypage/mypage_screen.dart';
 import 'package:dailylotto/src/presentation/introduce/Introduce_screen.dart';
@@ -35,9 +36,13 @@ class Routes {
   // round list
   static const String allround = '/allround'; // 번호기록 (탭바)
 
+  // statics
+  static const String stats = '/stats'; // 회차별 통계
+
   // latest round result
   static const String latestRoundResult = '/latestRoundResult'; // 최근 회차 결과
 
+  // number generate
   static const String dailyQuestion = '/dailyQuestion'; // 번호 생성 퀴즈
   static const String recommendation = '/recommendation'; // 번호 생성 결과 (AI 추천결과)
 
@@ -104,6 +109,11 @@ class AppRouter {
       case Routes.allround:
         return MaterialPageRoute(
           builder: (_) => AllRoundsScreen(),
+        );
+      case Routes.stats:
+        final latestRound = settings.arguments as int;
+        return MaterialPageRoute(
+          builder: (_) => LottoStatsScreen(latestRound: latestRound),
         );
       case Routes.notification:
         return MaterialPageRoute(

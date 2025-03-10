@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dailylotto/src/data/models/lotto_stats_model.dart';
 import '../models/lotto_remote_model.dart';
 
 class LottoRemoteDataSource {
@@ -19,7 +20,7 @@ class LottoRemoteDataSource {
     );
   }
 
-  // 사용자가 매번 번호를 생성할 때 마다 Firestore에 저장하는 로직
+  // 생성번호 저장
   Future<void> saveLottoEntry(List<int> numbers, int currentRound) async {
     final timestamp = DateTime.now().toIso8601String(); // 생성 시간
 
@@ -34,5 +35,15 @@ class LottoRemoteDataSource {
         }
       ])
     }, SetOptions(merge: true));
+  }
+
+  // 최근회차 당첨결과 불러오기 (1~5등)
+  Future<LottoStatsModel> getRoundData(int roundId) async {
+    final snapshot = await _firestore.collection('lotto').doc("$roundId").get();
+    if (snapshot.exists) {
+      return LottoStatsModel.fromMap(snapshot.data()!);
+    } else {
+      throw Exception("$roundId 데이터 없음");
+    }
   }
 }

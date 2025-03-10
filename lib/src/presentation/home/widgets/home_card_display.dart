@@ -177,7 +177,6 @@ class HomeCardDisplay extends StatelessWidget {
                                     final latestRound = remoteState.latestRound;
                                     Navigator.of(context).pushNamed(Routes.latestRoundResult, arguments: latestRound);
                                   }
-                                  print("최근 회차결과");
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -194,7 +193,7 @@ class HomeCardDisplay extends StatelessWidget {
                                               CrossAxisAlignment.stretch,
                                           children: [
                                             Text(
-                                              "최근 회차 결과",
+                                              "내 최근 회차 결과",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .titleMedium,
