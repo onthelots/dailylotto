@@ -2,7 +2,7 @@
 > 매일 만나는 나만의 행운번호
 - 랜덤 번호 생성은 이제 그만! 당신의 선택과 운세를 분석해 AI가 맞춤형 로또 번호를 추천하는 서비스입니다.
 
-#### <a href="https://momentous-wallet-0f7.notion.site/1a81c3f0e003806980e5e8bd7732fa83?pvs=4"><img src="https://img.shields.io/badge/HomePage-000000?style=flat&logo=Notion&logoColor=white"/> <a href="https://apps.apple.com/kr/app/%EB%8D%B0%EC%9D%BC%EB%A6%AC%EB%A1%9C%EB%98%90/id6742641988"><img src="https://img.shields.io/badge/AppStore-000000?style=flat&logo=AppStore&logoColor=white"/></a>
+#### <a href="https://momentous-wallet-0f7.notion.site/1a81c3f0e003806980e5e8bd7732fa83?pvs=4"><img src="https://img.shields.io/badge/HomePage-009BD5?style=flat&logo=Notion&logoColor=white"/> <a href="https://apps.apple.com/kr/app/%EB%8D%B0%EC%9D%BC%EB%A6%AC%EB%A1%9C%EB%98%90/id6742641988"><img src="https://img.shields.io/badge/AppStore-000000?style=flat&logo=AppStore&logoColor=white"/> <a href="https://www.figma.com/design/MYK0TassNj2fG4hVPaYZlY/daily_lotto_design?node-id=86-700&t=WqObIinlzsDwdsbQ-1"><img src="https://img.shields.io/badge/Figma-F24E1E?style=flat&logo=figma&logoColor=white"/></a>
 
 
 <br>
@@ -179,7 +179,12 @@
 - 색상 팔레트 및 메인테마, 앱 아이콘 등 초기 앱 세팅에 필요한 사항을 선행 작업
 - 전반적인 앱 흐름 파악과 빠른 UI 작업을 위해 Figma를 통해 Components 생성
 
+<a href="https://www.figma.com/design/MYK0TassNj2fG4hVPaYZlY/daily_lotto_design?node-id=86-700&t=WqObIinlzsDwdsbQ-1"><img src="https://img.shields.io/badge/Figma-F24E1E?style=flat&logo=figma&logoColor=white"/>
+
+
 ![app_design_figma](https://github.com/user-attachments/assets/81a80590-7452-4eb7-8f1e-04d5f8ee024b)
+
+
 
 <br>
 
@@ -188,7 +193,8 @@
 - 회차별 당첨번호 갱신, 매일 새롭게 생성되는 질문세트, AI 번호 생성, 주기적 알림 등
 - 관련된 주요 기능을 우선 테스트하기 위하여 Firestore functions을 활용하여 google console scheduler 내 적용
 
-![image](https://github.com/user-attachments/assets/14179a89-fea0-4073-93e5-e699eb009db6)
+![Group 68](https://github.com/user-attachments/assets/c85a2375-14a2-4ce1-8fed-6aff38da9be2)
+
 
 
 <br>
