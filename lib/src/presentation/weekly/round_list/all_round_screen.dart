@@ -105,6 +105,7 @@ class _AllRoundsScreenState extends State<AllRoundsScreen> {
                         vertical: contentPaddingIntoBox,
                         horizontal: contentPaddingIntoBox),
                     itemCount: allLottoData.length,
+                    cacheExtent: 500, // 미리 로드할 범위 지정
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 30.0),

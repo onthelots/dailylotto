@@ -118,7 +118,7 @@ class HomeCardDisplay extends StatelessWidget {
 
                 /// 오른쪽 카드 그룹 (작은 카드 2개)
                 Expanded(
-                  child: Container(
+                  child: SizedBox(
                     height: 260,
                     child: Column(
                       children: [
@@ -249,7 +249,7 @@ class HomeCardDisplay extends StatelessWidget {
                             "매일 만나는 나만의 AI 추천번호",
                             style: Theme.of(context).textTheme.labelMedium,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 3,
                           ),
                           RichText(
@@ -274,7 +274,7 @@ class HomeCardDisplay extends StatelessWidget {
                         ],
                       ),
 
-                      Spacer(),
+                      const Spacer(),
 
                       Image.asset(
                         'assets/images/ai.png',

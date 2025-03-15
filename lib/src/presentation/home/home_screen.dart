@@ -7,8 +7,6 @@ import 'package:dailylotto/src/presentation/home/widgets/home_number_display.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../core/routes.dart';
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -18,6 +16,7 @@ class HomeScreen extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           body: CustomScrollView(
+            physics: const BouncingScrollPhysics(), // iOS 스타일 부드러운 스크롤
             slivers: <Widget>[
               SliverAppBar(
                 scrolledUnderElevation: 0.0,
@@ -28,11 +27,6 @@ class HomeScreen extends StatelessWidget {
                 flexibleSpace: FlexibleSpaceBar(
                   background: _buildHeader(context),
                 ),
-                // actions: [
-                //   IconButton(onPressed: (){
-                //     Navigator.of(context).pushNamed(Routes.stats, arguments: 1162);
-                //   }, icon: const Icon(Icons.query_stats))
-                // ],
               ),
 
               SliverPersistentHeader(
@@ -64,7 +58,7 @@ class HomeScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: boxPadding),
+          padding: EdgeInsets.symmetric(horizontal: boxPadding),
           child: HomeTitleDisplay(),
         ),
       ],
