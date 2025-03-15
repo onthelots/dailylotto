@@ -1,4 +1,5 @@
 import 'package:dailylotto/src/data/models/lotto_remote_model.dart';
+import 'package:dailylotto/src/data/models/lotto_stats_model.dart';
 import 'package:dailylotto/src/domain/repositories/lotto_remote_repository.dart';
 
 class LottoRemoteUseCase {
@@ -14,5 +15,10 @@ class LottoRemoteUseCase {
   // firebase 업로드
   Future<void> saveLottoEntry({required List<int> numbers, required int currentRound}) async {
     return repository.saveLottoEntry(numbers, currentRound);
+  }
+
+  // 회차별 데이터 가져오기
+  Future<LottoStatsModel> getRoundData(int roundId) async {
+    return repository.getRoundData(roundId);
   }
 }

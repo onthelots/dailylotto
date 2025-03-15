@@ -4,8 +4,6 @@ import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_state.dart'
 import 'package:dailylotto/src/presentation/home/widgets/home_card_display.dart';
 import 'package:dailylotto/src/presentation/home/widgets/home_title_display.dart';
 import 'package:dailylotto/src/presentation/home/widgets/home_number_display.dart';
-import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
-import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,6 +16,7 @@ class HomeScreen extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           body: CustomScrollView(
+            physics: const BouncingScrollPhysics(), // iOS 스타일 부드러운 스크롤
             slivers: <Widget>[
               SliverAppBar(
                 scrolledUnderElevation: 0.0,
@@ -43,11 +42,7 @@ class HomeScreen extends StatelessWidget {
                 hasScrollBody: false,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: boxPadding, vertical: boxPadding),
-                  child: Column(
-                    children: [
-                      HomeCardDisplay(),
-                    ],
-                  ),
+                  child: HomeCardDisplay(),
                 ),
               ),
             ],
@@ -63,7 +58,7 @@ class HomeScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: boxPadding),
+          padding: EdgeInsets.symmetric(horizontal: boxPadding),
           child: HomeTitleDisplay(),
         ),
       ],

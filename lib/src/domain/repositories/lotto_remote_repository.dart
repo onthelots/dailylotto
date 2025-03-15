@@ -1,4 +1,5 @@
 import 'package:dailylotto/src/data/models/lotto_remote_model.dart';
+import 'package:dailylotto/src/data/models/lotto_stats_model.dart';
 import 'package:dailylotto/src/data/sources/lotto_remote_datasource.dart';
 
 class LottoRemoteRepository {
@@ -12,5 +13,9 @@ class LottoRemoteRepository {
 
   Future<void> saveLottoEntry(List<int> numbers, int currentRound) async {
     return dataSource.saveLottoEntry(numbers, currentRound);
+  }
+
+  Future<LottoStatsModel> getRoundData(int roundId) async {
+    return dataSource.getRoundData(roundId);
   }
 }

@@ -50,7 +50,7 @@ class _AllRoundsScreenState extends State<AllRoundsScreen> {
               actions: [
                 // 필터 버튼 (선택한 년/월이 있으면 표시, 없으면 '전체')
                 IconButton(
-                  icon: Row(
+                  icon: const Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Icon(Icons.sort),
@@ -105,6 +105,7 @@ class _AllRoundsScreenState extends State<AllRoundsScreen> {
                         vertical: contentPaddingIntoBox,
                         horizontal: contentPaddingIntoBox),
                     itemCount: allLottoData.length,
+                    cacheExtent: 500, // 미리 로드할 범위 지정
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 30.0),

@@ -34,6 +34,5 @@ class LottoRemoteBloc extends Bloc<LottoRemoteEvent, LottoRemoteState> {
         print("Save Lotto Entry Failed : $e");
       }
     });
-    
   }
 }
