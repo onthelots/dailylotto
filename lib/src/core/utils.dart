@@ -74,17 +74,21 @@ class LottoUtils {
     required bool isCorrect,
   }) {
     return SizedBox(
-      width: 30, // ✅ 모든 숫자의 너비를 동일하게 설정
-      child: Text(
-        number.toString(),
-        style: TextStyle(
-          color: isCorrect ? AppColors.lightAccent : null,
-          fontWeight: FontWeight.w600,
-          fontSize: 15.0,
+      width: 30,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          number.toString(),
+          style: TextStyle(
+            color: isCorrect ? AppColors.lightAccent : null,
+            fontWeight: FontWeight.w600,
+            fontSize: 15.0,
+          ),
+          textAlign: TextAlign.center,
         ),
-        textAlign: TextAlign.center, // ✅ 텍스트를 가운데 정렬
       ),
     );
+
   }
 
 

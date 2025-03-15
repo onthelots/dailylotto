@@ -15,26 +15,23 @@ class RoundNumberList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sortedEntries = List.of(roundData.entries)
-      ..sort((a, b) => b.date.compareTo(a.date));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        /// 회차 섹션
+        // 회차 섹션
         Container(
           height: 50,
           padding: const EdgeInsets.symmetric(
-              vertical: contentPaddingIntoBox,
-              horizontal: contentPaddingIntoBox),
+              vertical: contentPaddingIntoBox, horizontal: contentPaddingIntoBox),
           decoration: BoxDecoration(
             color: AppColors.darkTertiary,
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1), // 그림자 색상
-                blurRadius: 10, // 흐림 정도 (값이 클수록 더 부드러운 그림자)
-                spreadRadius: 2, // 그림자 확산 정도
-                offset: Offset(3, 5), // 그림자의 위치 (x, y)
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 10,
+                spreadRadius: 2,
+                offset: const Offset(3, 5),
               ),
             ],
           ),
@@ -51,30 +48,28 @@ class RoundNumberList extends StatelessWidget {
                           .labelSmall
                           ?.copyWith(color: Colors.white),
                     ),
-                    WidgetSpan(
-                      child: SizedBox(width: 4), // 간격 추가
-                    ),
+                    const WidgetSpan(child: SizedBox(width: 4)),
                     TextSpan(
-                        text:
-                            '(${LottoUtils.formattedTimestamp(roundData.timeStamp)})',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(color: Colors.white)),
+                      text:
+                      '(${LottoUtils.formattedTimestamp(roundData.timeStamp)})',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall
+                          ?.copyWith(color: Colors.white),
+                    ),
                   ],
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               Row(
-                children:
-                    (roundData.winningNumbers ?? List.generate(6, (_) => -1))
-                        .map((num) => LottoUtils.lottoSolidBall(
-                              color: Theme.of(context).focusColor,
-                              number: num,
-                              width: 30.0,
-                              height: 30.0,
-                            ))
-                        .toList(),
+                children: (roundData.winningNumbers ?? List.generate(6, (_) => -1))
+                    .map((num) => LottoUtils.lottoSolidBall(
+                  color: Theme.of(context).focusColor,
+                  number: num,
+                  width: 30.0,
+                  height: 30.0,
+                ))
+                    .toList(),
               ),
             ],
           ),
@@ -82,97 +77,105 @@ class RoundNumberList extends StatelessWidget {
 
         const SizedBox(height: 10),
 
-        roundData.entries.isEmpty
-            ? Container(
+        if (roundData.entries.isEmpty)
+          _buildEmptyContainer(context)
+        else
+          _buildNumberList(context),
+      ],
+    );
+  }
+
+  // 회차에 생성한 번호가 없을 경우
+  Widget _buildEmptyContainer(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Container(
+        height: 60,
+        padding: const EdgeInsets.symmetric(
+            vertical: contentPaddingIntoBox, horizontal: contentPaddingIntoBox),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 10,
+              spreadRadius: 2,
+              offset: const Offset(3, 5),
+            ),
+          ],
+        ),
+        child: Center(
+          child: Text(
+            "생성된 번호가 없습니다",
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNumberList(BuildContext context) {
+    return ListView.builder(
+      physics: const BouncingScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: roundData.entries.length,
+      itemBuilder: (context, index) {
+        final entry = roundData.entries[index];
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 5),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).pushNamed(
+                Routes.recommendation,
+                arguments: RecommendationArgs(
+                  round: roundData.round,
+                  date: entry.date,
+                  popUntil: false,
+                ),
+              );
+            },
+            child: Container(
               height: 60,
               padding: const EdgeInsets.symmetric(
-                  vertical: contentPaddingIntoBox,
-                  horizontal: contentPaddingIntoBox),
+                  vertical: contentPaddingIntoBox, horizontal: contentPaddingIntoBox),
               decoration: BoxDecoration(
                 color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1), // 그림자 색상
-                    blurRadius: 10, // 흐림 정도 (값이 클수록 더 부드러운 그림자)
-                    spreadRadius: 2, // 그림자 확산 정도
-                    offset: Offset(3, 5), // 그림자의 위치 (x, y)
-                  ),
-                ],
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Row(
                 children: [
                   Text(
-                    "생성된 번호가 없습니다",
+                    entry.date,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(fontSize: 11.0),
+                  ),
+                  const SizedBox(width: 12.0),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: entry.numbers
+                          .map((num) => LottoUtils.lottoNumber(
+                        number: num,
+                        isCorrect:
+                        roundData.winningNumbers?.contains(num) ?? false,
+                      ))
+                          .toList(),
+                    ),
+                  ),
+                  Text(
+                    entry.result ?? "예정",
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
               ),
-            )
-            : Column(
-                children: List.generate(sortedEntries.length, (index) {
-                  final entry = sortedEntries[index];
-                  return Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pushNamed(Routes.recommendation, arguments: RecommendationArgs(round: roundData.round, date: entry.date, popUntil: false));
-                        },
-                        child: Container(
-                          height: 60,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: contentPaddingIntoBox,
-                              horizontal: contentPaddingIntoBox),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).cardColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                entry.date,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
-                                    ?.copyWith(fontSize: 11.0),
-                              ),
-
-                              const SizedBox(width: 12.0), // 날짜와 로또 번호 사이 간격 추가
-
-                              Row(
-                                mainAxisSize: MainAxisSize.max, // ✅ Row를 가득 채우도록 설정
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: entry.numbers
-                                    .map((int num) => LottoUtils.lottoNumber(
-                                      number: num,
-                                      isCorrect: roundData.winningNumbers
-                                              ?.contains(num) ??
-                                          false,
-                                    ))
-                                    .toList(),
-                              ),
-
-                              Spacer(),
-
-                              Text(
-                                entry.result ?? "예정",
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      )
-                    ],
-                  );
-                }),
-              )
-      ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
