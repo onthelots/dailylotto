@@ -23,10 +23,10 @@ class Routes {
   static const String main = '/main'; // 메인
 
   // notice
-  static const String notice = '/notice'; // 스플래시
+  static const String notice = '/notice'; // 공지사항
 
-  // splash
-  static const String introduce = '/introduce'; // 스플래시
+  // introduce
+  static const String introduce = '/introduce'; // 소개페이지
 
   // tab
   static const String home = '/home'; // 홈 (탭바)
@@ -73,23 +73,23 @@ class AppRouter {
         );
       case Routes.home:
         return MaterialPageRoute(
-          builder: (_) => HomeScreen(),
+          builder: (_) => const HomeScreen(),
         );
       case Routes.notice:
         return MaterialPageRoute(
-          builder: (_) => NoticeScreen(),
+          builder: (_) => const NoticeScreen(),
         );
       case Routes.weekly:
         return MaterialPageRoute(
-          builder: (_) => WeeklyScreen(),
+          builder: (_) => const WeeklyScreen(),
         );
       case Routes.mypage:
         return MaterialPageRoute(
-          builder: (_) => MyPageScreen(),
+          builder: (_) => const MyPageScreen(),
         );
       case Routes.introduce:
         return MaterialPageRoute(
-          builder: (_) => IntroduceScreen(),
+          builder: (_) => const IntroduceScreen(),
         );
       case Routes.dailyQuestion:
         final currentRound = settings.arguments as int;
@@ -108,7 +108,7 @@ class AppRouter {
         );
       case Routes.allround:
         return MaterialPageRoute(
-          builder: (_) => AllRoundsScreen(),
+          builder: (_) => const AllRoundsScreen(),
         );
       case Routes.stats:
         final latestRound = settings.arguments as int;

@@ -16,7 +16,7 @@ class AppTheme {
 
     // - text
     textTheme: const TextTheme(
-      displayLarge: TextStyle(color: Colors.black87, fontSize: 32, letterSpacing: -0.1),
+      displayLarge: TextStyle(color: Colors.black87, fontSize: 32, fontWeight: FontWeight.bold, letterSpacing: -0.1,),
       displayMedium: TextStyle(color: Colors.black54, fontSize: 25, fontWeight: FontWeight.bold, letterSpacing: -0.1),
       titleMedium: TextStyle(color: Colors.black87, fontSize: 17, fontWeight: FontWeight.bold, letterSpacing: -0.2),
       bodyLarge: TextStyle(color: Colors.black87, fontSize: 20, fontWeight: FontWeight.bold, letterSpacing: -0.3),
