@@ -1,7 +1,7 @@
 name: dailylotto
 description: "lucky numbers recommended every day through AI"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.0.2+1
+version: 1.0.2+3
 
 environment:
   sdk: ^3.5.4
@@ -52,14 +52,16 @@ dependencies:
   fl_chart: ^0.70.2
 
 flutter_native_splash:
+  android: true
+  ios: true
+  web: true
+
   color: "#FFFFFF" # 스플래시 화면의 배경색 설정 (흰색)
-  image: "assets/icons/icon_splash.png" # 스플래시 화면에 표시될 이미지 설정 (앱 로고)
-  android: true # 안드로이드 플랫폼에 스플래시 화면 적용
-  ios: true # iOS 플랫폼에 스플래시 화면 적용
+  image: "assets/icons/splash_image.png" # 스플래시 화면에 표시될 이미지 설정 (앱 로고)
+
   android_12: # Android 12 이상을 위한 추가 설정
     color: "#FFFFFF" # Android 12 이상 스플래시 화면의 배경색 (흰색)
-    image: "assets/icons/icon_splash.png" # Android 12 이상 스플래시 화면에 표시될 이미지
-
+    image: "assets/icons/splash_image.png" # Android 12 이상 스플래시 화면에 표시될 이미지
 
 dev_dependencies:
   flutter_lints: ^4.0.0
