@@ -278,8 +278,8 @@ class HomeCardDisplay extends StatelessWidget {
 
                       Image.asset(
                         'assets/images/ai.png',
-                        width: 100,
-                        height: 100,
+                        width: 80,
+                        height: 80,
                         fit: BoxFit.cover,
                       ),
                     ],

@@ -97,7 +97,7 @@ class WarningCheckDialog extends StatelessWidget {
             ),
           )
         : AlertDialog(
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            backgroundColor: Theme.of(context).cardColor,
             title: Column(
               children: [
                 Icon(
