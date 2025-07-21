@@ -31,6 +31,7 @@ class WeeklyScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).primaryColor,
         scrolledUnderElevation: 0,
         leadingWidth: 200.0,
+        centerTitle: true,
         title: Padding(
           padding: EdgeInsets.symmetric(horizontal: appBarLeadingPadding),
           child: RichText(

@@ -37,6 +37,7 @@ class _AiRecommendationScreenState extends State<AiRecommendationScreen> {
                 toolbarHeight: 70,
                 backgroundColor: Theme.of(context).primaryColor,
                 scrolledUnderElevation: 0,
+                centerTitle: true,
                 title: Column(
                   children: [
                     Text(
