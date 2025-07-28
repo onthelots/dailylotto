@@ -1,7 +1,7 @@
 name: dailylotto
 description: "lucky numbers recommended every day through AI"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.0.3+4
+version: 1.0.4+5
 
 environment:
   sdk: ^3.5.4

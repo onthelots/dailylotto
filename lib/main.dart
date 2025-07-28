@@ -2,8 +2,6 @@ import 'package:dailylotto/src/core/app_info/app_info_cubit.dart';
 import 'package:dailylotto/src/core/di/locator.dart';
 import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_bloc.dart';
 import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_event.dart';
-import 'package:dailylotto/src/presentation/lotto_stats/bloc/lotto_stats_bloc.dart';
-import 'package:dailylotto/src/presentation/lotto_stats/bloc/lotto_stats_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_state.dart';
@@ -29,6 +27,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'firebase_options.dart';
+import 'src/core/service/notification_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,22 +39,21 @@ Future<void> main() async {
 
   // env (gemini api key)
   await dotenv.load(fileName: ".env"); // env (api key)
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await setupLocator();
 
-  // 앱 구동여부 확인
   final bool isFirstRun = await SharedPreferencesHelper.getFirstRunState();
   final String initialRoute = isFirstRun ? Routes.introduce : Routes.main;
 
-  // Firebase, DI(Locator), Hive를 병렬로 초기화
-  await Future.wait([
-    Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
-    setupLocator(),
-  ]);
+  final notificationService = NotificationService();
 
-  // run
-  Future.delayed(Duration(seconds: 2), () {
-    runApp(MyApp(initialRoute: initialRoute));
-  });
+  // 알림 제거 + 초기화
+  await notificationService.clearAllNotifications();
+  await notificationService.init();
+
+  runApp(MyApp(initialRoute: initialRoute));
 }
+
 
 class MyApp extends StatelessWidget {
   final String initialRoute;
