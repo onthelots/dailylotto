@@ -268,28 +268,28 @@ class _NotificationScreenState extends State<NotificationScreen>
               SizedBox(height: 10),
 
               // 📢 Notice Topic
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text('공지사항 알림',
-                      style: Theme.of(context).textTheme.bodyMedium),
-                  Switch(
-                    activeColor: Theme.of(context).cardColor,
-                    activeTrackColor: Theme.of(context).primaryColor,
-                    value: _isSubscribedNotice,
-                    onChanged: _isLoading
-                        ? null
-                        : (value) {
-                            if (value) {
-                              _subscribeToTopic('notice_topic');
-                            } else {
-                              _unsubscribeFromTopic('notice_topic');
-                            }
-                          },
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   crossAxisAlignment: CrossAxisAlignment.center,
+              //   children: [
+              //     Text('공지사항 알림',
+              //         style: Theme.of(context).textTheme.bodyMedium),
+              //     Switch(
+              //       activeColor: Theme.of(context).cardColor,
+              //       activeTrackColor: Theme.of(context).primaryColor,
+              //       value: _isSubscribedNotice,
+              //       onChanged: _isLoading
+              //           ? null
+              //           : (value) {
+              //               if (value) {
+              //                 _subscribeToTopic('notice_topic');
+              //               } else {
+              //                 _unsubscribeFromTopic('notice_topic');
+              //               }
+              //             },
+              //     ),
+              //   ],
+              // ),
 
               SizedBox(height: 5),
 
