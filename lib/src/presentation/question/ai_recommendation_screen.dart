@@ -3,6 +3,7 @@ import 'package:dailylotto/src/data/models/recommendation_args.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_state.dart';
+import 'package:dailylotto/src/presentation/question/widgets/report_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -192,6 +193,21 @@ class _AiRecommendationScreenState extends State<AiRecommendationScreen> {
                       ),
                     ],
                   ),
+                ),
+              ),
+              floatingActionButton: SizedBox(
+                height: 40,  // 원하는 높이
+                child: FloatingActionButton.extended(
+                  icon: Icon(Icons.report, color: Colors.white, size: 18),
+                  backgroundColor: Theme.of(context).splashColor,
+                  label: Text('신고하기', style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.white)),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (context) => ReportModal(selectEntry: selectEntry),
+                    );
+                  },
                 ),
               ),
             );

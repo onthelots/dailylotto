@@ -482,12 +482,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     dependencies: [PackageRef('collection'), PackageRef('meta')]
   );
 
-/// bloc 9.0.0
+/// report_bloc 9.0.0
 const _bloc = Package(
-    name: 'bloc',
+    name: 'report_bloc',
     description: 'A predictable state management library that helps implement the BLoC (Business Logic Component) design pattern.',
-    homepage: 'https://github.com/felangel/bloc',
-    repository: 'https://github.com/felangel/bloc/tree/master/packages/bloc',
+    homepage: 'https://github.com/felangel/report_bloc',
+    repository: 'https://github.com/felangel/report_bloc/tree/master/packages/report_bloc',
     authors: [],
     version: '9.0.0',
     license: '''The MIT License (MIT)
@@ -2719,9 +2719,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
 /// flutter_bloc 9.0.0
 const _flutter_bloc = Package(
     name: 'flutter_bloc',
-    description: 'Flutter Widgets that make it easy to implement the BLoC (Business Logic Component) design pattern. Built to be used with the bloc state management package.',
+    description: 'Flutter Widgets that make it easy to implement the BLoC (Business Logic Component) design pattern. Built to be used with the report_bloc state management package.',
     homepage: 'https://bloclibrary.dev',
-    repository: 'https://github.com/felangel/bloc/tree/master/packages/flutter_bloc',
+    repository: 'https://github.com/felangel/report_bloc/tree/master/packages/flutter_bloc',
     authors: [],
     version: '9.0.0',
     license: '''The MIT License (MIT)
@@ -2747,7 +2747,7 @@ OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 USE OR OTHER DEALINGS IN THE SOFTWARE.''',
     isMarkdown: false,
     isSdk: false,
-    dependencies: [PackageRef('bloc'), PackageRef('flutter'), PackageRef('provider')]
+    dependencies: [PackageRef('report_bloc'), PackageRef('flutter'), PackageRef('provider')]
   );
 
 /// flutter_dotenv 5.2.1

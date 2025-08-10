@@ -28,21 +28,38 @@ class WarningCheckDialog extends StatelessWidget {
         style: Theme.of(context).textTheme.bodyMedium,
         children: [
           TextSpan(text: "$subtitle\n\n"),
-          TextSpan(
-            text: "서비스 이용 주의사항 확인하기",
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(decoration: TextDecoration.underline),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                Navigator.pushNamed(context, Routes.webView,
-                    arguments: WebRoutes.warning);
+          WidgetSpan(
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  Routes.webView,
+                  arguments: WebRoutes.warning,
+                );
               },
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Theme.of(context).focusColor,
+                      width: 1.0,
+                    ),
+                  ),
+                ),
+                padding: const EdgeInsets.only(bottom: 1),
+                child: Text(
+                  "서비스 이용 주의사항 확인하기",
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: Theme.of(context).focusColor,
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
     );
+
     return Platform.isIOS
         ? CupertinoTheme(
             data: CupertinoThemeData(

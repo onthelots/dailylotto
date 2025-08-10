@@ -1,3 +1,8 @@
+import 'package:dailylotto/src/data/sources/report_remote_data_source.dart';
+import 'package:dailylotto/src/domain/repositories/report_repository.dart';
+import 'package:dailylotto/src/domain/usecases/submit_report_use_case.dart';
+import 'package:dailylotto/src/presentation/question/bloc/daily_question/daily_question_bloc.dart';
+import 'package:dailylotto/src/presentation/question/bloc/report_bloc/report_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dailylotto/src/data/models/lotto_local_model.dart';
 import 'package:dailylotto/src/data/sources/daily_question_datasource.dart';
@@ -17,7 +22,6 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../../domain/repositories/lotto_local_repository.dart';
 import '../../domain/usecases/lotto_local_usecase.dart';
-import '../../presentation/question/bloc/daily_question_bloc.dart';
 import '../../presentation/weekly/bloc/round_list_bloc/round_list_bloc.dart';
 
 final locator = GetIt.instance;
@@ -68,6 +72,16 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton<DailyQuestionUseCase>(
           () => DailyQuestionUseCase(repository: locator<DailyQuestionRepository>()));
 
+  /// Report
+  locator.registerLazySingleton<ReportRemoteDataSource>(
+          () => ReportRemoteDataSourceImpl(firestore: locator<FirebaseFirestore>()));
+
+  locator.registerLazySingleton<ReportRepository>(
+          () => ReportRepositoryImpl(remoteDataSource: locator<ReportRemoteDataSource>()));
+
+  locator.registerLazySingleton<SubmitReportUseCase>(
+          () => SubmitReportUseCase(repository: locator<ReportRepository>()));
+
   // <----- Bloc ----->
 
   // 1. Lotto Remote
@@ -97,4 +111,8 @@ Future<void> setupLocator() async {
   // 7. Lotto Stats
   locator.registerFactory<LottoStatsBloc>(
           () => LottoStatsBloc(useCase: locator<LottoRemoteUseCase>()));
+
+  // 8. Report
+  locator.registerFactory<ReportBloc>(
+          () => ReportBloc(submitReportUseCase: locator<SubmitReportUseCase>()));
 }

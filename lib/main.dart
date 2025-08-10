@@ -1,3 +1,5 @@
+import 'package:dailylotto/src/presentation/question/bloc/daily_question/daily_question_event.dart';
+import 'package:dailylotto/src/presentation/question/bloc/report_bloc/report_bloc.dart';
 import 'package:dailylotto/src/core/app_info/app_info_cubit.dart';
 import 'package:dailylotto/src/core/di/locator.dart';
 import 'package:dailylotto/src/presentation/home/bloc/time_bloc/time_bloc.dart';
@@ -16,8 +18,7 @@ import 'package:dailylotto/src/presentation/main/bloc/theme_bloc/theme_event.dar
 import 'package:dailylotto/src/presentation/main/bloc/theme_bloc/theme_state.dart';
 import 'package:dailylotto/src/presentation/main/bloc/weekly_lotto_bloc/weekly_lotto_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/weekly_lotto_bloc/weekly_lotto_event.dart';
-import 'package:dailylotto/src/presentation/question/bloc/daily_question_bloc.dart';
-import 'package:dailylotto/src/presentation/question/bloc/daily_question_event.dart';
+import 'package:dailylotto/src/presentation/question/bloc/daily_question/daily_question_bloc.dart';
 import 'package:dailylotto/src/presentation/weekly/bloc/latest_round_bloc/latest_round_bloc.dart';
 import 'package:dailylotto/src/presentation/weekly/bloc/latest_round_bloc/latest_round_event.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -87,6 +88,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => locator<DailyQuestionBloc>()..add(LoadDailyQuestionEvent()),
+        ),
+        BlocProvider(
+          create: (context) => locator<ReportBloc>(),
         ),
         // version
         BlocProvider(

@@ -1,7 +1,7 @@
 import 'package:dailylotto/src/domain/usecases/daily_question_usecase.dart';
-import 'package:dailylotto/src/presentation/question/bloc/daily_question_state.dart';
+import 'package:dailylotto/src/presentation/question/bloc/daily_question/daily_question_event.dart';
+import 'package:dailylotto/src/presentation/question/bloc/daily_question/daily_question_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'daily_question_event.dart';
 
 class DailyQuestionBloc extends Bloc<DailyQuestionEvent, DailyQuestionState> {
   final DailyQuestionUseCase getDailyQuestionUseCase;
