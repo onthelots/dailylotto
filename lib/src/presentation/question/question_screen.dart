@@ -1,21 +1,19 @@
 import 'package:dailylotto/src/core/constants.dart';
 import 'package:dailylotto/src/core/utils.dart';
 import 'package:dailylotto/src/data/models/daily_question_model.dart';
-import 'package:dailylotto/src/data/models/lotto_local_model.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_event.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_local_bloc/lotto_local_state.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_bloc.dart';
 import 'package:dailylotto/src/presentation/main/bloc/lotto_remote_bloc/lotto_remote_event.dart';
-import 'package:dailylotto/src/presentation/question/bloc/daily_question_bloc.dart';
-import 'package:dailylotto/src/presentation/question/bloc/daily_question_state.dart';
+import 'package:dailylotto/src/presentation/question/bloc/daily_question/daily_question_bloc.dart';
+import 'package:dailylotto/src/presentation/question/bloc/daily_question/daily_question_event.dart';
+import 'package:dailylotto/src/presentation/question/bloc/daily_question/daily_question_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:timezone/timezone.dart';
 import '../../core/routes.dart';
 import '../../data/models/recommendation_args.dart';
-import 'bloc/daily_question_event.dart';
 
 class QuestionScreen extends StatefulWidget {
   final int currentRound;
