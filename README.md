@@ -1,3 +1,5 @@
+<img width="80" height="80" alt="splash_light" src="https://github.com/user-attachments/assets/838f336f-cf1c-4f84-9cd2-025c1b47eabb" />
+
 # 데일리로또 
 > 매일 만나는 나만의 행운번호
 - 랜덤 번호 생성은 이제 그만! 당신의 선택과 운세를 분석해 AI가 맞춤형 로또 번호를 추천하는 서비스입니다.
